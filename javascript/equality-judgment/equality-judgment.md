@@ -55,3 +55,25 @@ Object.is(+0, -0) // false
 出现 `NaN` 是因为比如把字符串 `"x"` 转换成数字这种是没意义的。
 
 [`NaN`](https://developer.mozilla.org/en-US/docs/Glossary/NaN)，Not a Number，非数字值，通常是在数学计算失败或者解析字符串成数字失败时出现，通过 `0/0` 就能得到 `NaN`，通过 [`isNaN()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/isNaN) 来检验一个值是否是 `NaN`。
+
+结合着隐式类型转换，JS 中也有如下一些奇技淫巧：
+
+``` js
++"28" // => 28。一元 + 尝试将操作数转数字
+!!"28" // => true。一元 ! 尝试将操作数转布尔并取反，这里注意是双叹号
+28+"" // => "28"。数字和字符串相加，数字会转字符串
+```
+
+使用这些奇技淫巧虽然代码量少了，但同时可读性也低了。平时写业务还是乖乖用 `Boolean()`、`Number()`、`String()` 这些做显式类型转换来得好些，毕竟代码是拿来给机器执行的，也是拿来给人读的：
+
+``` js
+Number("28") // => 28
+Boolean("28") // => true
+String(28) // => "28"
+```
+
+现在再来看 `console.log('b'+'a'+ +'a'+'a') // => "baNaNa"` 的执行结果就没那么惊讶了，关键在中间有个 `+"a"`：
+
+`+"a" // => NaN`
+
+得到 `NaN` 后再与其他字符串拼接，`NaN` 隐式转换成了字符串 `"NaN"`，拼接后最终结果为 `"baNaNa"`。
