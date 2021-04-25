@@ -54,3 +54,18 @@ Q：SQL 又是什么？SQL 和 MySQL 有什么关系？
 A：SQL 是一门语言，用这门语言可以访问和处理数据库。所以 SQL 和 MySQL 的关系就是——可以用 SQL 语句处理 MySQL 中的数据。
 
 后文会讲解 SQL 语句的基本使用。
+
+### 下载和安装
+
+#### MySQL 安装
+
+这里是 MySQL 的 [官网](https://www.mysql.com)，可以通过官网的 [下载页](https://dev.mysql.com/downloads/mysql/) 根据自己电脑的系统选择下载安装。
+
+#### 数据库可视化操作工具安装
+
+平时浏览数据库中的数据不可能每次都输入一堆 SQL 语句，既花时间又容易出错，这时候一款可视化工具就尤为重要了，它可以大大提高咱们平时学习、使用数据库的效率。
+
+推荐2款市面上常用的数据库可视化工具：
+
+1. Navicat：[http://www.navicat.com.cn](http://www.navicat.com.cn)，支持 MySQL、MongoDB、Oracle 等多达7种数据库。价格比较贵，有能力的朋友还是推荐支持下正版。对于没有收入来源的学生党，白嫖版网上也是有的；
+2. MySQL Workbench：[MySQL Workbench](https://www.mysql.com/cn/products/workbench/)，MySQL 官方提供的，免费，同样支持 Windows/Mac OS X/Linux 等各平台。功能同 Navicat 类似，提供数据建模、SQL 开发、服务器配置、用户管理、备份等工具，对数据库进行可视化操作。
