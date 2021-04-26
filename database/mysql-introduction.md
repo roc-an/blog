@@ -394,3 +394,25 @@ SELECT * FROM user WHERE `desc` LIKE "%男%";
 * `AND`：且。示例：```SELECT * FROM user WHERE `desc` LIKE "%男%" AND `age` >= 30;```
 * `OR`：或。示例：```SELECT * FROM user WHERE `desc` LIKE "%男%" OR `age` >= 30;```
 * `IN`：可以规定查询的值是多个值其中之一。示例：```SELECT * FROM user WHERE age IN (19, 28, 32);```
+
+### ORDER BY 排序
+
+通过 `ORDER BY` 语句设定按哪个字段、按哪种方式来排序。
+
+语法：
+
+``` sql
+SELECT 字段1, 字段2
+  FROM 表名
+  ORDER BY 字段名 [ASC [DESC][默认 ASC]]
+```
+
+其中，可以用 `ASC`（升序）或 `DESC`（降序）关键字来设置查询结果按升序或降序排列。默认是 `ASC` 升序。
+
+示例：
+
+``` sql
+SELECT * FROM user ORDER BY `age` DESC;
+```
+
+示例中，查询 `user` 表中的记录并按 `age` 字段降序排列。
