@@ -184,7 +184,7 @@ MySQL 支持多种数据类型，主要分为 3 类：
 
 可以发现不同的数据类型所占用的字节大小是不同的，因此在实际业务中，合理定义数据字段的类型对于数据库的优化是十分重要的。
 
-## （四）MySQL 基础指令
+## （四）SQL 基础语句
 
 ### 使用 Navicat 执行 SQL 语句
 
@@ -464,3 +464,15 @@ SQL 示例：
 ``` sql
 SELECT * FROM user ORDER BY age LIMIT 3, 3;
 ```
+
+## （五）SQL 语句的分类
+
+上面是一些基础的 SQL 语句使用，如果更加系统地看，SQL 语句主要分为 5 大类，这里简单了解即可：
+
+1. DDL（Data Definition Language，数据定义语言）：对「数据库」以及「表」进行「增加（create）」、「删除（drop）」、「修改（alter）」等操作；
+2. DML（Data Manipulation Language，数据操作语言）：对「表中数据」进行「增加（insert）」、「删除（delete）」、「修改（update）」等操作；
+3. DQL（Data Query Language，数据查询语言）：对「表中数据」进行「各种维度的查询（select）」；
+4. DCL（Data Control Language，数据控制语言）：权限相关；
+5. TCL（Transaction Control Language，事务控制语言）。
+
+在区分它们分类时，要注意操作的对象以及可进行的操作。
