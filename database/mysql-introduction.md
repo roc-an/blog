@@ -386,3 +386,11 @@ SELECT * FROM user WHERE `desc` LIKE "%男%";
 ```
 
 上面这条 SQL 会查询 `user` 表中所有 `desc` 字段含有“男”字的数据记录。
+
+### AND、OR 和 IN 操作符
+
+`WHERE` 语句也常常与 `AND`、`OR` 以及 `IN` 这 3 个 SQL 操作符配合使用：
+
+* `AND`：且。示例：```SELECT * FROM user WHERE `desc` LIKE "%男%" AND `age` >= 30;```
+* `OR`：或。示例：```SELECT * FROM user WHERE `desc` LIKE "%男%" OR `age` >= 30;```
+* `IN`：可以规定查询的值是多个值其中之一。示例：```SELECT * FROM user WHERE age IN (19, 28, 32);```
