@@ -297,3 +297,31 @@ DELETE FROM user WHERE `id`=7;
 ```
 
 删除 `user` 表中 `id` 为7的那条记录。
+
+### 查询记录
+
+语法：
+
+``` sql
+SELECT 字段1, 字段2
+  FROM 表名
+  [可选的 WHERE 语句]
+```
+
+其中：
+
+* `SELECT` 命令可以读取多条字段；
+* 可以用 `*` 来代替所有字段，这样会返回所有字段数据；
+* 可以用 `WHERE` 语句可以包含条件；
+
+SQL 示例，查询 `user` 表中指定字段的记录：
+
+``` sql
+SELECT name, age FROM user;
+```
+
+SQL 示例，查询 `user` 表中所有字段的记录：
+
+``` sql
+SELECT * FROM user;
+```
