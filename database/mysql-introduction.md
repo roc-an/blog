@@ -149,38 +149,38 @@ MySQL 支持多种数据类型，主要分为 3 类：
 
 ### 数值类型
 
-* TINYINT：小整数值，1 byte
-* SMALLINT：大整数值，2 bytes
-* MEDIUMINT：大整数值，3 bytes
-* INT 或 INTEGER：大整数值，4 bytes
-* BIGINT：极大整数值，8 bytes
+* `TINYINT`：小整数值，1 byte
+* `SMALLINT`：大整数值，2 bytes
+* `MEDIUMINT`：大整数值，3 bytes
+* `INT` 或 `INTEGER`：大整数值，4 bytes
+* `BIGINT`：极大整数值，8 bytes
 
-* FLOAT：单精度浮点值，4 bytes
-* DOUBLE：双精度浮点值，8 bytes
-* DECIMAL：小数值。大小计算，对 DECIMAL(M, D) ，如果 M > D，为 M + 2 否则为 D + 2
+* `FLOAT`：单精度浮点值，4 bytes
+* `DOUBLE`：双精度浮点值，8 bytes
+* `DECIMAL`：小数值。大小计算，对 DECIMAL(M, D) ，如果 M > D，为 M + 2 否则为 D + 2
 
 ### 字符串类型
 
-* CHAR：定长字符串
-* VARCHAR：变长字符串
+* `CHAR`：定长字符串
+* `VARCHAR`：变长字符串
 
-* TINYBLOB：不超过 255 个字符的二进制字符串
-* BLOB：二进制形式的长文本数据
-* MEDIUMBLOB：二进制形式的中等长度文本数据
-* LONGBLOB：二进制形式的极大文本数据
+* `TINYBLOB`：不超过 255 个字符的二进制字符串
+* `BLOB`：二进制形式的长文本数据
+* `MEDIUMBLOB`：二进制形式的中等长度文本数据
+* `LONGBLOB`：二进制形式的极大文本数据
 
-* TINYTEXT：短文本字符串
-* TEXT：长文本数据
-* MEDIUMTEXT：中等长度文本数据
-* LONGTEXT：极大文本数据
+* `TINYTEXT`：短文本字符串
+* `TEXT`：长文本数据
+* `MEDIUMTEXT`：中等长度文本数据
+* `LONGTEXT`：极大文本数据
 
 ### 时间日期类型
 
-* DATE：日期值，格式 YYYY-MM-DD，3 bytes
-* TIME：时间值或持续时间，格式 HH:MM:SS，3 bytes
-* YEAR：年份值，格式 YYYY，1 bytes
-* DATETIME：混合日期和时间值，格式 YYYY-MM-DD HH:MM:SS，8 bytes
-* TIMESTAMP：时间戳，混合日期和时间值，格式 YYYYMMDD HHMMSS，4 bytes
+* `DATE`：日期值，格式 `YYYY-MM-DD`，3 bytes
+* `TIME`：时间值或持续时间，格式ß `HH:MM:SS`，3 bytes
+* `YEAR`：年份值，格式 `YYYY`，1 bytes
+* `DATETIME`：混合日期和时间值，格式 `YYYY-MM-DD HH:MM:SS`，8 bytes
+* `TIMESTAMP`：时间戳，混合日期和时间值，格式 `YYYYMMDD HHMMSS`，4 bytes
 
 可以发现不同的数据类型所占用的字节大小是不同的，因此在实际业务中，合理定义数据字段的类型对于数据库的优化是十分重要的。
 
