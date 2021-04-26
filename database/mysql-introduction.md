@@ -359,3 +359,30 @@ SELECT * FROM user WHERE `age` >= 20;
 ```
 
 执行后会查询出 `user` 表中所有 `age` 大于等于 20 的记录。
+
+### LIKE 语句
+
+可以用 `LIKE` 子句按指定模式进行模糊匹配。
+
+语法：
+
+``` sql
+SELECT 字段1, 字段2
+  FROM 表名
+  WHERE 字段名 LIKE 匹配模式
+```
+
+其中：
+
+* 可以在 `WHERE` 子句中使用 `LIKE` 子句；
+* `LIKE` 通常与 `%` 一同使用，`%` 表示匹配任意字符；
+* 可以用 `AND` 或者 `OR` 指定一个或多个条件；
+* 还可以在 `DELETE` 或 `UPDATE` 中使用 `WHERE...LIKE` 子句。
+
+示例：
+
+``` sql
+SELECT * FROM user WHERE `desc` LIKE "%男%";
+```
+
+上面这条 SQL 会查询 `user` 表中所有 `desc` 字段含有“男”字的数据记录。
