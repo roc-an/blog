@@ -277,3 +277,23 @@ SQL 示例：
 ``` sql
 UPDATE user SET `age`=34, `desc`="真相只有一个。" WHERE `id`=8;
 ```
+
+### 删除记录
+
+用 `DELETE` 删除表中的数据记录。
+
+语法：
+
+``` sql
+DELETE FROM 表名 [可选的 WHERE 语句];
+```
+
+其中，如果没有指定 `WHERE` 子句，表中所有记录都会被删。
+
+SQL 示例：
+
+``` sql
+DELETE FROM user WHERE `id`=7;
+```
+
+删除 `user` 表中 `id` 为7的那条记录。
