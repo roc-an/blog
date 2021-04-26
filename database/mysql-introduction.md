@@ -205,6 +205,13 @@ SQL 是结构化查询语言（Structured Query Language）的简称，执行 SQ
 
 执行后，也可以 CTRL + S 将这段 SQL 语句保存，留作后续简单修改后再次执行。
 
+### SQL 通用语法
+
+* SQL 语句支持单行或多行书写，以分号结尾；
+* 可以用空格、缩进增强可读性；
+* MySQL 数据库的 SQL 语句不区分大小写，建议关键字用大写。
+
+SQL 示例：`SELECT * FROM user;`
 ### 创建表
 
 语法：
