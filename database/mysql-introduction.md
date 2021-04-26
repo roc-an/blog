@@ -2,7 +2,7 @@
 
 ## （一）MySQL 数据库的一二事
 
-### 数据库是什么？
+### 数据库是什么
 
 简单说，**数据库就是存储和管理数据的仓库**。用户可以对其中的数据进行增、删、改、查。
 
@@ -185,6 +185,17 @@ MySQL 支持多种数据类型，主要分为 3 类：
 可以发现不同的数据类型所占用的字节大小是不同的，因此在实际业务中，合理定义数据字段的类型对于数据库的优化是十分重要的。
 
 ## （四）SQL 基础语句
+
+### 什么是 SQL
+
+SQL 是结构化查询语言（Structured Query Language）的简称，执行 SQL 语句可以操作数据库。
+
+当然：
+
+* 虽然叫“查询语言”，不仅仅可以查询，还可以增、删、改；
+* 也不仅仅只能操作数据库，数据库中的表、表中的数据都是可以操作的。
+
+另外，SQL 是各个数据库都要遵循的规范，虽然各数据库厂商都有一些自己特有的内容，但核心内容都是一致的。
 
 ### 使用 Navicat 执行 SQL 语句
 
@@ -469,10 +480,10 @@ SELECT * FROM user ORDER BY age LIMIT 3, 3;
 
 上面是一些基础的 SQL 语句使用，如果更加系统地看，SQL 语句主要分为 5 大类，这里简单了解即可：
 
-1. DDL（Data Definition Language，数据定义语言）：对「数据库」以及「表」进行「增加（create）」、「删除（drop）」、「修改（alter）」等操作；
+1. DDL（Data Definition Language，数据定义语言）：对「数据库」、「表」、「列」进行「增加（create）」、「删除（drop）」、「修改（alter）」等操作；
 2. DML（Data Manipulation Language，数据操作语言）：对「表中数据」进行「增加（insert）」、「删除（delete）」、「修改（update）」等操作；
 3. DQL（Data Query Language，数据查询语言）：对「表中数据」进行「各种维度的查询（select）」；
-4. DCL（Data Control Language，数据控制语言）：权限相关；
+4. DCL（Data Control Language，数据控制语言）：用来定义数据库的访问权限和安全级别，进行用户的创建和权限的分配。
 5. TCL（Transaction Control Language，事务控制语言）。
 
 在区分它们分类时，要注意操作的对象以及可进行的操作。
