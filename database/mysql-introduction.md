@@ -183,3 +183,43 @@ MySQL 支持多种数据类型，主要分为 3 类：
 * TIMESTAMP：时间戳，混合日期和时间值，格式 YYYYMMDD HHMMSS，4 bytes
 
 可以发现不同的数据类型所占用的字节大小是不同的，因此在实际业务中，合理定义数据字段的类型对于数据库的优化是十分重要的。
+
+## （四）MySQL 基础指令
+
+### 使用 Navicat 执行 SQL 语句
+
+在 Navicat 上方点击「新建查询」，然后输入 SQL 语句后点击「运行」按钮就可以执行 SQL 语句。
+
+下图是创建 `user` 表的 SQL 语句：
+
+执行后，也可以 CTRL + S 将这段 SQL 语句保存，留作后续简单修改后再次执行。
+
+### 创建表
+
+语法：
+
+``` sql
+CREATE TABLE 表名(
+  字段1 类型 [可选修饰符],
+  字段2 类型 [可选修饰符]
+  ...
+);
+```
+
+SQL 示例，创建一个 `user` 表：
+
+``` sql
+CREATE TABLE `user`(
+  `id` INT PRIMARY KEY AUTO_INCREMENT,
+  `name` VARCHAR(10),
+  `age` INT,
+  `sex` VARCHAR(1),
+  `desc` TEXT,
+	`ctime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+其中：
+
+* 将字段 `id` 设为主键（`PRIMARY KEY`），主键值不允许重复，另外也设成了自增的（`AUTO_INCREMENT`），这样新增一条记录后，该记录的 `id` 就会自动加1；
+* 对字段 `ctime` 使用了 `DEFAULT` 约束来设置「默认值」，在创建新记录时把这个字段设置为当前时间的时间戳（`CURRENT_TIMESTAMP`）。
