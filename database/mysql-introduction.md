@@ -416,3 +416,51 @@ SELECT * FROM user ORDER BY `age` DESC;
 ```
 
 示例中，查询 `user` 表中的记录并按 `age` 字段降序排列。
+
+### 处理分页
+
+语法：
+
+``` sql
+SELECT 字段1, 字段2
+  FROM 表名
+  LIMIT M, N
+```
+
+其中：
+
+* M：查询跳过的条数
+* N：要查询的条数
+
+比如要进行一个分页请求，前端的传参：
+
+``` js
+const postData = {
+  pageIndex: 2, // 请求第几页数据
+  pageSize: 3, // 每一页有多少条数据
+  sortField: 'age' // 用于排序的字段
+}
+```
+
+然后后端进行数据库查询，返回数据：
+
+``` js
+{
+  code: 0,
+  msg: '请求分页数据成功',
+  data: {
+    list: [ // 当前页的列表数据
+      { id: 6, name: '庄周', age: 26, sex: '男', desc: '蝴蝶是我，我就是蝴蝶。' },
+      { id: 3, name: '猪八戒', age: 28, sex: '男', desc: '心中乾坤大，地上有西瓜。' },
+      { id: 8, name: '狄仁杰', age: 34, sex: '男', desc: '真相只有一个。' }
+    ],
+    total: 7 // 总条数
+  }
+}
+```
+
+SQL 示例：
+
+``` sql
+SELECT * FROM user ORDER BY age LIMIT 3, 3;
+```
