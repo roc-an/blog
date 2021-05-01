@@ -1,6 +1,6 @@
 # MySQL 数据库边学边练光速入门
 
-> 发布于 2021.04.26，最后更新于 2021.04.29。
+> 发布于 2021.04.26，最后更新于 2021.05.01。
 
 ## （一）MySQL 数据库的一二事
 
@@ -498,3 +498,7 @@ SELECT * FROM user ORDER BY age LIMIT 3, 3;
 5. TCL（Transaction Control Language，事务控制语言）。
 
 在区分它们分类时，要注意操作的对象以及可进行的操作。
+
+## （六）相关阅读推荐
+
+* [Express 光速入门](https://github.com/roc-an/blog/issues/2)
