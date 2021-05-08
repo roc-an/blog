@@ -379,6 +379,58 @@ Location: https://github.com/
 
 有了 DOM 树之后，接下来就要处理样式了。
 
+### 样式计算（Recalculate Style）
+
+**在实际布局之前，要先通过样式计算得到 DOM 树中每一个元素的具体样式**，该阶段可以细分为 3 步：
+
+1. 将 CSS 解析成浏览器能够理解、处理的 `styleSheets`（样式表）结构；
+2. 对 `styleSheets`（样式表）中的属性值进行标准化处理；
+3. 计算 DOM 树中各个节点的具体样式。
+
+#### 1.将 CSS 解析成浏览器能够理解、处理的 `styleSheets`（样式表）结构
+
+和 HTML 一样，浏览器同样无法直接理解 CSS 脚本，所以也需要一步解析，就是将 CSS 脚本解析成 `styleSheets`（样式表）。
+
+那 `styleSheets`（样式表）又是啥呢？在浏览器控制台输入 `document.styleSheets` 就能看到了。
+
+`styleSheets`（样式表）是后续样式处理的操作基础，浏览器是可以进行查询和访问的。
+
+#### 对 `styleSheets`（样式表）中的属性值进行标准化处理
+
+属性值标准化是在干啥呢？
+
+比如有这样一段 CSS：
+
+```css
+.footer {
+  display: none;
+  color: blue;
+  font-size: 3rem;
+  font-weight: bold;
+}
+```
+
+这段 CSS 中有一些属性值，虽然对于程序员来说比较好记，但是对于浏览器渲染引擎来说缺难以理解（就好比之前提到的域名，用户好记，但计算机难以理解），比如 `blue`、`3rem`、`bold`。
+
+于是就要将这些难以理解的属性值，标准化处理成浏览器容易理解的属性值：
+
+```css
+.footer {
+  display: none;
+  color: rgb(0, 0, 255);
+  font-size: 48px;
+  font-weight: 700;
+}
+```
+
+其中：
+
+- `blue` 标准化处理成了 `rgb(0, 0, 255)`；
+- `3rem` 标准化处理成了 `48px`；
+- `bold` 标准化处理成了 `700`。
+
+这些都是具体的样式数值了，有了标准化后的值，后面的样式处理就会轻松很多。
+
 ## TODO
 
 1. 补充请求行、请求头、请求体的图；
