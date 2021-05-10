@@ -121,3 +121,7 @@
 ## 参考资源
 
 * [source.chromium.org | Chrome 浏览器源码](https://source.chromium.org/)
+
+## Todo List
+
+- [ ] 补充 宏任务与微任务 的图。
