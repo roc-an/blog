@@ -203,7 +203,7 @@ JS 脚本在执行时，V8 会创建一个全局执行上下文，在上下文�
 
 微任务的产生方式有 2 种：
 
-1. 使用 MutationObserver 监控 DOM 节点变化，然后执行 JS 来修改节点或添加/删除其子节点，这时就会产生 DOM 变化的微任务；
+1. 使用 [MutationObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/MutationObserver) 监控 DOM 节点变化。当节点被修改或添加/删除其子节点时，就会触发 DOM 变化时要执行的回调，该回调的执行就属于微任务；
 2. Promise 构造函数中调用 `resolve()` 和 `reject()` 后也会产生微任务。`.then()` 和 `.catch()` 的执行就属于微任务。
 
 ### 微任务的执行时机
@@ -213,6 +213,65 @@ JS 脚本在执行时，V8 会创建一个全局执行上下文，在上下文�
 然后将微任务队列中的所有微任务依次执行。
 
 如果在执行微任务过程中产生了新的微任务，并不会把它推迟到下个宏任务，而是就在当前宏任务的微任务队列中添加，并直到执行完毕。
+
+## （四）MutationObserver
+
+`MutationObserver` 接口提供了监视对 DOM 树所做更改的能力。这是它的规范：[Interface MutationObserver](Interface MutationObserver)
+
+### 使用示例
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="wrapper"></div>
+  <script src="./mutationObserver.js"></script>
+</body>
+</html>
+```
+
+```js
+document.addEventListener('DOMContentLoaded', () => {
+  const wrapper = document.querySelector('#wrapper')
+
+  // 观察器配置
+  const observerCfg = {
+    attributes: true,
+    childList: true,
+    subtree: true
+  }
+
+  // 创建观察器实例
+  const observer = new MutationObserver((mutationsList, observer) => {
+    // 为兼容 IE 11，使用了传统的 for 循环
+    for (let mutation of mutationsList) {
+      if (mutation.type === 'childList') {
+        console.log('添加或删除了一个子节点');
+      } else if (mutation.type === 'attributes') {
+        console.log(`修改了 ${mutation.attributeName} 的属性值`)
+      }
+    }
+  })
+
+  // 开始观察目标节点的变更
+  observer.observe(wrapper, observerCfg)
+
+  // 2000ms 后为监视的节点添加子节点
+  window.setTimeout(() => {
+    const p = document.createElement('p')
+    p.textContent = '一天不写代码浑身难受'
+    wrapper.appendChild(p)
+  }, 2000)
+})
+```
+
+执行结果：等待 2 秒后，控制台打印出了“添加或删除了一个子节点”。
 
 ## 参考资源
 
