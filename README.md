@@ -7,6 +7,7 @@
 浏览器原理：
 
 - [从浏览器地址栏中输入 URL 到看到页面，中间经历了什么？](https://github.com/roc-an/blog/issues/3)
+- [宏任务与微任务](https://github.com/roc-an/blog/issues/4)
 
 NodeJS：
 

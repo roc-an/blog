@@ -444,6 +444,10 @@ console.log('script end')
 
 目前本文关于宏任务和微任务的知识已经足够解答这些执行顺序问题了。
 
+## （八）相关阅读推荐
+
+- [从浏览器地址栏中输入 URL 到看到页面，中间经历了什么？](https://github.com/roc-an/blog/issues/3)
+
 ## 参考资源
 
 * [source.chromium.org | Chrome 浏览器源码](https://source.chromium.org/)
