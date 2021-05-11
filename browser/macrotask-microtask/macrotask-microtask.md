@@ -130,14 +130,58 @@
 `window.setTimeout()` 用于在指定延时毫秒后执行回调函数：
 
 ```js
-const timeoutId = window.setTimeout(() => {
-  console.log('学习 JS 使我快乐')
-}, 1000)
+function log() {
+  console.log('学前端我乐此不疲')
+}
+
+const timeoutId = window.setTimeout(log, 1000)
 ```
 
 `setTimeout()` 返回的整数是该定时器的编号，可以通过该编号来清除定时器：
 
-`window.clearInterval(timeoutId)`
+`window.clearTimeout(timeoutId)`
+
+### setTimeout 实现原理
+
+上文提到过，当要执行异步回调时，会将执行回调的逻辑添加到消息队列。
+
+可 `setTimeout()` 是指定一个确切的延时毫秒后执行，所以只是简单地将回调逻辑直接添加到消息队列队尾明显不可行，因为这样就没法控制要执行的时间了。
+
+于是机智的 Chrome 又开辟了另一个结构，叫**延迟 HashMap**，里面专门放定时器回调任务和其他 Chrome 内部要延迟执行的任务。
+
+简单说，**HashMap 是一种数据结构，里面存着 Key-Value 键值对，通过 Key 可以映射取到 Value**。
+
+接一开始的 `setTimeout()` 代码：
+
+```js
+function log() {
+  console.log('学前端我乐此不疲')
+}
+
+const timeoutId = window.setTimeout(log, 1000)
+```
+
+当 JS 执行创建定时器的代码时，渲染进程会创建一个回调任务，任务中包含了：
+
+* 回调函数名 `log`；
+* 当前发起时间；
+* 延迟执行时间 `1000`。
+
+然后将该回调任务添加到延迟 HashMap 中。
+
+渲染主线程的事件循环机制在每次循环时：
+
+1. 先去消息队列中取任务、执行；
+2. 再去延迟 HashMap 中判断：
+  1. 根据发起时间和延迟执行时间判断 HashMap 结构中每个任务是否到期了；
+  2. 如果到期，就去执行；
+3. 延迟 HashMap 中所有的到期任务都执行完后，继续下一轮循环。
+
+如果要取消掉还没执行的定时器回调任务，也非常简单：根据定时器 ID 找到延迟 HashMap 中的任务，删除掉就可以了。
+
+综上，设置定时器的整体流程可以用下图表示：
+
+另外注意，**无论是消息队列，还是延迟 HashMap，它们中的任务都是宏任务（其实渲染进程中维护了很多不同优先级的队列，这些队列中的任务都是宏任务，而宏任务中的微任务队列是在宏任务要结束时执行的）**。
 
 ## 参考资源
 
@@ -145,4 +189,8 @@ const timeoutId = window.setTimeout(() => {
 
 ## Todo List
 
-- [ ] 补充 宏任务与微任务 的图。
+- [ ] 补充 宏任务与微任务 的图；
+- [ ] 长任务使 `setTimeout()` 延后执行；
+- [ ] `setTimeout()` 嵌套；
+- [ ] 未激活页面的 `setTimeout()` 最小间隔；
+- [ ] `setTimeout()` 延迟时间有最大值；
