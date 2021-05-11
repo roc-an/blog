@@ -2,7 +2,42 @@
 
 > 发布于 2021.05.11，最后更新于 2021.05.11。
 
-## （一）消息队列与事件循环机制
+## （一）一道面试题引发的血案
+
+面试时总能遇到这种题（甚至是原题）：
+
+```js
+async function foo() {
+  console.log('foo')
+}
+async function bar() {
+  console.log('bar start')
+  await foo()
+  console.log('bar end')
+}
+console.log('script start')
+setTimeout(function () {
+  console.log('setTimeout')
+}, 0)
+bar();
+new Promise(function (resolve) {
+  console.log('promise executor')
+  resolve();
+}).then(function () {
+  console.log('promise then')
+})
+console.log('script end')
+```
+
+然后就问 `console.log()` 的打印顺序。
+
+没点道行的还真不知道这题究竟要考啥，可能以为只是为了考 Promise、Async/Await 的用法，以及同步与异步。
+
+这些都知道可还是没法做对，是因为这里还涉及到了宏任务与微任务。
+
+所以这篇文章的目的就是搞懂宏任务和微任务，后面再遇上类似的执行顺序题目，那就如同喝汤一样了。
+
+## （二）消息队列与事件循环机制
 
 在浏览器多进程架构中，渲染进程是专门用来将 HTML/CSS/JS 解析、渲染成页面的。排版引擎 Blink 和 V8 引擎都运行在渲染进程中：
 
@@ -98,7 +133,7 @@
 3. 渲染主线程的事件循环机制会循环地从消息队列头部读取任务，然后执行任务，再读取、再执行...；
 4. 渲染主线程每次执行任务后，都会判断退出页面的标识变量，如果要退出页面，那么中断后续要执行的所有任务，退出线程。
 
-## （二）宏任务与微任务的由来
+## （三）宏任务与微任务的由来
 
 不过只有消息队列和事件循环机制还不够灵活，目前已经具备的能力有：
 
@@ -107,7 +142,7 @@
 
 但是没有解决**如何执行高优先级任务**的问题：
 
-举个例子，比如使用 `axios`（axios 是基于 Promise 的 HTTP 请求库）进行 AJAX 请求，当收到响应时，内部会触发执行 Promise 的 `resolve()` 方法，从而使 promise 实例的状态从进行中（pending）变为已成功（fulfilled），之后触发执行 `.then()` 中的 JS 逻辑。
+举个例子，比如使用 `axios`（axios 是基于 Promise 的 HTTP 请求库）进行 AJAX 请求，当收到响应时，内部会触发执行 Promise 的 `resolve()`，从而使 promise 实例的状态从进行中（pending）变为已成功（fulfilled），之后触发执行 `.then()` 中的 JS 逻辑。
 
 那么问题来了，`.then()` 中的逻辑要放在消息队列的哪里进行执行呢？
 
@@ -120,14 +155,14 @@
 
 **在任务执行过程中，如果产生了微任务，那么就把它添加到当前正执行的宏任务的微任务队列中。当宏任务要执行结束时，会依次执行它自己的微任务队列中的微任务。全部执行完毕后，才轮到下一个宏任务的执行。**
 
-所以回到之前的例子，Promise 进行 `resolve()` 后将要执行的 `.then()` 中逻辑就是一个微任务：
+所以回到之前的例子，Promise 执行 `resolve()` 就是一个微任务，`resolve()` 后再执行的 `.then()` 中逻辑：
 
 * `.then()` 微任务会被插入到当前正在执行的宏任务的微任务队列中，等待执行。所以它并没有阻塞到当前宏任务逻辑的执行，从而解决了执行效率的问题；
 * `.then()` 微任务也没有被插入消息队列的队尾，而是只要当前宏任务的逻辑执行完，渲染主线程并不会着急执行下一个宏任务，而是先把当前宏任务的微任务队列都执行完，然后再执行下一个宏任务，这又确保了实时性。
 
 以上就是引入宏任务和微任务的初衷，进一步思考，其实就是通过细化了任务的调度粒度（宏任务中维护一个微任务队列），而使得较高优先的任务能够在合适的时机去执行罢了。
 
-## （三）setTimeout
+## （四）setTimeout
 
 `window.setTimeout()` 用于在指定延时毫秒后执行回调函数：
 
@@ -167,7 +202,7 @@ const timeoutId = window.setTimeout(log, 1000)
 
 * 回调函数名 `log`；
 * 当前发起时间；
-* 延迟执行时间 `1000`。
+* 延迟执行时间 `1000`。
 
 然后将该回调任务添加到延迟 HashMap 中。
 
@@ -185,7 +220,7 @@ const timeoutId = window.setTimeout(log, 1000)
 
 另外注意，**无论是消息队列，还是延迟 HashMap，它们中的任务都是宏任务（其实渲染进程中维护了很多不同优先级的队列，这些队列中的任务都是宏任务，而宏任务中的微任务队列是在宏任务要结束时执行的）**。
 
-## （三）再探宏任务与微任务
+## （五）再探宏任务与微任务
 
 通过上面小节我们知道：渲染进程中维护了很多队列及其他存储待执行任务的结构，比如文章中提到的消息队列和延迟 HashMap。渲染主线程的事件循环机制循环地从这些数据结构中取任务、执行任务。
 
@@ -206,7 +241,7 @@ JS 脚本在执行时，V8 会创建一个全局执行上下文，在上下文�
 微任务的产生方式有 2 种：
 
 1. 使用 [MutationObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/MutationObserver) 监控 DOM 节点变化。当节点被修改或添加/删除其子节点时，就会触发 DOM 变化时要执行的回调，该回调的执行就属于微任务；
-2. Promise 构造函数中调用 `resolve()` 和 `reject()` 后也会产生微任务。`.then()` 和 `.catch()` 的执行就属于微任务。
+2. Promise 构造函数中调用 `resolve()` 和 `reject()` 都是微任务。然后触发执行 `.then()` 和 `.catch()` 中逻辑。
 
 ### 微任务的执行时机
 
@@ -216,7 +251,7 @@ JS 脚本在执行时，V8 会创建一个全局执行上下文，在上下文�
 
 如果在执行微任务过程中产生了新的微任务，并不会把它推迟到下个宏任务，而是就在当前宏任务的微任务队列中添加，并直到执行完毕。
 
-## （四）MutationObserver
+## （六）MutationObserver
 
 `MutationObserver` 接口提供了监视对 DOM 树所做更改的能力。这是它的规范：[Interface MutationObserver](Interface MutationObserver)
 
@@ -300,6 +335,99 @@ DOM4 中，引入 MutationObserver 来取代 Mutation Event。MutationObserver A
 * 异步：规避了频繁触发 DOM 变化后执行同步函数的性能问题；
 * 微任务：确保了实时性。
 
+## （七）题目解析
+
+回到文章开头的题目。通过本篇文章的学习，我们知道：
+
+* `setTimeout()` 的定时器回调属于宏任务，被添加到延迟 HashMap 中；
+* Promise 的 `resolve()` 和 `reject()` 属于微任务，执行后触发 `.then()` 和 `.catch()` 的执行。
+
+另外需要知道：
+
+`async` 函数返回一个 Promise 实例。当函数执行的时候，一旦遇到 `await` 就会先返回，等到异步操作完成，再接着执行函数体内后面的语句。
+
+于是我对题目的执行顺序做了详细注释：
+
+```js
+// foo 函数声明
+async function foo() {
+  // 执行 2-2-1：同步代码，执行它。打印 'foo'
+  console.log('foo')
+  // 执行 2-2-2：
+  // 关键，这里虽然没有显式写出 return 值，但 async 函数的调用是默认返回 promise 实例的
+  // 所以执行到这里，在 V8 引擎内部创建 promise 实例并返回：
+
+  // return new Promise((resolve) => {
+  //   resolve()
+  // })
+
+  // 执行 resolve() 是一个微任务，它被添加到当前宏任务的微任务队列中
+  // 此时当前宏任务的微任务队列中有了第 1 个微任务，等待执行
+}
+
+// bar 函数声明
+async function bar() {
+  // 执行 2-1：同步代码，执行它。打印 'bar start'
+  console.log('bar start')
+  // 执行 2-2：遇到 await foo()，进入到 foo() 函数
+
+  // 执行 5：
+  // 等当前宏任务的同步代码都执行完，终于轮到当前宏任务的微任务队列了。
+  // 第 1 个微任务是处理 foo() 返回的 promise 的 resolve()，这里没打印。
+  // await foo() 的返回值是 undefined。
+  await foo()
+
+  // 执行 6：这一步就相当于第 1 个微任务 resolve() 后要执行的 .then() 逻辑。打印 'bar end'。
+  console.log('bar end')
+}
+
+// 执行 1：先执行所有同步逻辑。打印 'script start'
+console.log('script start')
+
+// setTimeout 的回调是宏任务，创建定时器时将它添加到延迟 HashMap 中，创建时不会立刻执行
+// 此时延迟 HashMap 中多了一个定时器的宏任务
+setTimeout(function () {
+  // 执行 8：终于该轮到之前添加到延迟 HashMap 的下一个宏任务了，执行它。打印 'setTimeout'
+  console.log('setTimeout')
+}, 0)
+
+// 执行 2：bar() 函数调用，进去执行逻辑
+bar();
+
+// 执行 3：new Promise 构造函数中的逻辑是同步的
+new Promise(function (resolve) {
+  // 执行 3-1：由于是同步的，打印 'promise executor'
+  console.log('promise executor')
+  // 执行 3-2：
+  // 又遇到 resolve() 微任务，将其添加到当前宏任务的微任务队列
+  // 此时微任务队列中有了第 2 个微任务，等待执行
+
+  // 执行 7：继续执行微任务队列，这是第 2 个微任务，resolve() 改变 Promise 实例状态
+  resolve();
+}).then(function () {
+  // 执行 7-1：实例状态改变后触发 .then() 中逻辑的执行。打印 'promise then'。
+  // 至此，当前宏任务和宏任务关联的微任务队列全部执行完毕。
+  console.log('promise then')
+})
+
+// 执行 4：依然是同步逻辑，打印 'script end'
+console.log('script end')
+
+// 打印顺序：
+// 执行 1：'script start'
+// 执行 2-1：'bar start'
+// 执行 2-2-1：'foo'
+// 执行 3-1：'promise executor'
+// 执行 4：'script end'
+// 执行 6：'bar end'
+// 执行 7-1：'promise then'
+// 执行 8：'setTimeout'
+```
+
+当然，如果再深入 Promise 和 Async/Await 原理，那就又是一篇文章了，其中要涉及到 Generator 函数以及协程（线程中维护着多个协程，协程间互相转交线程的控制权）。
+
+目前本文关于宏任务和微任务的知识已经足够解答这些执行顺序问题了。
+
 ## 参考资源
 
 * [source.chromium.org | Chrome 浏览器源码](https://source.chromium.org/)
@@ -312,3 +440,4 @@ DOM4 中，引入 MutationObserver 来取代 Mutation Event。MutationObserver A
 - [ ] 未激活页面的 `setTimeout()` 最小间隔；
 - [ ] `setTimeout()` 延迟时间有最大值；
 - [ ] 补充 XHR 部分；
+- [ ] 外链 Promise、Async/Await 原理解析（含协程）；
