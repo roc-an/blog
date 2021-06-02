@@ -1,6 +1,6 @@
 # MySQL 数据库边学边练光速入门
 
-> 发布于 2021.04.26，最后更新于 2021.05.01。
+> 发布于 2021.04.26，最后更新于 2021.05.28。
 
 ## （一）MySQL 数据库的一二事
 
@@ -72,7 +72,7 @@ A：SQL 是一门语言，用这门语言可以访问和处理数据库。所以
 
 推荐2款市面上常用的数据库可视化工具：
 
-1. Navicat：[http://www.navicat.com.cn](http://www.navicat.com.cn)，支持 MySQL、MongoDB、Oracle 等多达7种数据库。价格比较贵，有能力的朋友还是推荐支持下正版。对于没有收入来源的学生党，白嫖版网上也是有的；
+1. Navicat：[http://www.navicat.com.cn](http://www.navicat.com.cn)，支持 MySQL、MongoDB、Oracle 等多达7种数据库。价格比较贵，有能力的朋友还是推荐支持下正版。对于没有收入来源的学生党，白嫖版网上也是有的；
 2. MySQL Workbench：[MySQL Workbench](https://www.mysql.com/cn/products/workbench/)，MySQL 官方提供的，免费，同样支持 Windows/Mac OS X/Linux 等各平台。功能同 Navicat 类似，提供数据建模、SQL 开发、服务器配置、用户管理、备份等工具，对数据库进行可视化操作。
 
 这些软件按照提示下载安装即可，遇到安装问题可以在网上搜搜，相关教程有很多，不再赘述。
@@ -95,7 +95,7 @@ A：SQL 是一门语言，用这门语言可以访问和处理数据库。所以
 
 在连接上点右键 -> 新建数据库。
 
-给数据库起名字，这里叫 `test`，字符集选 utf-8，排序规则选第一个，保存。
+给数据库起名字，这里叫 `test`，字符集选 utf-8，排序规则选第一个，保存。
 
 ### 创建表
 
@@ -237,7 +237,7 @@ CREATE TABLE `user`(
   `age` INT,
   `sex` VARCHAR(1),
   `desc` TEXT,
-	`ctime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  `ctime` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
@@ -502,3 +502,7 @@ SELECT * FROM user ORDER BY age LIMIT 3, 3;
 ## （六）相关阅读推荐
 
 * [Express 光速入门](https://github.com/roc-an/blog/issues/2)
+
+## ToDo List
+
+- [ ] 性别补充 [`DECIMAL` 类型](https://dev.mysql.com/doc/refman/5.7/en/precision-math-decimal-characteristics.html) 说明。
