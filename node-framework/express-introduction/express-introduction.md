@@ -1,6 +1,6 @@
 # Express 光速入门
 
-> 发布于 2021.05.01，最后更新于 2021.05.01。
+> 发布于 2021.05.01，最后更新于 2021.06.03。
 
 ![express](https://camo.githubusercontent.com/0566752248b4b31b2c4bdc583404e41066bd0b6726f310b73e1140deefcc31ac/68747470733a2f2f692e636c6f756475702e636f6d2f7a6659366c4c376546612d3330303078333030302e706e67)
 
@@ -353,7 +353,7 @@ router.get('/userList', (req, res, next) => {
 // 设置允许跨域
 app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Origin, Accept, X-Requested-With');
   res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
   res.header("Content-Type", "application/json;charset=utf-8");
   next();
