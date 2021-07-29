@@ -32,9 +32,10 @@ Git 文件有 3 种状态：
 * 已暂存：对已修改的文件的版本做了标记，使它包含在了下次提交的快照中；
 * 已提交：数据已保存到本地数据库中；
 
-### `git commit -m`
+### `git commit -m`、`git commit --amend`
 
-`git commit -m <msg>`: 这个指令非常常用，`-m` 后跟提交的信息即可，比如：`git commit -m "feat: 完成登录功能"`。
+* `git commit -m <msg>`: 这个指令非常常用，`-m` 后跟提交的信息即可，比如：`git commit -m "feat: 完成登录功能"`；
+* `git commit --amend`：修改当前分支的上一次 commit 信息，在命令行中执行会调出自带的 Vim 编辑器；
 
 ## Git 与 SVN 的区别
 
