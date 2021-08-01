@@ -107,3 +107,61 @@ Math.exp(3); // 20.085536923187668，e 的 3 次幂
 伪随机数是用确定性的算法计算出来自 `[0,1]` 均匀分布的随机数序列。并不真正的随机。
 
 所以，`Math.random()` 不能提供像密码一样安全的随机数字，如果要生成符合密码学要求的安全随机值，可以使用 Web Crypto API：[`window.crypto.getRandomValues()`](https://developer.mozilla.org/zh-CN/docs/Web/API/Crypto/getRandomValues)
+
+## 算术运算的一些特殊现象
+
+### 溢出（Overflow）
+
+当运算结果超过了 JS 所能表示的数的上限，就会得到正无穷或者负无穷：
+
+* 正无穷：Infinity
+* 负无穷：-Infinity
+
+这种现象就是溢出。正负无穷进行四则运算后得到的结果还是无穷：
+
+```js
+Infinity-10000; // Infinity
+-Infinity * 2; // -Infinity
+```
+
+另外在 JS 中，一个正数或负数除以 0，也将得到正负无穷：
+
+```js
+17/0; // Infinity
+-0.3/0; // -Infinity
+```
+
+零除以零没有意义，将会得到一个 `NaN`：
+
+`0/0; // NaN`
+
+JS 中使用 `isNaN()` 来检测一个变量是否是 `NaN`：
+
+```js
+NaN === NaN; // false
+isNaN(0/0); // true
+```
+
+可以通过 `Number` 上的静态属性来访问正负无穷值：
+
+```js
+Number.POSITIVE_INFINITY; // Infinity
+Number.NEGATIVE_INFINITY; // -Infinity
+```
+
+通过 `isFinite()` 可以判断传入的参数是否是有限的，如果传参不是 `NaN`、`Infinity` 或 `-Infinity` 便会得到 `true`：
+
+`isFinite(0.11e22); // true`
+
+### 下溢（Underflow）
+
+如果运算结果无限接近 0，比 JS 能表示的最小值还要小时，就是下溢，这时 JS 中会得到 0。
+
+如果是一个无限小（接近于 0）的负数，那么会得到负零（`-0`）。
+
+JS 能表示的最大、最小值究竟是多少？
+
+```js
+Number.MAX_VALUE; // 最大值，1.7976931348623157e+308
+Number.MIN_VALUE; // 最小值，5e-324
+```
