@@ -332,8 +332,26 @@ Number.EPSILON === Math.pow(2, -52); // true
 
 这个 `Number.EPSILON` 其实就是 JS 表示浮点数的最小精度，如果误差小于 `Number.EPSILON`，那么在 JS 中可以认为没有误差。
 
-可以写一个**误差检测函数**，如果两数之差的绝对值比 `Number.EPSILON` 还小，那么可以认为在可接受的误差范围内，这个计算是 OK 的：
+### 安全整数
+
+JS 64 位双精度浮点数存储时，尾数是 53（1 隐藏位 + 52 有效位），所以能表示的整数在 -2 的 53 次幂到 2 的 53 次幂之间（不包含这 2 个端点），超过这个值就无法精确表示了：
 
 ```js
+Math.pow(2, 53); // 9007199254740992
+Math.pow(2, 53) + 1 === Math.pow(2, 53); // true
+```
 
+ES6 引入了 `Number.MAX_SAFE_INTEGER` 和 `Number.MIN_SAFE_INTEGER` 来分别表示 JS 所能精确表示的整数上下限：
+
+```js
+Number.MAX_SAFE_INTEGER === Math.pow(2, 53) - 1; // true
+Number.MIN_SAFE_INTEGER === -Math.pow(2, 53) + 1; // true
+```
+
+在 `Number.MIN_SAFE_INTEGER` 和 `Number.MAX_SAFE_INTEGER` 之间的整数称为**安全整数**，可以通过 `Number.isSafeInteger()` 这个静态方法来判断一个值是否是安全整数：
+
+```js
+Number.isSafeInteger('abc'); // false
+Number.isSafeInteger(-Infinity); // false
+Number.isSafeInteger(Number.MAX_SAFE_INTEGER); // true
 ```
