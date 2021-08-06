@@ -355,3 +355,61 @@ Number.isSafeInteger('abc'); // false
 Number.isSafeInteger(-Infinity); // false
 Number.isSafeInteger(Number.MAX_SAFE_INTEGER); // true
 ```
+
+### BigInt 数据类型
+
+由于 JS 的数字都是用 IEEE 754 的 64 位双精度浮点数表示的，所以仅有的 53 个二进制尾数位无法精确表示大整数。
+
+这样就无法使用 JS 用于金融和科学领域的精确计算。
+
+另外如果一个数大于等于 2 的 1024 次方，在 JS 中会变为无穷大 `Infinity`：
+
+```js
+// 超过 53 个二进制位的数值，无法保持精度
+Math.pow(2, 53) === Math.pow(2, 53) + 1 // true
+
+// 大于等于 2 的 1024 次方的数值，无法表示
+Math.pow(2, 1023); // 8.98846567431158e+307
+Math.pow(2, 1024); // Infinity
+```
+
+[ES2020](https://github.com/tc39/proposal-bigint) 引入了一种新的数据类型 `BigInt`（大整数），来解决这个问题，这是 ECMAScript 的**第八种数据类型**。
+
+`BigInt` 只用来表示整数，没有位数的限制，任何位数的整数都可以精确表示。
+
+为了与 `Number` 类型区别，`BigInt` 类型的数据必须添加后缀 `n`：
+
+```js
+const a = 2172141653n;
+const b = 15346349309n;
+
+// BigInt 可以保持精度
+a * b // 33334444555566667777n
+
+// 普通整数无法保持精度
+Number(a) * Number(b) // 33334444555566670000
+
+// 可以使用 typeof 进行类型检测
+typeof(a); // "bigint"
+```
+
+通过原生提供的 `BigInt()` 函数（注意，`BigInt` 并不是构造函数）可以将整数转为 BigInt 类型：
+
+```js
+BigInt(100); // 100n
+
+// 传入其他无法转为数字类型的参数或者传小数都将报错
+BigInt('100'); // 100n，能正常转换，因为 '100' 可以转成数字
+BigInt(null); // Uncaught TypeError: Cannot convert null to a BigInt
+BigInt(100.01); // Uncaught RangeError: The number 100.01 cannot be converted to a BigInt because it is not an integer
+```
+
+## （五）总结
+
+我们较深入地探讨了 JS 中数字类型相关的一些基础知识，甚至过程中还涉及到了数的存储结构这种计算机组成原理相关的知识。
+
+这对于我们理解 JS 数字相关的一些表现很有帮助，另外，也可以站在更底层的角度来思考编程语言的一些局限性，以及语言标准进步的方向。
+
+在进行科学计算或是金融数字相关的研发时，需要注意到浮点数导致的误差。这也侧面在提醒我们在进行日常编码时要注重严谨性。
+
+希望看到这篇文章的朋友能够有所思考和感悟。
