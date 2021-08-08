@@ -1,5 +1,7 @@
 # 深入理解 JavaScript 中的数字类型
 
+> 发布于 2021.08.08，最后更新于 2021.08.08。
+
 JS 中所有数字都是用 64 位双精度浮点数表示的。
 
 虽然标准对 JS 数字定义得很清晰，但：
@@ -478,6 +480,13 @@ BigInt(100); // 100n
 BigInt('100'); // 100n，能正常转换，因为 '100' 可以转成数字
 BigInt(null); // Uncaught TypeError: Cannot convert null to a BigInt
 BigInt(100.01); // Uncaught RangeError: The number 100.01 cannot be converted to a BigInt because it is not an integer
+```
+
+`BigInt` 数无法直接与普通数字进行运算：
+
+```js
+3n + 1; // Uncaught TypeError: Cannot mix BigInt and other types, use explicit conversions
+3n + 1n; // 4n，大整数只能与大整数进行运算
 ```
 
 ## （五）总结
