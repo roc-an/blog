@@ -20,10 +20,10 @@ Object.getOwnPropertyDescriptor(obj, 'a');
 
 ```js
 {
+  writable: true,
   configurable: true,
   enumerable: true,
   value: 1,
-  writable: true
 }
 ```
 
@@ -43,10 +43,10 @@ Object.getOwnPropertyDescriptor(obj, 'a');
 
 这些内部特性也叫「属性描述符」（`descriptor`），数据属性有 4 种属性描述符：
 
-* `[[Writable]]`
-* `[[Configurable]]`
-* `[[Enumerable]]`
-* `[[Value]]`
+* `[[Writable]]` 是否可写
+* `[[Configurable]]` 是否可配置
+* `[[Enumerable]]` 是否可枚举
+* `[[Value]]` 属性值
 
 之所以加上 `[[]]` 是因为这些属性描述符都是 JS 引擎根据标准在浏览器内部实现的，没办法直接访问这些属性描述符。
 
@@ -129,4 +129,36 @@ Object.keys(obj); // ["a", "c"]
 ```js
 obj.propertyIsEnumerable('a'); // true，a 属性是可枚举的
 obj.propertyIsEnumerable('b'); // false，b 属性是不可枚举的
+```
+
+### `[[Value]]`
+
+**该属性的值。**也就是对象实际读取和写入的属性值。默认是 `undefined`。可以将对象属性值设置成任何 JavaScript 值。
+
+小结一下，当我们创建了一个新对象并让其携带初始属性，那么：
+
+* 这些属性的 `[[Writable]]`、`[[Configurable]]`、`[[Enumerable]]` 均为 `true`；
+* 这些属性的 `[[Value]]` 都会被设定为指定的值；
+
+可以通过 [`Object.getOwnPropertyDescriptor()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor) 这个对象的静态方法来获取对象属性的各特性。
+
+你会发现，我们其实又回到了最初引言中的例子：
+
+```js
+const hero = {
+  name: '曜',
+};
+
+Object.getOwnPropertyDescriptor(hero, 'name');
+```
+
+将得到：
+
+```js
+{
+  writable: true,
+  configurable: true,
+  enumerable: true,
+  value: "曜",
+}
 ```
