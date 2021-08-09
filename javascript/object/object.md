@@ -98,3 +98,35 @@ console.log(obj.a); // 2，依旧是 2 因为 writable 为 false
 ```
 
 TODO：引用数据类型数据的属性，依然可以被修改
+
+### `[[Enumerable]]`
+
+**该属性是否可枚举。**枚举的意思说白了就是该属性是否可以被 `for-in` 循环和 `Object.keys()` 的遍历中被访问到。
+
+默认为 `true`，也就是直接定义在对象上的属性，默认是可枚举的：
+
+```js
+const obj = { a: 1, b: 2, c: 3 }
+Object.keys(obj); //  ["a", "b", "c"]
+```
+
+如果我们使用 `Object.defineProperty()` 将 `b` 属性设为不可枚举：
+
+```js
+Object.defineProperty(obj, 'b', { enumerable: false });
+
+for (let key in obj) {
+  console.log(obj[key]); // 打印 1, 3
+}
+
+Object.keys(obj); // ["a", "c"]
+```
+
+那么再使用 `for-in` 或 `Object.keys()` 对对象属性进行遍历，就不会访问该不可枚举属性了。
+
+对象原型上提供了 [`Object.prototype.propertyIsEnumerable()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/propertyIsEnumerable) 方法，通过它可以判断对象的属性是否可枚举：
+
+```js
+obj.propertyIsEnumerable('a'); // true，a 属性是可枚举的
+obj.propertyIsEnumerable('b'); // false，b 属性是不可枚举的
+```
