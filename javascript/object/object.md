@@ -1,5 +1,7 @@
 # 深入理解 JavaScript 中的对象
 
+> 封面图取自王者荣耀官网，英雄曜的限定皮肤——李逍遥
+
 ## （一）引子
 
 ECMAScript 中定义，对象其实就是一组属性的无序集合。对象的属性和方法都由一个个标识符来标识，每个标识符映射到一个值。
@@ -162,3 +164,112 @@ Object.getOwnPropertyDescriptor(hero, 'name');
   value: "曜",
 }
 ```
+
+## （四）访问器属性
+
+访问器属性没有具体的值，取而代之的是，拥有可选的取值（getter）、设置值函数（setter）。
+
+访问器属性也有 4 种属性描述符：
+
+* `[[Configurable]]`：同数据属性一致；
+* `[[Enumerable]]`：同数据属性一致；
+* `[[Get]]`：取值函数，非必需的，在读取对象属性值时会被调用。默认为 `undefined`；
+* `[[Set]]`：设置值函数，非必需的，在写入对象属性值时会被调用。默认为 `undefined`；
+
+### 定义访问器属性，模拟英雄升级加点
+
+可以通过 `Object.defineProperty()` 来为对象定义访问器属性：
+
+```js
+// 模拟王者荣耀英雄，曜
+const hero = {
+  _level: 1,
+  name: '曜',
+  skills: [{
+    name: '裂空斩',
+    level: 1,
+  }]
+};
+
+// 取曜的已学技能名
+Object.defineProperty(hero, 'skillNames', {
+  // skillNames 的取值函数
+  get() {
+    return this.skills.map(skill => skill.name);
+  }
+});
+
+// 提升英雄等级，学习新的技能
+Object.defineProperty(hero, 'level', {
+  // level 的取值函数
+  get() {
+    return this._level;
+  },
+
+  // level 的设置值函数
+  set(newValue) {
+    this._level = newValue;
+
+    switch (newValue) {
+      case 2: // 2 级了，学 2 技能
+        this.skills.push({
+          name: '逐星',
+          level: 1,
+        });
+        break;
+      case 3: // 3 级了，升级已学的 1 技能
+        this.skills[0].level += 1;
+        break;
+      case 4: // 4 级了，学大招
+        this.skills.push({
+          name: '归尘',
+          level: 1,
+        });
+        break;
+      default:
+        console.log('本示例仅模拟曜的前 4 级升级加点情况');
+    }
+  }
+});
+```
+
+上面代码中，我们定义了对象 `hero` 来模拟王者荣耀中的英雄曜在前 4 级的升级加技能点情况。
+
+英雄每升一级就能新学习新技能或升级一个现有技能。
+
+其中 `_level` 表示私有属性“等级”，虽然加了下划线前缀与其他属性从命名角度区分，但本质上 JS 对象是不存在私有属性的，所以 `_level` 算是一个伪私有属性。
+
+接着我们通过 `Object.defineProperty()` 定义了 `skillNames` 的取值函数。只要一访问 `hero.skillNames` 就能得到已学技能名数组
+
+另外也定义了 `level` 的取值和设置值函数，每当等级增加，学习或升级相应的技能。
+
+我们用代码试一试：
+
+```js
+// 初始，曜 1 级，只会一个 1 技能“裂空斩”
+console.log(hero.level); // 1
+console.log(hero.skillNames); // ["裂空斩"]
+
+// 曜升到 2 级，多学了一个 2 技能“逐星”
+hero.level += 1;
+console.log(hero.level); // 2
+console.log(hero.skillNames); // ["裂空斩", "逐星"]
+
+// 曜升到 3 级，已学的技能“裂空斩”升了 1 级
+hero.level += 1;
+console.log(hero.level); // 3
+console.log(hero.skillNames); // ["裂空斩", "逐星"]
+console.log(hero.skills[0]); // { name: "裂空斩", level: 2 }，发现此时技能裂空斩正如预期那样升了一级
+
+// 曜升到 4 级，学习大招“归尘”
+hero.level += 1;
+console.log(hero.level); // 4
+console.log(hero.skillNames); // ["裂空斩", "逐星", "归尘"]
+
+// 再给英雄升级，就会得到打印提示
+hero.level += 1; // 控制台输出 "本示例仅模拟曜的前 4 级升级加点情况"
+```
+
+上面例子中我们发现，虽然设置的是 `level` 属性的值，但同时又会影响到 `_level` 和 `skills` 属性，并且间接影响到了 `skillNames` 属性的取值。
+
+这种**设置一个属性而导致其他事情发生的情况，是访问器属性非常典型的使用场景。**
