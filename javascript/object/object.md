@@ -546,3 +546,28 @@ console.log(obj); // { name: "小乔" }，密封后，同样无法删除属性
 Object.isFrozen(obj); // false，该对象被密封而不是被冻结
 Object.isSealed(obj); // true
 ```
+
+### `Object.is()` 同值相等
+
+在 ES5 时代，如果要比较两个值是否完全相等，会使用 `===` 而不是 `==`，因为 `==` 在比较时存在「隐式转换」，比如 `1 == '1' // true`。
+
+但是 `===` 其实也有坑人的地方：
+
+```js
+NaN === NaN; // false，要想判断 NaN 需要使用 isNaN()
+-0 === +0; // true
+```
+
+于是 ES6 提出了同值相等（Same-value equality）算法的实现，也就是 `Object.is()`。
+
+`Object.is()` 与严格相等只有 2 处不同：
+
+* `NaN` 等于 `NaN`
+* `+0` 与 `-0` 不等
+
+示例：
+
+```js
+Object.is(+0, -0); // false
+Object.is(NaN, NaN); // true
+```
