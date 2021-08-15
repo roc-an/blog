@@ -738,3 +738,50 @@ obj.name; // "曜"
 上面 1~11 种代理操作已经覆盖了对象操作的方方面面，第 12、13 种甚至可以代理一个函数，来拦截函数的调用。
 
 本文不再对每一种代理配置进行展开，详细可以看给出的链接，另外也可以在这里查到完整的 `Proxy` 代理操作方法：[Proxy | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy)。
+
+也可以参考阮一峰老师的 [Proxy | 《ECMAScript 6 入门》](https://es6.ruanyifeng.com/#docs/proxy)。
+
+### Proxy 的典型使用场景
+
+#### Proxy 实现数据验证
+
+假设给英雄升级，级数不超过 15 级，那么给对象属性赋值的数据验证可以这样实现：
+
+```js
+// 代理操作配置
+const validator = {
+  /**
+   * 代理设置属性
+   * @param {object} target 代理的源对象
+   * @param {string} propKey 将被设置属性名或 Symbol
+   * @param {any} value 新属性值
+   */
+  set: function(target, propKey, value) {
+    // 对 level 属性进行验证，不通过则抛错
+    if (propKey === 'level') {
+      if (!Number.isInteger(value)) {
+        throw new TypeError('level 属性非整数');
+      }
+      if (value < 0 || value > 15) {
+        throw new RangeError('level 值范围应在 0 ~ 15 之间');
+      }
+    }
+    // 通过验证，保留设置对象属性值的默认行为
+    target[propKey] = value;
+    // set 返回 boolean 值表示设置属性是否成功
+    return true;
+  },
+};
+
+const hero = {
+  name: '曜',
+  level: 0,
+}
+const heroProxy = new Proxy(hero, validator); // 创建代理实例
+
+heroProxy.level = 1.01; // Uncaught TypeError: level 属性非整数
+heroProxy.level = -1; // Uncaught RangeError: level 值范围应在 0 ~ 15 之间
+heroProxy.level = 18; // Uncaught RangeError: level 值范围应在 0 ~ 15 之间
+heroProxy.level = 2; // 可正常设置
+heroProxy.level; // 2
+```
