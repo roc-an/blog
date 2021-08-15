@@ -387,7 +387,7 @@ hero.level += 1; // 控制台输出 "本示例仅模拟曜的前 4 级升级加�
 
 如果要一次性为对象的多个属性定义属性描述符，可以使用 `Object.defineProperties()`，这里就不再赘述了。
 
-### `Object.assign()`
+### `Object.assign()` 拷贝对象属性
 
 `assign` 英文释义是分配、指派、赋值的意思。
 
@@ -432,7 +432,7 @@ Object.defineProperty(obj, 'skills', { enumerable: false });
 console.log(Object.assign({}, obj)); // { name: "曜" }
 ```
 
-### `Object.create()`
+### `Object.create()` 创建一个指定了原型的新对象
 
 传入一个对象，得到一个新对象，传入对象作为新对象的原型。
 
@@ -477,3 +477,72 @@ son.getFatherSkill(); // ["吃饭", "睡觉"]，调用继承来的父类原型�
 
 * 组合式：通过在子类构造函数中调用父类构造函数，来继承属性；通过指定原型关系来继承方法。这两者打了个配合，从而叫组合式；
 * 寄生式：使用 `Object.create()` 指定了原型指向关系，从而避免了 1 次父类构造函数的执行，这叫寄生式。
+
+### `Object.freeze()` 冻结对象
+
+`freeze` 是冻结的意思。
+
+**`Object.freeze()` 可以冻结一个对象，冻结后没法再新增、删除属性，也没法修改属性的属性描述符，该对象的原型也不能修改。**
+
+```js
+const obj = { name: '曜', };
+Object.freeze(obj);
+
+obj.age = 22;
+console.log(obj); // { name: "曜" }，冻结后无法新增属性
+
+delete obj.name; // false
+console.log(obj); // { name: "曜" }，冻结后无法删除属性
+
+// Uncaught TypeError: Cannot redefine property: name，冻结后无法修改属性描述符
+Object.defineProperty(obj, 'name', { enumerable: false });
+
+// Uncaught TypeError: #<Object> is not extensible，冻结后无法修改原型
+Object.setPrototypeOf(obj, { a: 1 });
+```
+
+**可以通过 `Object.isFrozen()` 来判断一个对象是否被冻结**，继续上面例子：
+
+```js
+Object.isFrozen(obj); // true
+```
+
+**`Object.freeze()` 还可以冻结数组，冻结后无法被修改：**
+
+```js
+const arr = ['吃饭', '睡觉'];
+Object.freeze(arr);
+
+// Uncaught TypeError: Cannot add property 2, object is not extensible，冻结的数组无法再 push
+arr.push('打哈欠');
+
+arr[0] = '打哈欠';
+console.log(arr); // 结果依然是 ["吃饭", "睡觉"]
+```
+
+### `Object.seal()` 密封对象
+
+`seal` 是密封的意思。
+
+`Object.seal()` 可以密封一个对象，它和 `Object.freeze()` 的区别是，密封对象的属性值，如果之前可改，那么密封后也可改。
+
+```js
+const obj = { name: '曜' };
+Object.seal(obj);
+
+obj.age = 22;
+console.log(obj); // { name: "曜" }，密封后，同样无法新增属性
+
+obj.name = '小乔';
+console.log(obj); // { name: "小乔" }，密封后，之前可改的属性依然可改
+
+delete obj.name; // false
+console.log(obj); // { name: "小乔" }，密封后，同样无法删除属性
+```
+
+同样地，JS 提供了 `Object.isSealed()` 方法来判断一个对象是否已冻结，继续上面代码：
+
+```js
+Object.isFrozen(obj); // false，该对象被密封而不是被冻结
+Object.isSealed(obj); // true
+```
