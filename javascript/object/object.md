@@ -672,7 +672,7 @@ Object.entries(obj); // [ ["a", 1], ["b", 2] ]
 
 ### Proxy 介绍
 
-`Proxy` 代理器用于代理对象。代理后一切对该对象的访问，都要经过拦截。可以拦截对象属性的访问、赋值、枚举以及方法的调用等。
+`Proxy` 代理器多用于代理对象。代理后一切对该对象的访问，都要经过拦截。可以拦截对象属性的读取、赋值、枚举。代理器也可以代理一个函数的调用。
 
 从语法角度来看，**`Proxy` 是构造函数**，那么同其他构造函数一样，要想使用它，就得 `new` 构造函数从而得到实例。
 
@@ -719,6 +719,22 @@ obj.name; // "曜"
 
 截止 2021 年，目前算上 `get`，一共可以配置 13 种「代理操作」（也叫捕捉器）：
 
-
+1. [`get(target, propKey, receiver)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/get)：代理读取属性；
+2. [`set(target, propKey, value, receiver)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/set)：代理设置属性；
+3. [`has(target, propKey)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/has)：代理 `in` 操作符操作；
+4. [`deleteProperty(target, propKey)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/deleteProperty)：代理属性的 `delete` 操作；
+5. [`ownKeys(target)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/ownKeys)：代理 `Object.getOwnPropertyNames()`、`Object.getOwnPropertySymbols()`、`Object.keys()`、`for-in` 循环等操作；
+6. [`getOwnPropertyDescriptor(target, propKey)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/getOwnPropertyDescriptor)：代理 `Object.getOwnPropertyDescriptor()` 操作；
+7. [`defineProperty(target, propKey, propDesc)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/defineProperty)：代理 `Object.defineProperty()` 和 `Object.defineProperties()` 操作；
+8. [`preventExtensions(target)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/preventExtensions)：代理 `Object.preventExtensions()` 操作；
+9. [`getPrototypeOf(target)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/getPrototypeOf)：代理 `Object.getPrototypeOf()` 操作；
+10. [`isExtensible(target)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/isExtensible)：代理 `Object.isExtensible()` 操作；
+11. [`setPrototypeOf(target, proto)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/setPrototypeOf)：代理 `Object.setPrototypeOf()` 操作；
+12. [`apply(target, object, args)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/apply)：代理函数的调用；
+13. [`construct(target, args)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/construct)：代理函数作为构造函数去 `new` 实例的操作。
 
 如果哪种代理操作没定义，那就采用源对象的默认行为。
+
+上面 1~11 种代理操作已经覆盖了对象操作的方方面面，第 12、13 种甚至可以代理一个函数，来拦截函数的调用。
+
+本文不再对每一种代理配置进行展开，详细可以看给出的链接，另外也可以在这里查到完整的 `Proxy` 代理操作方法：[Proxy | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy)。
