@@ -431,3 +431,49 @@ const obj = {
 Object.defineProperty(obj, 'skills', { enumerable: false });
 console.log(Object.assign({}, obj)); // { name: "曜" }
 ```
+
+### `Object.create()`
+
+传入一个对象，得到一个新对象，传入对象作为新对象的原型。
+
+语法：`Object.create(proto，[propertiesObject])`，其中：
+
+* `proto`：要作为新对象原型的对象；
+* `propertiesObject`：属性描述符对象，同 `Object.defineProperties()` 的第二个参数；
+
+一个典型场景是使用它实现类的「寄生组合式继承」：
+
+```js
+// 虽然是构造函数，但是居然没有去 new 它，而是通过 .call() 调用
+function Father(name, age) { // 父类
+  this.name = name
+  this.age = age
+  this.skills = ['吃饭', '睡觉']
+}
+Father.prototype.getFatherSkill = function() { // 父类原型方法
+  console.log(this.skills)
+}
+
+function Son(name, age) { // 子类
+  // 1.通过在「子类构造函数」中调用「父类构造函」来「继承属性」
+  Father.call(this, name, age)
+
+  // 还可以追加定义子类自己的属性
+  this.color = 'blue' // 基因突变
+  this.name = '基因突变的儿子'
+}
+
+// 2.通过 子类原型 = Object.create(父类原型) 来「继承父类方法」
+Son.prototype = Object.create(Father.prototype) // 寄生式 - 借鸡下蛋。避免了 1 次父类构造函数的执行
+
+// 3. 补充完善 constructor 指向
+Son.prototype.constructor = Son
+
+const son = new Son('曜', 22);
+son.getFatherSkill(); // ["吃饭", "睡觉"]，调用继承来的父类原型方法
+```
+
+寄生组合式继承，要理解它其实要拆开看，是 2 个思想：
+
+* 组合式：通过在子类构造函数中调用父类构造函数，来继承属性；通过指定原型关系来继承方法。这两者打了个配合，从而叫组合式；
+* 寄生式：使用 `Object.create()` 指定了原型指向关系，从而避免了 1 次父类构造函数的执行，这叫寄生式。
