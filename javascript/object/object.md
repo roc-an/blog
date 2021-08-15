@@ -571,3 +571,99 @@ NaN === NaN; // false，要想判断 NaN 需要使用 isNaN()
 Object.is(+0, -0); // false
 Object.is(NaN, NaN); // true
 ```
+
+### `Object.preventExtensions()` 与 `Object.isExtensible()`
+
+**可以使用 `Object.preventExtensions()` 让对象变成「不可扩展的」，所谓不可扩展，意思就是不能增加新属性（原型也不可改）：**
+
+```js
+const obj = { name: '曜' };
+Object.preventExtensions(obj); // 使 obj 这个对象不可扩展
+
+obj.age = 12;
+console.log(obj); // { name: "曜" }，无法新增新属性
+Object.setPrototypeOf(obj, { a: 1 }); // Uncaught TypeError: #<Object> is not extensible，无法修改原型
+
+obj.name = '小乔';
+console.log(obj); // { name: "小乔" }，已有的可改属性依然可改
+```
+
+**可以使用 `Object.isExtensible()` 来判断对象是否可扩展，需要注意的是，被冻结、被密封的对象也是不可扩展的。**
+
+```js
+const frozen = Object.freeze({});
+Object.isExtensible(frozen); // false
+
+const sealed = Object.seal({});
+Object.isExtensible(frozen); // false
+```
+
+### `Object.keys()`、`Object.values()` 与 `Object.entries()` 遍历对象的键和值
+
+ES5 中，如果我们想遍历一个对象，一般使用 `for-in` 循环：
+
+```js
+const obj = { a: 1 };
+for (let key in obj) {
+  console.log(key); // "a"
+}
+```
+
+但是，`for-in` 也会遍历原型链上的所有可枚举属性，比如在上面例子追加代码：
+
+```js
+// 为对象原型新增了属性 b
+Object.prototype.b = 2;
+
+// for-in 循环可以遍历到
+for (let key in obj) {
+  console.log(key); // "a" "b"
+}
+```
+
+所以在 ES5 中，如果仅仅想遍历对象自身的属性，`for-in` 要与 `Object.prototype.hasOwnProperty()` 配合使用：
+
+```js
+for (let key in obj) {
+  if (obj.hasOwnProperty(key)) {
+    console.log(key); // 只打印 "a"
+  }
+}
+```
+
+可是，类似 `Object.prototype.toString`，对象原型上不是应该还有很多其他属性吗，怎么没有被遍历到？因为它们是不可枚举的：
+
+```js
+Object.getOwnPropertyDescriptor(Object.prototype, 'toString'); // { writable: true, enumerable: false, configurable: true, value: ƒ }
+```
+
+ES6 及后续版本中，加入了 `Object.keys()`、`Object.values()` 和 `Object.entries()`，它们只会遍历对象自身上的属性
+
+**`Object.keys()` 遍历对象自身的可枚举属性，得到属性的键名数组**
+
+```js
+const obj = { a: 1, b: 2 };
+Object.prototype.c = 3;
+
+Object.keys(obj); // 得到 ["a", "b"]，数组中没有原型上的 "c" 属性
+```
+
+## `Object.values()` 遍历对象自身的可枚举属性，得到属性的键值数组**
+
+```js
+const obj = { a: 1, b: 2 };
+Object.prototype.c = 3;
+
+Object.values(obj); // 得到 [1, 2]，数组中没有原型上 "c" 属性的值 3
+```
+
+`Object.entries()` 使用场景相对较少，**`Object.entries()` 遍历对象自身的可枚举属性，得到一个数组，数组元素是键值对数组。**
+
+```js
+const obj = { a: 1, b: 2 };
+Object.prototype.c = 3;
+
+Object.entries(obj); // [ ["a", 1], ["b", 2] ]
+```
+
+小结一下，如果你想遍历一个对象的属性，并且只想遍历对象自身上的，那么优先使用 `Object.keys()`、`Object.values()` 和 `Object.entries()` 而不是 `for-in` 循环。
