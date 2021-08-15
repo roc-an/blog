@@ -648,7 +648,7 @@ Object.prototype.c = 3;
 Object.keys(obj); // 得到 ["a", "b"]，数组中没有原型上的 "c" 属性
 ```
 
-## `Object.values()` 遍历对象自身的可枚举属性，得到属性的键值数组**
+**`Object.values()` 遍历对象自身的可枚举属性，得到属性的键值数组**
 
 ```js
 const obj = { a: 1, b: 2 };
@@ -667,3 +667,58 @@ Object.entries(obj); // [ ["a", 1], ["b", 2] ]
 ```
 
 小结一下，如果你想遍历一个对象的属性，并且只想遍历对象自身上的，那么优先使用 `Object.keys()`、`Object.values()` 和 `Object.entries()` 而不是 `for-in` 循环。
+
+## （六）Proxy 代理器
+
+### Proxy 介绍
+
+`Proxy` 代理器用于代理对象。代理后一切对该对象的访问，都要经过拦截。可以拦截对象属性的访问、赋值、枚举以及方法的调用等。
+
+从语法角度来看，**`Proxy` 是构造函数**，那么同其他构造函数一样，要想使用它，就得 `new` 构造函数从而得到实例。
+
+语法：`const proxy = new Proxy(target, handler)`，其中：
+
+* `target`：要代理的源对象
+* `handler`：配置对象，用于定义代理操作
+* `proxy`：得到的代理器 `Proxy` 实例
+
+来看代码：
+
+```js
+const obj = { name: '曜' };
+
+const proxyObj = new Proxy(obj, {
+  /**
+   * get 用来代理对对象的访问操作
+   * @param {object} target 代理的源对象
+   * @param {string} propKey 要访问的属性名
+   * @return {any} 属性值
+   */
+  get: function(target, propKey) {
+    if (propKey === 'name') {
+      return '小乔';
+    }
+    return '未定义属性';
+  },
+});
+
+proxyObj.name; // "小乔"
+proxyObj.age; // "未定义属性"
+obj.name; // "曜"
+```
+
+这段代码中，我们对对象 `obj` 进行代理，创建了 `Proxy` 实例 `proxyObj`。
+
+我们还定义了代理操作 `get`，每当访问代理实例的属性时就会触发 `get` 函数。
+
+另外需要注意，**要想使代理生效，那么操作的对象应是 `Proxy` 实例**，而不是代理的源对象。
+
+### 13 种可代理操作
+
+除了配置 `get` 进行属性访问的代理操作外，还能配置哪些代理操作呢？
+
+截止 2021 年，目前算上 `get`，一共可以配置 13 种「代理操作」（也叫捕捉器）：
+
+
+
+如果哪种代理操作没定义，那就采用源对象的默认行为。
