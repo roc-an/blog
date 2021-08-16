@@ -1,5 +1,7 @@
 # 深入理解 JavaScript 中的对象
 
+> 发布于 2021.08.16，最后更新于 2021.08.16。
+
 > 封面图取自王者荣耀官网，英雄曜的限定皮肤——李逍遥
 
 ECMAScript 中定义，对象其实就是一组属性的无序集合。对象的属性和方法都由一个个标识符来标识，每个标识符映射到一个值。
@@ -858,3 +860,44 @@ const yao = new Hero('曜', 1);
 yao; // { name: "曜", level: 1 }，同时兼顾了源构造函数和扩展函数的功能
 yao.theme; // "描边"，也能够正常访问构造函数的原型属性
 ```
+
+## （七）Reflect
+
+`Reflect` 意为反映、反射的意思。它同 `Proxy` 一样也是针对对象的：
+
+* 将 `Object` 上属于语言内部的方法放到 `Reflect` 上，比如 `Object.defineProperty`，未来对象的语言内部方法都会部署到 `Reflect` 上；
+* 修改某些 `Object` 方法的返回值，使其更加合理。比如 `Object.defineProperty` 无法定义属性时会抛错，而 `Reflect.defineProperty` 会返回 `false`，因而就可以进行 `if` 判断而无需 `try-catch`；
+* 让 `Object` 相关操作都变成函数行为。比如 `key in obj` 和 `delete obj[key]` 都是指令式的，取而代之的是 `Reflect.has(obj, key)` 和 `Reflect.deletePRoperty(obj, key)`；
+* `Reflect` 对象的方法与 `Proxy` 对象的方法一一对应，只要是 `Proxy` 对象的方法，就能在 `Reflect` 对象上找到对应的方法。这样无论怎么修改 `Proxy` 的代理操作，总能在 `Reflect` 上取到默认行为；
+
+`Reflect` 一共有 13 个静态方法：
+
+1. `Reflect.get(target, name, receiver)`
+2. `Reflect.set(target, name, value, receiver)`
+3. `Reflect.has(target, name)`
+4. `Reflect.deleteProperty(target, name)`
+5. `Reflect.ownKeys(target)`
+6. `Reflect.getOwnPropertyDescriptor(target, name)`
+7. `Reflect.defineProperty(target, name, desc)`
+8. `Reflect.preventExtensions(target)`
+9. `Reflect.getPrototypeOf(target)`
+10. `Reflect.isExtensible(target)`
+11. `Reflect.setPrototypeOf(target, prototype)`
+12. `Reflect.apply(target, thisArg, args)`
+13. `Reflect.construct(target, args)`
+
+我故意将它们的顺序与上方列出的 `Proxy` 代理操作的顺序保持一致，而且也是 13 个，这说明 `Reflect` 的静态方法与 `Proxy` 的代理操作一一对应，并且大部分与 `Object` 的同名方法行为都是一致的。
+
+详细的每个静态方法的使用可以参考 [Reflect | ECMAScript 6 入门](https://es6.ruanyifeng.com/#docs/reflect)，本文就不再赘述了。
+
+## （八）小结
+
+本文从介绍对象在浏览器内存中的存储开始，解释了很多对象相关的 JS 的奇葩现象。如果不理解对象的存储，那么我们在面对很多 JS 的不同数据类型的使用场景时会感到困惑。
+
+接着深入对象的属性，介绍了数据属性和访问器属性，理解它们将会使我们站在更微观的视角来看待对象属性的操作。
+
+再之后我们介绍了一些平时写业务不常用，但又常常出现在框架源码中的对象静态方法。
+
+最后介绍了 `Proxy` 和 `Reflect` 这两块 ES 标准中与对象相关的比较新的扩展，`Proxy` 已在 Vue3 中作为底层被大量使用，而 `Reflect` 也是我们后面写对象静态方法可读性比较强的写法。
+
+希望读者能有所感悟和收获，欢迎留言与我探讨:)
