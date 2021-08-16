@@ -736,7 +736,7 @@ obj.name; // "曜"
 9. [`getPrototypeOf(target)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/getPrototypeOf)：代理 `Object.getPrototypeOf()` 操作；
 10. [`isExtensible(target)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/isExtensible)：代理 `Object.isExtensible()` 操作；
 11. [`setPrototypeOf(target, proto)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/setPrototypeOf)：代理 `Object.setPrototypeOf()` 操作；
-12. [`apply(target, object, args)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/apply)：代理函数的调用；
+12. [`apply(target, thisArg, argumentsList)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/apply)：代理函数的调用；
 13. [`construct(target, args)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Proxy/Proxy/construct)：代理函数作为构造函数去 `new` 实例的操作。
 
 如果哪种代理操作没定义，那就采用源对象的默认行为。
@@ -790,4 +790,71 @@ heroProxy.level = -1; // Uncaught RangeError: level 值范围应在 0 ~ 15 之�
 heroProxy.level = 18; // Uncaught RangeError: level 值范围应在 0 ~ 15 之间
 heroProxy.level = 2; // 可正常设置
 heroProxy.level; // 2
+```
+
+#### 扩展构造函数
+
+结合 `construct` 和 `apply` 这两个代理操作配置，可以实现函数作为构造函数创建实例时的功能扩展：
+
+```js
+function getExtendedConstructor(srcConstructor, toExtendFunc) {
+  // 得到要扩展的函数的原型的 constructor 属性描述对象
+  const descriptor = Object.getOwnPropertyDescriptor(toExtendFunc.prototype, 'constructor');
+  // 要扩展的函数的原型设为一个空对象，该空对象的原型是源构造函数的原型
+  toExtendFunc.prototype = Object.create(srcConstructor.prototype);
+  // 代理配置
+  const handler = {
+    /**
+     * 代理 new 构造函数创建实例
+     * @param {function} target 源构造函数
+     * @param {array} argumentsList 构造函数的参数列表
+     * @return {object} 创建的实例对象
+     */
+    construct: function(target, argumentsList) {
+      // 创建一个新对象，该对象的原型是要扩展的函数的原型（也是个空对象，空对象的原型指向源构造函数的原型）
+      // 这一步实现了创建的新对象的原型链式关系：新对象 -> 要继承的函数的原型（空对象） -> 源构造函数的原型
+      const obj = Object.create(toExtendFunc.prototype);
+      // this 绑定到代理配置对象 handler，这里执行 apply 代理操作
+      this.apply(target, obj, argumentsList);
+      return obj;
+    },
+    /**
+     * 代理函数调用
+     * @param {function} target 源函数
+     * @param {any} thisArg 函数被调用时的上下文
+     * @param {array} argumentsList 函数被调用时的参数数组
+     * @return {any} apply 方法可以返回任何值
+     */
+    apply: function(target, thisArg, argumentsList) {
+      // 以创建的新实例作为 this，执行源构造函数
+      srcConstructor.apply(thisArg, argumentsList);
+      // 以创建的新实例作为 this，执行要扩展的函数
+      toExtendFunc.apply(thisArg, argumentsList);
+    }
+  };
+
+  const proxy = new Proxy(toExtendFunc, handler); // 创建代理实例
+
+  // 令要扩展的函数的原型的 constructor 指向代理实例
+  descriptor.value = proxy;
+  Object.defineProperty(toExtendFunc.prototype, 'constructor', descriptor);
+
+  return proxy;
+}
+
+const Person = function(name) {
+  this.name = name;
+};
+
+// 创建代理后的扩展了功能的代理实例
+const Hero = getExtendedConstructor(Person, function(name, level) {
+  this.level = level;
+});
+
+Hero.prototype.theme = '描边';
+
+const yao = new Hero('曜', 1);
+
+yao; // { name: "曜", level: 1 }，同时兼顾了源构造函数和扩展函数的功能
+yao.theme; // "描边"，也能够正常访问构造函数的原型属性
 ```
