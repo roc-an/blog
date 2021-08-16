@@ -387,6 +387,12 @@ hero.level += 1; // 控制台输出 "本示例仅模拟曜的前 4 级升级加�
 
 如果要一次性为对象的多个属性定义属性描述符，可以使用 `Object.defineProperties()`，这里就不再赘述了。
 
+## （五）对象的静态方法
+
+对象的所有静态方法可以在这里查到：[Object | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object)
+
+我们挑一些典型的、在框架底层常用的以及 ES 标准新增的方法做介绍。方法的详细使用语法可以参考 MDN。
+
 ### `Object.assign()` 拷贝对象属性
 
 `assign` 英文释义是分配、指派、赋值的意思。
@@ -743,7 +749,7 @@ obj.name; // "曜"
 
 ### Proxy 的典型使用场景
 
-#### Proxy 实现数据验证
+#### 数据验证
 
 假设给英雄升级，级数不超过 15 级，那么给对象属性赋值的数据验证可以这样实现：
 
