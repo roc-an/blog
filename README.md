@@ -1,8 +1,8 @@
-# blog
+# Blog
 
 安鸿鹏的专题博客
 
-## 目录
+## 技术
 
 ECMAScript：
 
@@ -21,3 +21,11 @@ NodeJS：
 数据库：
 
 - [MySQL 数据库边学边练光速入门](https://github.com/roc-an/blog/issues/1)
+
+## 跨界看财经
+
+财经月记：
+
+以程序员的视角，摘录财经消息，分享财经知识。
+
+- [财经月记-2021年7月](https://github.com/roc-an/blog/issues/7)
