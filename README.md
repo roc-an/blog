@@ -22,6 +22,10 @@ NodeJS：
 
 - [MySQL 数据库边学边练光速入门](https://github.com/roc-an/blog/issues/1)
 
+啃《算法导论》系列：
+
+- [01-算法分析、插入排序与归并排序（啃算法导论系列）](https://github.com/roc-an/blog/issues/8)
+
 ## 跨界看财经
 
 财经月记：
