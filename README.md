@@ -24,7 +24,7 @@ NodeJS：
 
 啃《算法导论》系列：
 
-- [01-算法分析、插入排序与归并排序（啃算法导论系列）](https://github.com/roc-an/blog/issues/8)
+- [算法分析、插入排序与归并排序（啃算法导论系列 01）](https://github.com/roc-an/blog/issues/8)
 
 ## 跨界看财经
 
