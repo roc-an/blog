@@ -43,3 +43,34 @@ JavaScript 由 3 部分组成：
   * `WeakSet`
 
 这样列下来后就比较清晰了，**本文的主角 `Map` 和 `Set`，是属于 JS 核心语法 ECMAScript 中数据类型这块，细分下去，它们是「引用数据类型」中「集合引用类型」的一员**。
+
+## （二）Map 为 JS 带来了真正的键/值对存储机制
+
+### 对象的 key 只能是字符串
+
+ES6 以前，对象是典型的键/值对存储的代表，但对象只能用字符串作为键，这在使用方面会带来诸多限制。 
+
+为此，TC39 委员会补充了 ES 规范，**`Map` 是一种新的集合引用类型，它也采用键/值对的方式存储数据，但特别的是，它的键可以是任意数据类型，甚至是一个对象**。
+
+来看举一些具体例子。
+
+如果对象的 `key` 是一个非字符串类型数据，那么在设置这个 `key` 时会调用 `toString` 方法：
+
+```js
+const obj = {};
+const element = document.getElementById('myDiv') // 获取 DOM 节点
+
+obj[element] = 'This is a element';
+console.log(obj); // {[object HTMLDivElement]: "This is a element"}
+console.log(obj['[object HTMLDivElement]']); // "This is a element"
+```
+
+从打印结果可以看到，在将一个 DOM 节点设为对象属性时，转成了类型信息的字符串作为 `key`，之后要想取到值就要用该类型信息字符串。
+
+如果执行：
+
+```js
+Object.prototype.toString.call(element); // "[object HTMLDivElement]"
+```
+
+就会发现转字符串的行为，其实和调用 `Object.prototype.toString.call()` 是等价的。
