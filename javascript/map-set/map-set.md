@@ -46,9 +46,9 @@ JavaScript 由 3 部分组成：
 
 ## （二）Map 为 JS 带来了真正的键/值对存储机制
 
-### 对象的 key 只能是字符串
+### ES5 时代对象的 key 只能是字符串
 
-ES6 以前，对象是典型的键/值对存储的代表，但对象只能用字符串作为键，这在使用方面会带来诸多限制。 
+ES6 以前，对象是典型的键/值对存储的代表，但对象只能用字符串作为键（ES6 后还可以用 `Symbol` 作为键），这在使用方面会带来诸多限制。 
 
 为此，TC39 委员会补充了 ES 规范，**`Map` 是一种新的集合引用类型，它也采用键/值对的方式存储数据，但特别的是，它的键可以是任意数据类型，甚至是一个对象**。
 
@@ -83,12 +83,12 @@ Object.prototype.toString.call(element); // "[object HTMLDivElement]"
 
 来看看 `Map` 的增、删、改、查、清 API：
 
-* 增和改：都是 [`Map.prototype.set()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/set)；
-* 删：[`Map.prototype.delete()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/delete)；
-* 查：[`Map.prototype.get()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/get)；
+* 增和改：都是 [`Map.prototype.set(key, value)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/set)；
+* 删：[`Map.prototype.delete(key)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/delete)；
+* 查：[`Map.prototype.get(key)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/get)；
 * 清：[`Map.prototype.clear()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/clear)
 
-另外可以通过 [`Map.prototype.has()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/has) 来检查 `Map` 实例中是否存在指定的键值对。
+另外可以通过 [`Map.prototype.has(key)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/has) 来检查 `Map` 实例中是否存在指定的键值对。
 
 举个简单例子（爸爸到儿子的映射）：
 
@@ -106,3 +106,76 @@ console.log(m.has(father1)); // false。判断键值对是否存在
 ```
 
 上例中，我们使用了对象作为 `Map` 实例的键，其他任何类型都可以，甚至将键设成 `Map` 实例也可以。从语言层面已经完全开放了键/值对存储，至于怎么用，那就要看实际场景了。
+
+### Map 中的键值对是有序的
+
+ES5 时代，对象的键值对是无序的，每次遍历将得到不同顺序的结果。**自 ES6 以来，对象保留了键的创建顺序，后续再遍历对象将按键的创建顺序来遍历**：
+
+```js
+const obj = {};
+
+for (let i = 0; i < 10; i++) {
+  obj[String(i)] = i;
+}
+
+for(let key in obj) {
+  console.log(obj[key]); // 总是打印 0 到 9
+}
+```
+
+**Map 实例中的键值对也是有序的。Map 实例会维护键值对的插入顺序，因此可以根据插入顺序执行迭代操作**
+
+所以，这就能理解为什么创建 `Map` 实例时，给构造函数要传递一个数组* []了：
+
+```js
+const m = new Map([
+  ['key1', 'val1'],
+  ['key2', 'val2'],
+  ['key3', 'val3']
+]);
+console.log(m.size); // 3
+```
+
+**本质上来说，任何具有 [`Iterator` 接口](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator)（也就是可迭代的）、且成员都是双元素数组的数据结构，都可以作为 `Map` 构造函数的参数**。
+
+ES 提供给 `Map` 3 个遍历器生成函数（Generator 函数）：
+
+* [`Map.prototype.keys()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/keys)：返回迭代器（Iterator）对象，包含着按照顺序插入 `Map` 实例的每个 `key` 值；
+* [`Map.prototype.values()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/values)：返回迭代器对象，包含着按照顺序插入 `Map` 实例的每个 `value` 值；
+* [`Map.prototype.entries()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)：返回一个包含 `[key, value]` 对的迭代器对象，依然维护着键值对插入顺序。
+
+ES 同时也提供了 1 个遍历方法：
+
+* [`Map.prototype.forEach()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach)：按照键值对的插入顺序来遍历 `Map` 实例中的每个键值对。
+
+接上面例子，分别使用这 4 种方式对 `Map` 实例 `m` 进行遍历：
+
+```js
+// 1. 使用 Map.prototype.keys() 遍历器生成函数
+for (let key of m.keys()) {
+  console.log(key); // 依次打印 "key1", "key2", "key3"
+}
+
+// 2. 使用 Map.prototype.values() 遍历器生成函数
+for (let value of m.values()) {
+  console.log(value); // 依次打印 "val1", "val2", "val3"
+}
+
+// 3. 使用 Map.prototype.entries() 遍历器生成函数
+for (let item of m.entries()) {
+  console.log(item); // 依次打印 ["key1", "val1"], ["key2", "val2"], ["key3", "val3"]
+}
+
+// 4. 使用 Map.prototype.forEach() 遍历方法
+m.forEach((value, key, map) => {
+  console.log(`m[${key}] = ${value}`); // 依次打印 "m[key1] = val1", "m[key2] = val2", "m[key3] = val3"
+})
+```
+
+以上可以看到，无论使用那种遍历方式，最终输出的顺序都是一致的，都与键值对的插入顺序一致。
+
+还有一个小 Tip 就是可以使用展开运算符 `...` 来将 `Map` 实例转为数组：
+
+```js
+console.log([...m]); // [["key1", "val1"], ["key2", "val2"], ["key3", "val3"]]
+```
