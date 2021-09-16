@@ -74,3 +74,35 @@ Object.prototype.toString.call(element); // "[object HTMLDivElement]"
 ```
 
 就会发现转字符串的行为，其实和调用 `Object.prototype.toString.call()` 是等价的。
+
+### Map 是一种“值-值”映射
+
+如果说对象提供了“字符串-值”的映射关系，那么 `Map` 提供的是“值-值”的映射，`Map` 是一种更完善的 Hash 结构的实现。
+
+简单概括下 `Map` 的基本使用，完整的 API 可以参考 [Map | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map)。
+
+来看看 `Map` 的增、删、改、查、清 API：
+
+* 增和改：都是 [`Map.prototype.set()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/set)；
+* 删：[`Map.prototype.delete()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/delete)；
+* 查：[`Map.prototype.get()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/get)；
+* 清：[`Map.prototype.clear()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/clear)
+
+另外可以通过 [`Map.prototype.has()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/has) 来检查 `Map` 实例中是否存在指定的键值对。
+
+举个简单例子（爸爸到儿子的映射）：
+
+```js
+const father1 = { name: '小头爸爸' };
+const son1 = { name: '大头儿子' };
+
+const m = new Map(); // 用 Map 构造函数创建实例
+
+m.set(father1, son1); // 添加键值对，注意这里将对象作为了键
+console.log(m.get(father1).name); // "大头儿子"。取值
+
+m.delete(father1); // 移除键值对
+console.log(m.has(father1)); // false。判断键值对是否存在
+```
+
+上例中，我们使用了对象作为 `Map` 实例的键，其他任何类型都可以，甚至将键设成 `Map` 实例也可以。从语言层面已经完全开放了键/值对存储，至于怎么用，那就要看实际场景了。
