@@ -138,13 +138,13 @@ console.log(m.size); // 3
 
 **本质上来说，任何具有 [`Iterator` 接口](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator)（也就是可迭代的）、且成员都是双元素数组的数据结构，都可以作为 `Map` 构造函数的参数**。
 
-ES 提供给 `Map` 3 个遍历器生成函数（Generator 函数）：
+**ES 提供给 `Map` 3 个遍历器生成函数（Generator 函数）**：
 
 * [`Map.prototype.keys()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/keys)：返回迭代器（Iterator）对象，包含着按照顺序插入 `Map` 实例的每个 `key` 值；
 * [`Map.prototype.values()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/values)：返回迭代器对象，包含着按照顺序插入 `Map` 实例的每个 `value` 值；
 * [`Map.prototype.entries()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/entries)：返回一个包含 `[key, value]` 对的迭代器对象，依然维护着键值对插入顺序。
 
-ES 同时也提供了 1 个遍历方法：
+**ES 同时也提供了 1 个遍历方法**：
 
 * [`Map.prototype.forEach()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach)：按照键值对的插入顺序来遍历 `Map` 实例中的每个键值对。
 
@@ -179,3 +179,28 @@ m.forEach((value, key, map) => {
 ```js
 console.log([...m]); // [["key1", "val1"], ["key2", "val2"], ["key3", "val3"]]
 ```
+
+`Map` 还有一个“兄弟”类型，那就是 `WeakMap`（弱映射），但要搞懂 `WeakMap`，前提是理解 JavaScript 这门语言的「垃圾回收机制」。
+
+## （三）JS 的垃圾回收机制
+
+### 主动回收与自动回收
+
+随着代码的执行，一些数据可能不再需要，比如在函数局部作用域中声明的变量，如果不考虑闭包，那么在函数执行后就不再需要它们了。
+
+如果不清理这些不需要的数据，它们就会占用越来越多的内存，所以浏览器需要对这些垃圾数据进行回收，从而能及时地释放更多内存出来。
+
+不同编程语言的垃圾回收机制都不尽相同，垃圾回收策略分两类，**「主动回收」和「自动回收」**：
+
+* **主动回收意味着何时分配内存、何时销毁内存，这都由代码控制**，C、C++ 都采用主动回收策略；
+* **自动回收意味着程序产生的垃圾数据由编程语言垃圾回收机制自动释放，不需要程序员的手动干预**，JavaScript、Java、Python 都处采用自动回收策略。
+
+垃圾回收的思路其实很简单：确定哪个变量不再使用，然后释放它所占用的内存。这个过程是周期性的，每隔一定时间（或者到了某个预定的收集时间）就会自动运行。
+
+思路虽然很简单，但是问题的关键，就是**如何识别一个变量未来还会不会使用**。
+
+在浏览器发展历史上，主要用到了**两种标记变量的策略：「标记-清理」和「引用计数」**。
+
+### 标记-清理（mark-and-sweep）
+
+**「标记-清理」策略是 JS 中最常用的垃圾回收策略**。
