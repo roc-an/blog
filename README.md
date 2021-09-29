@@ -9,6 +9,10 @@ ECMAScript：
 - [深入理解 JavaScript 中的数字类型](https://github.com/roc-an/blog/issues/5)
 - [深入理解 JavaScript 中的对象](https://github.com/roc-an/blog/issues/6)
 
+工程构建：
+
+- [风驰电掣 ESBuild](https://github.com/roc-an/blog/issues/9)
+
 浏览器原理：
 
 - [从浏览器地址栏中输入 URL 到看到页面，中间经历了什么？](https://github.com/roc-an/blog/issues/3)
