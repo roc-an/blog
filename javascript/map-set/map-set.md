@@ -307,6 +307,42 @@ fn();
 因此，**由于存在循环引用这种场景，“引用计数”策略逐渐被“标记-清除”策略所取代**。
 
 ## （四）WeakMap 弱映射
+
+`WeakMap` 弱映射的 API 是 `Map` 的子集。
+
+`WeakMap` 与 `Map` 主要有 **3 点区别**：
+
+1. `WeakMap` 的 `key` 只能是对象（使用其他类型会抛 `TypeError` 的错，`key` 是 `null` 也不行）；
+2. `WeakMap` 的键名所指向的对象，不计入垃圾回收机制；
+3. `WeakMap` 没有迭代其键值对的能力（即不可迭代）。
+
+下面我们一一说明。
+
+### `WeakMap` 的 `key` 只能是对象
+
+来看一个创建 `WeakMap` 的例子：
+
+```js
+const key1 = { id: 1 };
+const key2 = { id: 2 };
+const key3 = { id: 3 };
+
+const vm = new WeakMap([
+  [key1, 'val1'],
+  [key2, 'val2'],
+  [key3, 'val3'],
+]);
+```
+
+上面代码中，`WeakMap` 构造函数接收一个可迭代对象，包含着键值对数组。
+
+如果继续给 `vm` 这个 `WeakMap` 实例添加键名是非对象的键值对，那就会报 `TypeError` 错：
+
+```js
+vm.set('skill', '睡觉'); // Uncaught TypeError: Invalid value used as weak map key
+vm.set(null, '空空如也'); // Uncaught TypeError: Invalid value used as weak map key
+```
+
 ## （五）Map VS Object 各方面对比
 
 用一张表格来说明 `Map` 和 `Object` 的主要区别：
