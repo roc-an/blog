@@ -343,6 +343,55 @@ vm.set('skill', '睡觉'); // Uncaught TypeError: Invalid value used as weak map
 vm.set(null, '空空如也'); // Uncaught TypeError: Invalid value used as weak map key
 ```
 
+### `WeakMap` 的键名所指向的对象，不计入垃圾回收机制
+
+这一点至关重要，这也是为什么要叫 `WeakMap` 弱映射的原因。
+
+前文在说明 JS 垃圾回收机制时有提到，JS 会自动地将内存中不再使用的数据回收掉。
+
+但试想如果在哈希结构中存在对某块数据的引用，那这块数据是不是就会一直不被垃圾回收呢？
+
+这似乎在某些场景下存在着内存泄漏的风险。
+
+比如让一个 DOM 节点作为哈希的键，把节点的已点击状态作为哈希的值，点击节点以后更新这个值。
+
+后续一旦这个节点被销毁了，那它对应的状态信息怎么办？不销毁的话就会造成内存泄露，手动销毁又太麻烦！
+
+这时就要用到 `WeakMap` 弱映射了。
+
+“弱”指的是“弱弱地拿着”，意思是 `WeakMap` 的键名所指向的对象，不属于正式的引用，不会阻止垃圾回收。
+
+如果 `WeakMap` 的键指向的对象在其他地方被清除了，那么 `WeakMap` 中以该对象为键名的键值对，也会被自动清除，也就是此时不会阻止垃圾回收。
+
+来看一个直观的例子：
+
+```js
+const container = {
+  key: {},
+};
+const vm = new WeakMap();
+
+// 为 WeakMap 实例设置 key
+vm.set(container.key, 'val');
+console.log(vm.get(container.key)); // "val"
+
+// vm 实例键名所指向的对象被清除了
+container.key = null;
+
+// vm 实例中以该对象为键名的键值对，被自动清除了
+console.log(vm.get(container.key)); // undefined
+```
+
+再看一个更简单粗暴的例子：
+
+```js
+const vm = new WeakMap();
+
+vm.set({}, 'val');
+```
+
+上面使用一个对象字面量作为 `WeakMap` 实例的 `key`。执行 `set()` 方法时会创建一个空对象，因为再没有指向这个空对象的其他引用，所以代码执行后，这个空对象就会被自动垃圾回收，从而以这个自动创建的空对象作为键的键值对也会被自动销毁。
+
 ## （五）Map VS Object 各方面对比
 
 用一张表格来说明 `Map` 和 `Object` 的主要区别：
