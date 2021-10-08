@@ -402,7 +402,53 @@ PS：另外需要特别注意，`WeakMap` 只是键名所指向的对象是弱�
 
 ### `WeakMap` 的使用场景
 
+#### DOM 节点作为键名
 
+上面也提到过，有时需要为 DOM 节点存储数据，使用 `WeakMap` 可以确保当 DOM 节点被销毁时，对应数据也会被自动销毁。
+
+```js
+const logo = document.getElementById('logo');
+const vm = new WeakMap();
+
+// 以 DOM 节点作为键
+vm.set(logo, { timeClicked: 0 });
+
+// 当 DOM 节点被点击时，取 vm 上存储的数据并计数
+logo.addEventListener('click', function() {
+  const logoData = vm.get(logo);
+  logoData.timeClicked++;
+});
+```
+
+上面代码中，每当 `logo` 这个 DOM 节点被点击，就会更新 `vm` 中存的点击状态。一旦 `logo` 这个 DOM 节点被删除，对应的数据也会自动销毁，不会存在内存泄露的风险。
+
+#### 对象深拷贝
+
+进行对象深拷贝时，会存在循环引用问题。
+
+比如，要拷贝的对象的属性，直接或间接地引用了自身，那么就会造成循环引用：
+
+```js
+const target = {
+  field1: 1,
+};
+
+// 循环引用：对象的属性，直接或间接地引用了自身
+target.target = target;
+```
+
+如果不加处理地去无脑递归，就会陷入死循环，从而导致栈内存溢出：
+
+`RangeError: Maximum call stack size exceeded`
+
+这时，可以使用 `WeakMap` 来解决深拷贝过程中的循环引用问题：将遍历过程中所有引用类型数据，存在一个 `WeakMap` 中，如果后续拷贝过程中要再次访问这些数据，那么直接返回就好。
+
+从算法思想角度考虑，这其实是一种空间换时间的思想。深拷贝过程中，在内存中多开辟了一块 `WeakMap` 的地方来保存引用类型数据，再次访问就直接返回，从而避免了不必要的再次递归时间。
+
+抽象来看：
+
+* `WeakMap` 适合关联数据的场景。比如为 DOM 节点关联数据，即便节点销毁了，也不必担心内存邪路；
+* `WeakMap` 也适合类似“缓存”的场景。比如在深拷贝过程中，开辟一块地方用来存储引用数据，以期在下次访问时快速返回。
 
 ## （五）Map VS Object 各方面对比
 
