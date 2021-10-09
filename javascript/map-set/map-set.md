@@ -641,3 +641,20 @@ console.log(ws.has(container.val)); // false
 ```
 
 与 `WeakMap` 类似，同样 `WeakSet` 不可迭代，因为它其中的值随时可能被销毁。
+
+### `WeakSet` 的使用场景
+
+相对 `WeakMap`，`WeakSet` 的使用场景较少。
+
+#### 给 DOM 节点打标签
+
+比如页面中有很多按钮，一些是启用状态，一些是禁用状态，使用 `WeakSet` 可以建立一个对应状态的节点集合：
+
+```js
+const loginBtn = document.getElementById('loginBtn');
+const disabledElements = new WeakSet();
+// 通过加入对应集合，给这个节点打上“禁用”标签
+disabledElements.add(loginBtn);
+```
+
+后续如果这个登录按钮的 DOM 节点被销毁了，那么垃圾回收机制就会自动释放内存。
