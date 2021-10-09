@@ -521,3 +521,24 @@ for (let i of s) {
 
 ### `Set` 的基本使用
 
+简单概括下 `Set` 的使用（使用不是本文重点，更具体的可参考 [Set | MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set)）：
+
+* 集合中元素个数：[`Set.prototype.size`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/size)
+
+集合元素操作：
+
+* 增：[`Set.prototype.add(value)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/add)；
+* 删：[`Set.prototype.delete(value)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/delete)；
+* 查：[`Set.prototype.has(value)`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/has)；
+* 清：[`Set.prototype.clear()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/clear)。
+
+集合的遍历：
+
+* [`Set.prototype.forEach(callback[, thisArg])`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/forEach)；
+
+取集合的迭代器：
+
+* [`Set.prototype.entries()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/entries)；
+* [`Set.prototype.values()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/values)
+
+**`Set` 的遍历顺序以及迭代器的迭代顺序，都是按照元素插入顺序来的**。
