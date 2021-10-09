@@ -539,6 +539,40 @@ for (let i of s) {
 取集合的迭代器：
 
 * [`Set.prototype.entries()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/entries)；
-* [`Set.prototype.values()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/values)
+* [`Set.prototype.values()`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set/values)；
+* `keys()` 就是 `values()` 方法的别名，它们行为完全一致。
 
 **`Set` 的遍历顺序以及迭代器的迭代顺序，都是按照元素插入顺序来的**。
+
+### `Set` 的应用
+
+#### 数组去重
+
+面试题里偶尔出现这种：有一个数组 `[1, 3, 2, 4, 2, 1]`，如何去重？
+
+首先，`Set` 是可迭代的，所以可以使用 `for...of` 循环：
+
+```js
+const s = new Set(['番茄炒蛋', '蛋炒番茄', '鸡蛋炒西红柿']);
+
+for (let dish of s) {
+  console.log(dish);
+}
+// "番茄炒蛋" "蛋炒番茄" "鸡蛋炒西红柿"
+```
+
+而扩展运算符 `...` 内部使用的就是 `for...of` 循环，所以扩展运算符可直接作用于 `Set` 实例：
+
+```js
+const s = new Set(['番茄炒蛋', '蛋炒番茄', '鸡蛋炒西红柿']);
+const arr = [...s];
+console.log(arr); // ["番茄炒蛋", "蛋炒番茄", "鸡蛋炒西红柿"]
+```
+
+然后再结合 `Set` 的元素值唯一的特性，可以轻松实现数组去重：
+
+```js
+const srcArr = [1, 3, 2, 4, 2, 1]; // 原数组
+const distArr = [...new Set(srcArr)]; // 去重后数组
+console.log(distArr); // [1, 3, 2, 4]
+```
