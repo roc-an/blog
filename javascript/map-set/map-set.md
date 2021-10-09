@@ -576,3 +576,42 @@ const srcArr = [1, 3, 2, 4, 2, 1]; // 原数组
 const distArr = [...new Set(srcArr)]; // 去重后数组
 console.log(distArr); // [1, 3, 2, 4]
 ```
+
+#### 实现交、并、差集
+
+比如现在有两个集合：
+
+```js
+const s1 = new Set([2, 3, 4]);
+const s2 = new Set([3, 4, 6]);
+```
+
+想求得它们的交集、并集以及差集。
+
+**交集**（Intersect）概念：设 `A`、`B` 是两个集合，由所有属于集合 `A` 且属于集合 `B` 的元素所组成的集合，叫做集合 `A` 与集合 `B` 的交集，记为 ![A交B](https://latex.codecogs.com/png.image?\dpi{110}%20A\cap%20B)
+
+```js
+// 求交集
+const intersect = new Set([...s1].filter(x => s2.has(x)));
+console.log(intersect); // Set(2) {3, 4}
+```
+
+**并集**（Union）概念：设 `A`、`B` 是两个集合，由所有 `A` 的元素和所有 `B` 的元素组成的集合（没有其他元素），叫做集合 `A` 与集合 `B` 的并集，记为 ![A并B](https://latex.codecogs.com/png.image?\dpi{110}%20A\cup%20B)
+
+```js
+// 求并集
+const union = new Set([...s1, ...s2]);
+console.log(union); // Set(4) {2, 3, 4, 6}
+```
+
+**差集**（Difference）概念：设 `A`、`B` 是两个集合，由所有属于 `A` 且不属于 `B` 的元素构成的集合，叫做集合 `A` 相对于集合 `B` 的差集，记为 `A-B`
+
+```js
+// 求 A 相对 B 的差集
+const differenceAB = new Set([...s1].filter(x => !s2.has(x)));
+console.log(differenceAB); // Set(1) {2}
+
+// 求 B 相对 A 的差集
+const differenceBA = new Set([...s2].filter(x => !s1.has(x)));
+console.log(differenceBA); // Set(1) {6}
+```
