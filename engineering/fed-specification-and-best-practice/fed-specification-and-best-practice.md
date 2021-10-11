@@ -52,3 +52,81 @@ fetchMine().then(() => {
 ```
 
 ## HTML
+
+### 文档类型
+
+统一使用 HTML5 的标准文档类型：`<!DOCTYPE html>`。
+
+HTML5 文档类型前后兼容，容易记也容易写，一般编辑器都支持快速生成 H5 文档，比如 VSCode 下保存文件为 `.html` 后缀然后输入 `!` 就可以快速生成。
+
+### 用双引号包裹属性值
+
+标签的属性值统一使用双引号 `""` 包裹。
+
+不推荐：
+
+```html
+<div class='intro'>...</div>
+```
+
+推荐：
+
+```html
+<div class="intro">...</div>
+```
+
+### 标签语义化
+
+* 根据 HTML 元素的用途去区分使用它们
+* 满足场景时优先使用 HTML5 提供的语义标签：`<header>`、`<footer>`、`<article>`、`<section>`、`<nav>`、`<aside>`、`<address>`
+
+不推荐：
+
+```html
+<p>新闻标题 XXX</p>
+```
+
+推荐：
+
+```html
+<h1>新闻标题 XXX</h1>
+```
+
+虽然使用 `<p>` 配合着 CSS 可以实现标题样式，但 `<p>` 的语义是段落，标题场景应使用 `h1~h6`。
+
+### 将 `<script>` 标签放在 `<body>` 标签内的结尾处
+
+不推荐：
+
+```html
+<head>
+  <title>Example HTML Page</title>
+  <script src="example1.js"></script>
+  <script src="example2.js"></script>
+</head>
+<body>
+  ...
+</body>
+```
+
+很早之前，所有的 `<script>` 标签都放在 `<head>` 标签里。这就意味着必须把所有的 JavaScript 代码都下载、解析和解释完成后，才能开始渲染页面（页面在浏览器解析到 `<body>` 的起始标签时开始渲染）。
+
+对于需要很多 JavaScript 的页面，这会导致页面渲染的明显延迟，在此期间浏览器窗口完全空白。
+
+为解决这个问题，现在通常将 `<script>` 标签放在 `<body>` 标签中页面内容的后面。
+
+推荐：
+
+```html
+<head>
+  <title>Example HTML Page</title>
+</head>
+<body>
+  ...
+  ...
+  <script src="example1.js"></script>
+  <script src="example2.js"></script>
+</body>
+```
+
+这样页面会在处理 JS 代码前渲染出来，由于浏览器显示空白页面的时间短了，用户会觉得页面加载更快了。
