@@ -200,3 +200,44 @@ HTML5 文档类型前后兼容，容易记也容易写，一般编辑器都支�
   margin-right: 12px;
 }
 ```
+
+### `class` 选择器命名遵守 BEM 规范
+
+知道了优先用 1 层 `class`，但是名字该怎么起才合适？
+
+业内有一个非常知名且广泛使用的 CSS `class` 选择器命名规范——[BEM](https://en.bem.info/methodology/quick-start/)
+
+简单来说，它将需要命名的元素分为 3 部分：
+
+* 块（Block）：独立的一整块区域；
+* 元素（Element）：块中的元素，元素不能离开它所在的块而单独使用；
+* 修饰（Modifier）：用来区分状态，比如是否已点击、是否 `hover` 等等。
+
+举个例子：`header-link__activated`，其中块是 `header` 头部，头部中有元素 `link`，此时的状态是已激活的 `activated`。
+
+当然，你的团队也不一定非要严格遵守 BEM 规范而使用下划线 `_`，你可以统一只用中划线 `-`，在修饰符前用两个 `-` 就可以了。简化成：
+
+`header-link--activated`
+
+这看起来也很爽。
+
+元素和修饰不是必需的，比如你可以只写一个块：`.news`。所以大多数业务场景，块+块内元素已经可以搞定了。块一般就用 1 个单词，如果元素用 1 个单词不够，我的习惯是使用小驼峰，比如 `.header-titleLink`，这即便在配合 CSS Modules 场景下仍然很适用。
+
+在列举几个使用修饰的例子：
+
+```css
+/* 登录区域内的提交按钮，禁用状态 */
+.login-submitBtn--disabled {
+  ...
+}
+
+/* 文章区域，暗黑主题风格 */
+.article--themeDark {
+  ...
+}
+
+/* 文章区域内的图片，鼠标 hover 时 */
+.article-img--hovered {
+  ...
+}
+```
