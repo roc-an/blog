@@ -241,3 +241,67 @@ HTML5 文档类型前后兼容，容易记也容易写，一般编辑器都支�
   ...
 }
 ```
+
+### 属性书写顺序
+
+有的选择器样式要写好多，很容易就写成了一坨（反例）：
+
+```css
+.xxx {
+  border: 1px solid #e5e5e5;
+  line-height: 1.5;
+  width: 100px;
+  height: 100px;
+  color: #333;
+  opacity: 0.5;
+  text-align: center;
+  position: absolute;
+  display: block;
+  float: right;
+  top: 0;
+  right: 0;
+  background-color: #f5f5f5;
+  border-radius: 3px;
+  bottom: 0;
+  left: 0;
+}
+```
+
+这样如果后面要改，不用搜索的话可能要找个几秒才能找到要改的属性。
+
+那不如**编码时给众多 CSS 属性分类**：
+
+```css
+.xxx {
+  /* 布局、位置 */
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+
+  /* 盒模型 */
+  display: block;
+  float: right;
+  width: 100px;
+  height: 100px;
+
+  /* 排版 */
+  line-height: 1.5;
+  color: #333;
+  text-align: center;
+
+  /* 视觉效果相关 */
+  background-color: #f5f5f5;
+  border: 1px solid #e5e5e5;
+  border-radius: 3px;
+
+  /* 其他需要额外注意的 */
+  opacity: 1;
+}
+```
+
+**编写顺序是按修改时可能对其他元素样式造成的影响大小来排的，影响可能更大的放前面，中间适当加入空行**。
+
+这样写，一来可以将重要的属性放在前面，读的时候一目了然，二来等到改的时候也可以按分类去快速找到对应属性。
