@@ -83,7 +83,7 @@ Object.getOwnPropertyDescriptor(location, 'href');
 
 只要浏览器启用了 JavaScript，那就一定存在 [`window.navigator`](https://developer.mozilla.org/en-US/docs/Web/API/Navigator) 对象。这个对象上有很多关于浏览器信息的属性，不同浏览器的实现也各不相同，但是所有浏览器都实现了 `navigator.userAgent` 字段。
 
-我在自己的浏览器控制台打印 `navigator.userAgent` 会得到：
+我在自己的 MacPro Chrome 浏览器控制台打印 `navigator.userAgent` 会得到：
 
 ```js
 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36'
@@ -116,4 +116,59 @@ Object.getOwnPropertyDescriptor(location, 'href');
 
 当时大多数检测用户代理的程序只判断了产品名称是不是 `Mozilla`，就这样，IE 浏览器成功伪装成了最火的 Netscape Navigator 3（PS：至于为啥 IE 用的版本号是 `2.0` 而不是最火的 `3.0` 已经无法考究，可能是因为一时疏忽，也可能是因为比较怂~）。
 
-微软当时的这一做法饱受争议，但它确实就这么发生了...这也说明了单纯靠 `userAgent` 信息来区分浏览器是不可靠的。
+微软当时的这一做法饱受争议，但它确实就这么发生了...这也说明了单纯靠 `userAgent` 信息来区分浏览器是不可靠的。类似地，在 2003 年苹果首次发布 Safari（WebKit 内核）时也这么干过。
+
+当然也有非常头铁的浏览器，比如 Opera，曾经的 Opera 是唯一一个坚持使用产品名称和版本完全标识自身的主流浏览器。比如 `userAgent` 是这样：
+
+`Opera/8.0 (Windows NT 5.1; U; en)`
+
+这种做法受到了一些开发者赞赏。然而为什么说是“曾经”呢，因为自 Opera 9 以后，它不要贞操了，又将自己改成了 `Mozilla/5.0` 开头，甚至还有更骚的——根据访问网站的不同，设置不同的 `userAgent` 来伪装成其他主流浏览器还不通知用户 :)
+
+IOS 和 Android 手机的系统自带浏览器都是基于 WebKit 的，所以它们的 `userAgent` 也有 `Mozilla/5.0`。
+
+随着各个浏览器的发展，为了让所有旧网站都能用自家浏览器打开，于是现在你会发现，只要你的浏览器是基于 WebKit 的，那么你的 `userAgent` 一定会包含 `Mozilla/5.0`...
+
+### 识别 `userAgent` 的库 `ua-device`
+
+百度团队有个库 [`ua-device`](https://github.com/fex-team/ua-device)，它会爬取大量的浏览器信息，然后根据提供的 `userAgent` 来判断出是哪种浏览器。
+
+我试用了下，nodeJS 文件是这样的（完整项目文件在）：
+
+```js
+const UA = require('ua-device');
+const input = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.71 Safari/537.36'
+
+const output = new UA(input);
+console.log(output);
+```
+
+执行后得到的输出结果：
+
+```js
+{
+  options: { useFeatures: false, detectCamouflage: true },
+  // 浏览器信息
+  browser: {
+    stock: false,
+    hidden: false,
+    channel: 'Nightly',
+    name: 'Chrome',
+    version: { original: '94.0.4606.71', alias: null }
+  },
+  // 浏览器内核
+  engine: { name: 'Webkit', version: { original: '537.36', alias: null } },
+  // 操作系统
+  os: {
+    name: 'Mac OS X',
+    version: { alias: '10.15.7', original: '10.15.7' }
+  },
+  // 硬件信息
+  device: { type: 'desktop', identified: false },
+  camouflage: false,
+  features: []
+}
+```
+
+检查了下，信息是正确吻合的。
+
+对于咱们目前的国内市场，PC 浏览器还好，移动浏览器及其背后的设备可谓五花八门，利用这个库来判断手机型号还算准确（PS：看最后更新时间已经几年以前了，现在不知道还是否准确度高）。
