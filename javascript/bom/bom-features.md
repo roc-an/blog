@@ -243,3 +243,29 @@ class BrowserDetector {
 ```
 
 做个小结，如果要识别浏览器，那么“基于能力”和“基于 `userAgent`” 这两种方式最好配合使用，先基于能力判断，如果识别不出再基于 `userAgent`，这样可以得到一个相对准确的浏览器信息。
+
+## （四）`Clipboard` 剪贴板
+
+[Clipboard API](https://w3c.github.io/clipboard-apis/#clipboard-interface) 是一个较新的 API，目前各主流浏览器还在不断完善中。使用它可以实现**剪切、复制、粘贴**功能，很多注重用户体验的网站已经在广泛使用了。`Clipboard` API 让网站更像是个 Web 应用。
+
+### 实现转载声明（给复制的内容加点料）
+
+如果你打开[知乎](https://www.zhihu.com/)，然后复制一段常常的内容，再粘贴到别处，就会发现你粘贴的内容前面多了类似这块内容：
+
+```
+作者：安鸿鹏
+链接：https://www.zhihu.com/people/roc.an/collections
+来源：知乎
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+```
+
+这种为转载内容自动添加声明的功能，就是用 `Clipboard` API 实现的。
+
+当使用 `CTRL + C` 复制一段内容时，就会触发 [`copy`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/copy_event) 事件。通过事件对象 [`e.clipboardData`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/copy_event) 可以拿到要“复制”或是“剪切”到剪贴板中的数据。
+
+`e.clipboardData` 保存的数据是个 [`DataTransfer`](https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer) 实例，它也被频繁用在拖放场景中：
+
+* 可通过 [`DataTransfer.getData()`](https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/getData) 拿到要复制/剪切的数据；
+* 可通过 [`DataTransfer.setData()`](https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/setData) 设置要复制/剪切的数据。
+
+再配合 `e.preventDefault()` 组织默认的剪贴板复制/剪切事件，就能实现上面的转载声明功能。核心代码：
