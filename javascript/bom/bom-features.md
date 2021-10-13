@@ -102,17 +102,23 @@ Object.getOwnPropertyDescriptor(location, 'href');
 
 在 1996 年，Netscape Navigator 3 是当时最受欢迎的浏览器。运行在 Windows 95 上的该浏览器的 `userAgent` 是这样的：
 
-`'Mozilla/3.0 (Win95; U)'`
+```js
+'Mozilla/3.0 (Win95; U)'
+```
 
 在 Netscape Navigator 3 发布后不久，微软首次对外发布了 IE3。但是当时 Netscape Navigator 3 市场占有率最高，很多网站服务器都特意检测了 `userAgent`，所以很多网站用 IE3 根本打不开。
 
 再这么下去 IE3 就得垮掉，于是“机智的”微软将 IE3 的 `userAgent` 改成了这种格式：
 
-`Mozilla/2.0 (compatible; MSIE Version; Operating System)`
+```js
+Mozilla/2.0 (compatible; MSIE Version; Operating System)
+```
 
 在 Windows 95 上一个 IE3.02 浏览器的 `userAgent` 是这样的：
 
-`'Mozilla/2.0 (compatible; MSIE 3.02; Windows 95)'`
+```js
+'Mozilla/2.0 (compatible; MSIE 3.02; Windows 95)'
+```
 
 当时大多数检测用户代理的程序只判断了产品名称是不是 `Mozilla`，就这样，IE 浏览器成功伪装成了最火的 Netscape Navigator 3（PS：至于为啥 IE 用的版本号是 `2.0` 而不是最火的 `3.0` 已经无法考究，可能是因为一时疏忽，也可能是因为比较怂~）。
 
@@ -120,7 +126,9 @@ Object.getOwnPropertyDescriptor(location, 'href');
 
 当然也有非常头铁的浏览器，比如 Opera，曾经的 Opera 是唯一一个坚持使用产品名称和版本完全标识自身的主流浏览器。比如 `userAgent` 是这样：
 
-`Opera/8.0 (Windows NT 5.1; U; en)`
+```js
+Opera/8.0 (Windows NT 5.1; U; en)
+```
 
 这种做法受到了一些开发者赞赏。然而为什么说是“曾经”呢，因为自 Opera 9 以后，它不要贞操了，又将自己改成了 `Mozilla/5.0` 开头，甚至还有更骚的——根据访问网站的不同，设置不同的 `userAgent` 来伪装成其他主流浏览器还不通知用户 :)
 
@@ -132,7 +140,7 @@ IOS 和 Android 手机的系统自带浏览器都是基于 WebKit 的，所以�
 
 百度团队有个库 [`ua-device`](https://github.com/fex-team/ua-device)，它会爬取大量的浏览器信息，然后根据提供的 `userAgent` 来判断出是哪种浏览器。
 
-我试用了下，nodeJS 文件是这样的（完整项目文件在）：
+我试用了下，nodeJS 文件是这样的（完整项目文件在 [ua-device-test](https://github.com/roc-an/blog/tree/main/javascript/bom/ua-device-test）：
 
 ```js
 const UA = require('ua-device');
