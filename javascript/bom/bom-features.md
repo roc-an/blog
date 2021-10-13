@@ -180,3 +180,66 @@ console.log(output);
 检查了下，信息是正确吻合的。
 
 对于咱们目前的国内市场，PC 浏览器还好，移动浏览器及其背后的设备可谓五花八门，利用这个库来判断手机型号还算准确（PS：看最后更新时间已经几年以前了，现在不知道还是否准确度高）。
+
+### 基于能力识别浏览器
+
+伪造 `userAgent` 字符串很简单，而伪造能浏览器特性却很难。
+
+可以通过判断浏览器是否支持某个 API 来判断浏览器的类型。这里摘录一下 《JavaScript 高级程序设计（第 4 版）》的示例：
+
+```js
+class BrowserDetector {
+  constructor() {
+    // 测试条件编译
+    // IE6~10支持
+    this.isIE_Gte6Lte10 = /*@cc_on!@*/false;
+
+    // 测试 documentMode
+    // IE7~11支持
+    this.isIE_Gte7Lte11 = !!document.documentMode;
+
+    // 测试 StyleMedia 构造函数
+    // Edge 20 及以上版本支持
+    this.isEdge_Gte20 = !!window.StyleMedia;
+
+    // 测试 Firefox 专有扩展安装 API
+    // 所有版本的 Firefox 都支持
+    this.isFirefox_Gte1 = typeof InstallTrigger !== 'undefined';
+
+    // 测试 chrome 对象及其 webstore 属性
+    // Opera 的某些版本有 window.chrome，但没有 window.chrome.webstore
+    // 所有版本的 Chrome 都支持
+    this.isChrome_Gte1 = !!window.chrome && !!window.chrome.webstore;
+
+    // Safari 早期版本会给构造函数的标签符追加 "Constructor" 字样，如：
+    // window.Element.toString(); // [object ElementConstructor]
+    // Safari 3~9.1支持
+    this.isSafari_Gte3Lte9_1 = /constructor/i.test(window.Element);
+
+    // 推送通知 API 暴露在 window 对象上
+    // 使用默认参数值以避免对 undefined 调用 toString()
+    // Safari 7.1及以上版本支持
+    this.isSafari_Gte7_1 =
+        (({pushNotification = {}} = {}) =>
+          pushNotification.toString() == '[object SafariRemoteNotification]'
+        )(window.safari);
+
+    // 测试 addons 属性
+    // Opera 20及以上版本支持
+    this.isOpera_Gte20 = !!window.opr && !!window.opr.addons;
+  }
+
+  isIE() { return this.isIE_Gte6Lte10 || this.isIE_Gte7Lte11; }
+  isEdge() { return this.isEdge_Gte20 && !this.isIE(); }
+  isFirefox() { return this.isFirefox_Gte1; }
+  isChrome() { return this.isChrome_Gte1; }
+  isSafari() { return this.isSafari_Gte3Lte9_1 || this.isSafari_Gte7_1; }
+  isOpera() { return this.isOpera_Gte20; }
+}
+
+这个 `class` 暴露的方法可以检测对应版本范围的浏览器。
+
+使用这种基于能力检测的方式，优点是比 `userAgent` 方式更准确，因为浏览器没法欺骗。缺点是具有一定时效性，因为浏览器也在不断发展和更新支持的 API，所以这种方式需要定期地更新底层判断条件。
+```
+
+做个小结，如果要识别浏览器，那么“基于能力”和“基于 `userAgent`” 这两种方式最好配合使用，先基于能力判断，如果识别不出再基于 `userAgent`，这样可以得到一个相对准确的浏览器信息。
