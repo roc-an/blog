@@ -348,3 +348,55 @@ HTML5 文档类型前后兼容，容易记也容易写，一般编辑器都支�
   * 布尔值 被计算为 对应布尔值
   * 数字 如果是 `+0`、`-0` 或 `NaN` 则被计算为 `false`，否则为 `true`
   * 字符串 如果是空字符串 `''` 被计算为 `false`，否则为 `true`
+
+### 命名规则
+
+* 使用小驼峰命名对象、函数和实例。
+
+```js
+// bad
+const OBJEcttsssss = {};
+const this_is_my_object = {};
+const o = {};
+function c() {}
+
+// good
+const thisIsMyObject = {};
+function thisIsMyFunction() {}
+```
+
+* 使用大驼峰命名构造函数或类。
+
+```js
+// bad
+function user(options) {
+  this.name = options.name;
+}
+
+const bad = new user({
+  name: 'nope'
+});
+
+// good
+function User(options) {
+  this.name = options.name;
+}
+
+const good = new User({
+  name: 'yup'
+});
+```
+
+* 不要使用下划线前/后缀
+
+> 为什么？JavaScript 并没有私有属性或私有方法的概念。虽然使用下划线来表示「私有」是一种共识，但实际上这些属性是完全公开的，它本身就是你公共接口的一部分。这种习惯或许会导致开发者错误的认为改动它不会造成破坏或者不需要去测试。
+
+```js
+// bad
+this.__firstName__ = 'Panda';
+this.firstName_ = 'Panda';
+this._firstName = 'Panda';
+
+// good
+this.firstName = 'Panda';
+```
