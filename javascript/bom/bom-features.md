@@ -14,7 +14,7 @@ BOM 在语言层面上，属于 JS 的三大组成部分之一：
 * DOM API
 * BOM API
 
-随着 BOM 相关规范的发展，如今使用 BOM API 能够实现的功能越来越多，也越来越有趣。
+随着 BOM 相关规范的发展，现如今使用 BOM API 能够实现的功能越来越多，也越来越有趣。如果没有 BOM 中异彩纷呈的一些 API，倒不会影响网站的访问，但用起来就很枯燥，简直索然无味。
 
 BOM 的核心是 `window` 对象，表示浏览器的实例。`window` 对象有两重身份：
 
@@ -302,4 +302,13 @@ document.addEventListener('copy', function(e) {
   // 阻止默认的复制事件，这里我们想要复制我们自定义的内容到剪贴板，而不是默认复制来的原内容
   e.preventDefault();
 });
+```
+
+[在线示例 CodeSandBox](https://codesandbox.io/s/declaration-of-copy-fbtr9?file=/index.html) | [完整文件](https://github.com/roc-an/blog/tree/main/javascript/bom/declaration-of-copy)
+
+**操作系统的剪贴板本质上是一个用于短期数据储存或转移的数据缓存区**，JS 的 BOM API 提供了访问和修改系统剪贴板的能力，但要注意**访问剪贴板是异步的，所有 `Clipboard` API 返回的都是一个 `Promise` 实例**。比如这样：
+
+```js
+navigator.clipboard.readText()
+  .then(clipText => document.getElementById('outbox').innerText = clipText);
 ```
