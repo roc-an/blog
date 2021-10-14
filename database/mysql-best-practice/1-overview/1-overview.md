@@ -27,3 +27,16 @@
 * 共享内存（Shared Memory）
 
 命名管道和共享内存方式的优势是访问速度更快，但这两种只能本地访问数据库。所以一般都选择网络通讯协议方式，默认的 TCP/IP 协议访问端口是 3306。
+
+### MySQL 源码学习途径
+
+如果要学习 MySQL 源码，那么[下载](https://dev.mysql.com/downloads/mysql/8.0.html)时将操作系统选成“SourceCode”。
+
+MySQL 是用 C++ 写的，其中几个重点目录：
+
+* `/sql`：MySQL 的核心代码；
+* `/libmysql`：客户端程序的 API；
+* `/mysql-test`：测试工具；
+* `/mysys`：操作系统相关函数和辅助函数。
+
+源码中写了大量且详尽的注释。
