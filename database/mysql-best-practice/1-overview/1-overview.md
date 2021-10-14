@@ -6,7 +6,7 @@
 * MySQL Router：轻量级的插件，在应用和数据库服务器之间，起到路由和负载均衡的作用；
 * MySQL Shell：命令行工具，支持 SQL 语句、JavaScript、Python，支持调用 MySQL API 的接口；
 * MySQL Workbench：官方提供的 MySQL 图形操作工具。
-* Connector/xxx：这些是数据库驱动程序，通过它们可以让其他语言和软件连接 MySQL。比如 Connector/ODBC 就可以让微软产品（如 Excel）连接 MySQL。
+* Connector/xxx：这些是数据库驱动程序，通过它们可以让其他的语言开发环境、软件连接 MySQL。比如 Connector/ODBC 就可以让微软产品（如 Excel）连接 MySQL。
 
 其中，MySQL Router 可以对前端发来的大量数据库访问请求进行调度，把访问均衡地分配给每一个数据库服务器（如果有多个数据库服务器的话）。
 
