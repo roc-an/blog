@@ -263,9 +263,43 @@ class BrowserDetector {
 
 当使用 `CTRL + C` 复制一段内容时，就会触发 [`copy`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/copy_event) 事件。通过事件对象 [`e.clipboardData`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element/copy_event) 可以拿到要“复制”或是“剪切”到剪贴板中的数据。
 
-`e.clipboardData` 保存的数据是个 [`DataTransfer`](https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer) 实例，它也被频繁用在拖放场景中：
+`e.clipboardData` 保存的数据是个 [`DataTransfer`](https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer) 实例，它也被频繁用在拖放场景中。
 
-* 可通过 [`DataTransfer.getData()`](https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/getData) 拿到要复制/剪切的数据；
-* 可通过 [`DataTransfer.setData()`](https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/setData) 设置要复制/剪切的数据。
+* 可通过 [`window.getSelection()`](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/getSelection) 拿到要复制/剪切的数据；
+* 在 `copy` 事件处理函数中，可通过 [`DataTransfer.setData()`](https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer/setData) 设置要复制/剪切的数据；
+* 可通过 [`navigator.clipboard.writeText()`](https://developer.mozilla.org/zh-CN/docs/Web/API/Clipboard/writeText) 向剪贴板写入字符串。
 
 再配合 `e.preventDefault()` 组织默认的剪贴板复制/剪切事件，就能实现上面的转载声明功能。核心代码：
+
+```js
+// 转载声明信息
+const DECLARATION = {
+  name: '安鸿鹏',
+  address: 'https://www.zhihu.com/people/roc.an/collections',
+  from: '知乎',
+  hint: '著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。'
+};
+// 待拼接的声明信息字符串
+const toJoin = `作者：${DECLARATION.name}\n链接：${DECLARATION.address}\n来源：${DECLARATION.from}\n${DECLARATION.hint}\n\n`;
+
+// 复制按钮事件绑定
+const btn = document.querySelector('#btn');
+btn.addEventListener('click', function() {
+  navigator.clipboard.writeText(`${toJoin}光辉女郎拉克丝的大招是“终极闪光”，发射一束耀目的光能射线，对射线上所有敌人造成 300 魔法伤害。此外，该技能还会引燃并刷新光芒四射的效果。`);
+});
+
+// 监听复制 copy 事件
+document.addEventListener('copy', function(e) {
+  // 通过 window.getSelection() 拿到复制的内容，这里不能使用 DataTransfer.getData() 拿数据
+  const srcContent = String(window.getSelection());
+
+  // 拼接要设置的转载字符串
+  const distContent = `${toJoin}${srcContent}`;
+
+  // 通过 DataTransfer.setData() 设置要复制/剪切的内容
+  e.clipboardData.setData('text/plain', distContent);
+
+  // 阻止默认的复制事件，这里我们想要复制我们自定义的内容到剪贴板，而不是默认复制来的原内容
+  e.preventDefault();
+});
+```
