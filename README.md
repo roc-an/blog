@@ -4,7 +4,7 @@
 
 ## 技术
 
-ECMAScript：
+JavaScript：
 
 - [深入理解 JavaScript 中的数字类型](https://github.com/roc-an/blog/issues/5)
 - [深入理解 JavaScript 中的对象](https://github.com/roc-an/blog/issues/6)
