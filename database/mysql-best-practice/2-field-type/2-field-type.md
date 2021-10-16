@@ -108,6 +108,17 @@ SELECT SUM(price) FROM lol.equip;
 * 对于像商品价格这种精度要求高，涉及金额计算的场景，应使用定点型 `DECIMAL`；
 * 对于不太 Care 精度的场景，可以使用浮点型 `FLOAT`，这样能表示的数范围还大一些。
 
+## （六）小结
+
+如果系统不需要特别追求高效，也没有特殊的场景，仅从可靠性角度考虑，那可以这样快速定出类型：
+
+* 如果要存字符串（不用做主键），那就用 `TEXT`；
+* 如果要存时间日期，就用 `DATETIME`；
+* 如果要存数字，整数就用 `INT`；
+* 如果要存数字，小数就用 `DECIMAL`。
+
+这样已经可以满足绝大部分的场景，可以避免因类型定义而出错。
+
 ## 参考资源
 
 * [Data Types | MySQL 8.0 Reference Manual](https://dev.mysql.com/doc/refman/8.0/en/data-types.html)
