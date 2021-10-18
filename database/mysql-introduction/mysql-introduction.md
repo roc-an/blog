@@ -482,7 +482,7 @@ SELECT * FROM user ORDER BY `age` DESC;
 
 示例中，查询 `user` 表中的记录并按 `age` 字段降序排列。
 
-### 处理分页
+### LIMIT 处理分页
 
 语法：
 
