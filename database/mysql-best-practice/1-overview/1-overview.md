@@ -190,6 +190,8 @@ MySQL 的连接分两种：
 
 这里的左和右，指的是 SQL 语句中关键字 `LEFT JOIN` 和 `RIGHT JOIN` 的左右。
 
+#### 内连接例子
+
 继续举实际的例子，班级表 `classes` 和 学生表 `students` 的关系是一对多。
 
 现在有两个班级和两个学生，如图：
@@ -208,7 +210,7 @@ SELECT
   c.startDate
 FROM
   demo.students AS s -- 给 demo.students 表起个别名 s
-    JOIN
+JOIN
   demo.classes AS c ON (s.classId = c.classId);
 ```
 
@@ -219,6 +221,64 @@ studentId | studentName | age | sex | className | startDate
 1 | 冯宝宝 | 307 | 女 | LOL零基础入门1班 | 2021-10-21 00:00:00
 
 因为两表中满足 `classId` 相同的记录仅有一条，所以就仅得到了这一条。这就是内连接。
+
+#### 外连接的左连接例子
+
+继续这个例子，如果用外连接，那么会查询得到一个表的完整记录，来看一个左连接的 SQL：
+
+```SQL
+SELECT
+  s.studentId, -- 查询出学生信息
+  s.studentName,
+  s.age,
+  s.sex,
+  c.className, -- 查询出班级信息
+  c.startDate
+FROM
+  demo.students AS s -- 给 demo.students 表起个别名 s
+LEFT JOIN
+  demo.classes AS c ON (s.classId = c.classId);
+```
+
+整个 SQL 语句和内连接相比，只多了个 `LEFT`，其余都一样。
+
+查询结果：
+
+studentId | studentName | age | sex | className | startDate
+-- | -- | -- | -- | -- | --
+1 | 冯宝宝 | 307 | 女 | LOL零基础入门1班 | 2021-10-21 00:00:00
+2 | 张楚岚 | 22 | 男 | NULL | NULL
+
+可以看到，左连接把 SQL 中 `LEFT JOIN` 左侧的 `students` 表的所有记录都查出来了，继而右侧 `classes` 表仅带出了满足 `classId` 相同的记录信息。
+
+#### 外连接的右连接例子
+
+其实到这，你可以猜猜如果上边的 SQL 改成右连接，查询结果会怎样。
+
+右连接 SQL：
+
+```sql
+SELECT
+  s.studentId, -- 查询出学生信息
+  s.studentName,
+  s.age,
+  s.sex,
+  c.className, -- 查询出班级信息
+  c.startDate
+FROM
+  demo.students AS s -- 给 demo.students 表起个别名 s
+RIGHT JOIN
+  demo.classes AS c ON (s.classId = c.classId);
+```
+
+查询结果：
+
+studentId | studentName | age | sex | className | startDate
+-- | -- | -- | -- | -- | --
+1 | 冯宝宝 | 307 | 女 | LOL零基础入门1班 | 2021-10-21 00:00:00
+NULL | NULL | NULL | NULL | LOL 进阶1班 | 2021-10-20 00:00:00
+
+这回结果把 `RIGHT JOIN` 右侧的 `classes` 表的记录都查出来了，而左侧 `students` 表仅带出了满足条件的记录信息。和左连接正相反。
 
 ## 其他资源推荐
 
