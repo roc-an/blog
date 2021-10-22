@@ -286,12 +286,72 @@ NULL | NULL | NULL | NULL | LOL 进阶1班 | 2021-10-20 00:00:00
 
 ## 区分 `WHERE` 与 `HAVING`
 
-`WHERE` 和 `HAVING` 作为条件语句，都能对查询结果进行按条件筛选：
+`WHERE` 和 `HAVING` 作为条件语句，都能对查询结果进行条件筛选：
 
 * `WHERE`：对表中字段进行限定，筛选查询结果；
 * `HAVING`：同分组关键字 `GROUP BY` 配合使用，通过分组字段/分组计算函数进行限定，筛选查询结果。
 
 有些场景下，用 `WHERE` 和 `HAVING` 都能得到查询结果，但两种方式的查询效率却截然不同。
+
+### `WHERE` 执行过程剖析
+
+如果想彻底分清 `WHERE` 和 `HAVING`，那么一定要搞清楚它们的执行过程。
+
+举个用 `WHERE` 的例子咱们一起来分析分析。入学后，学生要进行考试，一次考试中细分了不同的考试科目，表结构如图：
+
+我把外键用黄色标了出来，可以看到考试表 `exams` 与学生表 `students` 和考试详情表 `exam_details` 都有关联。
+
+提个需求，如果想查询考试分数小于 60 分的考试信息，看看是谁考的那么烂、都用了哪些英雄，这就要用到 `WHERE` 语句了。
+
+联表查询的 SQL 语句如下：
+
+```sql
+SELECT
+	e.examDate,
+	e.examName,
+	e.goal,
+	s.studentName,
+	ed.hero
+FROM
+	demo.exams AS e
+JOIN
+	demo.students AS s ON (e.studentId = s.studentId)
+JOIN
+	demo.exam_details AS ed ON (e.examId = ed.examId)
+WHERE
+	e.goal < 60;
+```
+
+得到的查询结果：
+
+examDate | examName | goal | studentName | hero
+-- | -- | -- | -- | --
+2021-10-22 00:00:00 | LOL手游入学测试 | 32 | 张楚岚 | 诺手
+2021-10-22 00:00:00 | LOL手游入学测试 | 32 | 张楚岚 | 蛮王
+
+MySQL 进行这次 `WHERE` 查询有下面几步：
+
+1. 先从考试表 `exams` 中筛出满足分数 < 60 的记录；
+2. 分别连接学生表 `students` 拿到学生名，连接考试详情表 `exam_details` 拿到使用的英雄
+3. 返回结果。
+
+如果用 SQL 语句来表示上面的步骤，
+
+那么**第一步，“先从考试表 `exams` 中筛出满足分数 < 60 的记录”的 SQL**：
+
+```sql
+SELECT *
+FROM
+	demo.exams AS e
+WHERE
+	e.goal < 60;
+```
+
+得到结果：
+
+examId | examName | studentId | goal | examDate
+-- | -- | -- | -- | --
+2 | LOL手游入学测试 | 2 | 32 | 2021-10-22 00:00:00
 
 ### `GROUP BY` 对数据分组
 
