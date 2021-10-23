@@ -380,6 +380,31 @@ WHERE
 
 `HAVING` 是同 `GROUP BY` 配合使用的，要想理解 `HAVING`，首先要搞明白 `GROUP BY`。**`GROUP BY` 可以对数据进行分组，从而可以对组内数据进行统计**。
 
+继续学生考试的例子，如果想要看看这3天考试中，每天由学生们产生的总击杀数、总死亡数，就可以用分组查询了：
+
+```sql
+SELECT
+	e.examDate,
+	SUM(ed.killCount), -- 统计分组下的总击杀数
+	SUM(ed.dieCount) -- 统计分组下的总死亡数
+FROM
+	demo.exams AS e
+JOIN
+	demo.exam_details AS ed ON (e.examId = ed.examId)
+GROUP BY
+	e.examDate; -- 按不同的考试日期分组
+```
+
+查询结果：
+
+examDate | SUM(ed.killCount) | SUM(ed.dieCount)
+-- | -- | --
+2021-10-22 00:00:00 | 27 | 16
+2021-10-28 00:00:00 | 24 | 6
+2021-11-08 00:00:00 | 44 | 7
+
+通过分组，在 `exams` 表中本来 3 天 6 条的考试记录，按考试日期分组后，得到了 3 天 3 条考试记录。
+
 ### `WHERE` 与 `HAVING` 的区别
 
 了解了 `WHERE` 和 `HAVING` 的执行过程，那么就能 Get 到它们的显著区别了：
