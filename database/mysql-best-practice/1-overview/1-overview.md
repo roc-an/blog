@@ -470,6 +470,58 @@ examId | examName | studentId | goal | examDate | id | hero | subject | killCoun
 6 | LOL手游毕业测试 | 2 | 88 | 2021-11-08 00:00:00 | 11 | 盖伦 | 单人路对线 | 6 | 2 | 46 | 6
 6 | LOL手游毕业测试 | 2 | 88 | 2021-11-08 00:00:00 | 12 | 盲僧 | 打野Gank | 8 | 2 | 42 | 6
 
+**第二步，按分组字段分组**
+
+按英雄名分组，那么就是把这 12 条记录中，相同英雄名的归为一组，分组情况如下：
+
+第 1 组-盖伦：
+
+examId | examName | studentId | goal | examDate | id | hero | subject | killCount | dieCount | subjectGoal | examId(1)
+-- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
+1 | LOL手游入学测试 | 1 | 93 | 2021-10-22 00:00:00 | 1 | 盖伦 | 单人路对线 | 6 | 0 | 43 | 1
+4 | LOL手游进阶测试 | 2 | 76 | 2021-10-28 00:00:00 | 7 | 盖伦 | 单人路对线 | 4 | 1 | 43 | 4
+6 | LOL手游毕业测试 | 2 | 88 | 2021-11-08 00:00:00 | 11 | 盖伦 | 单人路对线 | 6 | 2 | 46 | 6
+
+第 2 组-蛮王：
+
+examId | examName | studentId | goal | examDate | id | hero | subject | killCount | dieCount | subjectGoal | examId(1)
+-- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
+1 | LOL手游入学测试 | 1 | 93 | 2021-10-22 00:00:00 | 2 | 蛮王 | 打野Gank | 18 | 0 | 50 | 1
+2 | LOL手游入学测试 | 2 | 32 | 2021-10-22 00:00:00 | 4 | 蛮王 | 打野Gank | 2 | 10 | 8 | 2
+
+第 3 组-诺手：
+
+examId | examName | studentId | goal | examDate | id | hero | subject | killCount | dieCount | subjectGoal | examId(1)
+-- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
+2 | LOL手游入学测试 | 2 | 32 | 2021-10-22 00:00:00 | 3 | 诺手 | 单人路对线 | 1 | 6 | 24 | 2
+
+第 4 组-易：
+
+examId | examName | studentId | goal | examDate | id | hero | subject | killCount | dieCount | subjectGoal | examId(1)
+-- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
+3 | LOL手游进阶测试 | 1 | 96 | 2021-10-28 00:00:00 | 5 | 易 | 单人路对线 | 10 | 0 | 48 | 3
+3 | LOL手游进阶测试 | 1 | 96 | 2021-10-28 00:00:00 | 6 | 易 | 打野Gank | 7 | 1 | 48 | 3
+4 | LOL手游进阶测试 | 2 | 76 | 2021-10-28 00:00:00 | 8 | 易 | 打野Gank | 3 | 4 | 33 | 4
+
+第 5 组-刀锋：
+
+examId | examName | studentId | goal | examDate | id | hero | subject | killCount | dieCount | subjectGoal | examId(1)
+-- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
+5 | LOL手游毕业测试 | 1 | 99 | 2021-11-08 00:00:00 | 9 | 刀锋 | 单人路对线 | 12 | 0 | 50 | 5
+
+第 6 组-盲僧：
+
+examId | examName | studentId | goal | examDate | id | hero | subject | killCount | dieCount | subjectGoal | examId(1)
+-- | -- | -- | -- | -- | -- | -- | -- | -- | -- | -- | --
+5 | LOL手游毕业测试 | 1 | 99 | 2021-11-08 00:00:00 | 10 | 盲僧 | 打野Gank | 18 | 2 | 49 | 5
+6 | LOL手游毕业测试 | 2 | 88 | 2021-11-08 00:00:00 | 12 | 盲僧 | 打野Gank | 8 | 2 | 42 | 6
+
+**最后一步，按 `HAVING` 的条件去筛选分组结果，返回查询结果**
+
+上面 6 组中，英雄使用了 3 次的是盖伦和易，查询的字段是英雄名。最终返回查询结果。
+
+从 `HAVING` 的执行过程可以发现，**`HAVING` 是先连接查询所有记录，然后再分组，分组后进行筛选。而且 `HAVING` 是可以使用分组计算函数的**。
+
 ### `WHERE` 与 `HAVING` 的区别
 
 了解了 `WHERE` 和 `HAVING` 的执行过程，那么就能 Get 到它们的显著区别了：
