@@ -522,6 +522,36 @@ examId | examName | studentId | goal | examDate | id | hero | subject | killCoun
 
 从 `HAVING` 的执行过程可以发现，**`HAVING` 是先连接查询所有记录，然后再分组，分组后进行筛选。而且 `HAVING` 是可以使用分组计算函数的**。
 
+### `WHERE` 与 `HAVING` 可以同时使用
+
+既然 `WHERE` 与 `HAVING` 执行过程是反着的，那是不是他俩在一段 SQL 中，用了一个，另一个就不会用了？答案是，可以一起使用。
+
+我们把演示 `HAVING` 的需求再改一下，改成：在 10 月 22 号和 28 号这两次考试中，想知道所有科目考试中出现了 3 次的英雄有哪些。
+
+我们加了个限定条件是“在 10 月 22 号和 28 号这两次考试中”，SQL 如下：
+
+```sql
+SELECT
+	ed.hero
+FROM
+	demo.exams AS e
+JOIN
+	demo.exam_details AS ed ON (e.examId = ed.examId)
+WHERE
+	e.examDate IN ('2021-10-22', '2021-10-28') -- 限定在 10 月 22 号和 28 号这两次考试中
+GROUP BY
+	ed.hero
+HAVING count(*) = 3; -- 筛选使用了 3 次英雄，也就是按英雄分组后，组内有 3 条记录
+```
+
+查询结果：
+
+hero |
+-- |
+易
+
+这种情况下，我们先通过 `WHERE` 限定考试日期是 10 月 22 号或 28 号，得到一个小的范围，然后再连接表，分组筛选挑出 3 次的英雄。简直妙不可言。
+
 ### `WHERE` 与 `HAVING` 的区别
 
 了解了 `WHERE` 和 `HAVING` 的执行过程，那么就能 Get 到它们的显著区别了：
