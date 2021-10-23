@@ -329,13 +329,12 @@ examDate | examName | goal | studentName | hero
 2021-10-22 00:00:00 | LOL手游入学测试 | 32 | 张楚岚 | 诺手
 2021-10-22 00:00:00 | LOL手游入学测试 | 32 | 张楚岚 | 蛮王
 
-MySQL 进行这次 `WHERE` 查询有下面几步：
+MySQL 进行这次 `WHERE` 查询有下面两步：
 
 1. 先从考试表 `exams` 中筛出满足分数 < 60 的记录；
-2. 分别连接学生表 `students` 拿到学生名，连接考试详情表 `exam_details` 拿到使用的英雄
-3. 返回结果。
+2. 分别连接学生表 `students` 拿到学生名，连接考试详情表 `exam_details` 拿到使用的英雄，返回查询结果。
 
-如果用 SQL 语句来表示上面的步骤，
+如果用 SQL 语句来模拟上面的步骤，
 
 那么**第一步，“先从考试表 `exams` 中筛出满足分数 < 60 的记录”的 SQL**：
 
@@ -352,6 +351,30 @@ WHERE
 examId | examName | studentId | goal | examDate
 -- | -- | -- | -- | --
 2 | LOL手游入学测试 | 2 | 32 | 2021-10-22 00:00:00
+
+然后**进行第二步，连接关联表拿数据，返回结果**
+
+```SQL
+SELECT
+	e.examDate,
+	e.examName,
+	e.goal,
+	s.studentName,
+	ed.hero
+FROM
+	demo.exams AS e
+JOIN
+	demo.students AS s ON (e.studentId = s.studentId)
+JOIN
+	demo.exam_details AS ed ON (e.examId = ed.examId)
+WHERE
+	e.examId = 2; -- 上一步已经拿到了成绩小于 60 分的考试 ID
+```
+
+由此，我们归纳下 `WHERE` 的执行特点：
+
+* 可以直接使用表的字段进行条件筛选；
+* 先通过 `WHERE` 条件筛选，然后用一个范围更小的数据集进行连接，再拿到关联表数据。
 
 ### `GROUP BY` 对数据分组
 
