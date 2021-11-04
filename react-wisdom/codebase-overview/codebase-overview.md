@@ -31,7 +31,11 @@ React Native 渲染器。它实现了 React 和 React Native 的连接，这个�
 
 #### `/packages/react-test-renderer`
 
+React 测试用渲染器。将 React 组件解析成纯粹的 JS 对象。可以和 Jest 的快照测试功能配合使用。
 
+#### `/packages/react-art`
+
+React ART 渲染器。它实现了与矢量图绘制库 [ART](https://github.com/sebmarkbage/art/) 的桥接。
 
 ### `/fixtures`
 
