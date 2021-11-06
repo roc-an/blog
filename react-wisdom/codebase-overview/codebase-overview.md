@@ -6,7 +6,7 @@
 
 #### `/packages/react`
 
-`react` 模块仅包含定义组件所必须的 API，也就是 React 的各顶层 API（[React Top-Level API](https://reactjs.org/docs/react-api.html#react)），比如：
+`react` 模块（也就是从 npm 上下载的 `react` 库）仅包含定义组件所必须的 API，也就是 React 的各顶层 API（[React Top-Level API](https://reactjs.org/docs/react-api.html#react)），比如：
 
 * [`React.createElement(type, [props], [...children])`](https://reactjs.org/docs/react-api.html#createelement);
 * [`React.Component()`](https://reactjs.org/docs/react-api.html#reactcomponent);
@@ -18,7 +18,7 @@
 
 #### `/packages/dom`
 
-React DOM 渲染器。将 React 组件树渲染成 Web 浏览器平台下实际的 DOM 节点。
+React DOM 渲染器（也就是从 npm 上下载的 `react-dom` 库）。将 React 组件树渲染成 Web 浏览器平台下实际的 DOM 节点。
 
 该模块包含各 [ReactDOM API](https://reactjs.org/docs/react-dom.html)，比如：
 
