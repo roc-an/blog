@@ -7,6 +7,7 @@
 React：
 
 - [React 18 新特性：startTransition](https://github.com/roc-an/react-wisdom/issues/1)
+- [React18 并发“模式”（Concurrent "Mode"）的前世今生](https://github.com/roc-an/react-wisdom/issues/2)
 
 JavaScript：
 
