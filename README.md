@@ -31,6 +31,8 @@ NodeJS：
 数据库：
 
 - [MySQL 数据库边学边练光速入门](https://github.com/roc-an/blog/issues/1)
+- [MySQL 最佳实践之联表查询（上）](https://github.com/roc-an/blog/issues/11)
+- [MySQL 最佳实践之联表查询（补充）](https://github.com/roc-an/blog/issues/12)
 
 啃《算法导论》系列：
 
