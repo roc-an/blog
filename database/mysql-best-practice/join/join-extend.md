@@ -12,16 +12,16 @@
 
 ```sql
 SELECT
-	LEFT(e.examDate, 10), -- 取考试间字符串的左边 10 个字符，得到年月日
-	AVG(ed.killCount) -- 对分组内的击杀数求平均
+  LEFT(e.examDate, 10), -- 取考试间字符串的左边 10 个字符，得到年月日
+  AVG(ed.killCount) -- 对分组内的击杀数求平均
 FROM
-	demo.exams AS e
+  demo.exams AS e
 JOIN
-	demo.exam_details AS ed ON (e.examId = ed.examId)
+  demo.exam_details AS ed ON (e.examId = ed.examId)
 GROUP BY
-	e.examDate
+  e.examDate
 ORDER BY
-	AVG(ed.killCount) DESC;
+  AVG(ed.killCount) DESC;
 ```
 
 得到查询结果：
@@ -38,16 +38,16 @@ LEFT(e.examDate, 10) | AVG(ed.killCount)
 
 ```sql
 SELECT
-	LEFT(e.examDate, 10), -- 取考试间字符串的左边 10 个字符，得到年月日
-	MAX(ed.dieCount) -- 对分组内的死亡数求最小值
+  LEFT(e.examDate, 10), -- 取考试间字符串的左边 10 个字符，得到年月日
+  MAX(ed.dieCount) -- 对分组内的死亡数求最小值
 FROM
-	demo.exams AS e
+  demo.exams AS e
 JOIN
-	demo.exam_details AS ed ON (e.examId = ed.examId)
+  demo.exam_details AS ed ON (e.examId = ed.examId)
 GROUP BY
-	e.examDate
+  e.examDate
 ORDER BY
-	MAX(ed.dieCount) DESC;
+  MAX(ed.dieCount) DESC;
 ```
 
 得到查询结果：
@@ -77,14 +77,14 @@ LEFT(e.examDate, 10) | MAX(ed.dieCount)
 
 ```sql
 SELECT
-	ed.hero,
-	COUNT(*)
+  ed.hero,
+  COUNT(*)
 FROM
-	demo.exams AS e
+  demo.exams AS e
 JOIN
-	demo.exam_details AS ed ON (e.examId = ed.examId)
+  demo.exam_details AS ed ON (e.examId = ed.examId)
 GROUP BY
-	ed.hero;
+  ed.hero;
 ```
 
 查询结果：
@@ -124,9 +124,9 @@ examId | examName | studentId | goal | examDate
 
 ```sql
 SELECT
-	COUNT(e.examName)
+  COUNT(e.examName)
 FROM
-	demo.exams AS e;
+  demo.exams AS e;
 ```
 
 得到：
@@ -141,9 +141,9 @@ COUNT(e.examName) |
 
 ```sql
 SELECT
-	COUNT(e.goal)
+  COUNT(e.goal)
 FROM
-	demo.exams AS e;
+  demo.exams AS e;
 ```
 
 得到：

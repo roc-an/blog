@@ -155,19 +155,19 @@ NULL | NULL | NULL | NULL | LOL 进阶1班 | 2021-10-20 00:00:00
 
 ```sql
 SELECT
-	e.examDate,
-	e.examName,
-	e.goal,
-	s.studentName,
-	ed.hero
+  e.examDate,
+  e.examName,
+  e.goal,
+  s.studentName,
+  ed.hero
 FROM
-	demo.exams AS e
+  demo.exams AS e
 JOIN
-	demo.students AS s ON (e.studentId = s.studentId)
+  demo.students AS s ON (e.studentId = s.studentId)
 JOIN
-	demo.exam_details AS ed ON (e.examId = ed.examId)
+  demo.exam_details AS ed ON (e.examId = ed.examId)
 WHERE
-	e.goal < 60;
+  e.goal < 60;
 ```
 
 得到的查询结果：
@@ -189,9 +189,9 @@ MySQL 进行这次 `WHERE` 查询有下面两步：
 ```sql
 SELECT *
 FROM
-	demo.exams AS e
+  demo.exams AS e
 WHERE
-	e.goal < 60;
+  e.goal < 60;
 ```
 
 得到结果：
@@ -204,19 +204,19 @@ examId | examName | studentId | goal | examDate
 
 ```SQL
 SELECT
-	e.examDate,
-	e.examName,
-	e.goal,
-	s.studentName,
-	ed.hero
+  e.examDate,
+  e.examName,
+  e.goal,
+  s.studentName,
+  ed.hero
 FROM
-	demo.exams AS e
+  demo.exams AS e
 JOIN
-	demo.students AS s ON (e.studentId = s.studentId)
+  demo.students AS s ON (e.studentId = s.studentId)
 JOIN
-	demo.exam_details AS ed ON (e.examId = ed.examId)
+  demo.exam_details AS ed ON (e.examId = ed.examId)
 WHERE
-	e.examId = 2; -- 上一步已经拿到了成绩小于 60 分的考试 ID
+  e.examId = 2; -- 上一步已经拿到了成绩小于 60 分的考试 ID
 ```
 
 由此，我们归纳下 `WHERE` 的执行特点：
@@ -232,15 +232,15 @@ WHERE
 
 ```sql
 SELECT
-	e.examDate,
-	SUM(ed.killCount), -- 统计分组下的总击杀数
-	SUM(ed.dieCount) -- 统计分组下的总死亡数
+  e.examDate,
+  SUM(ed.killCount), -- 统计分组下的总击杀数
+  SUM(ed.dieCount) -- 统计分组下的总死亡数
 FROM
-	demo.exams AS e
+  demo.exams AS e
 JOIN
-	demo.exam_details AS ed ON (e.examId = ed.examId)
+  demo.exam_details AS ed ON (e.examId = ed.examId)
 GROUP BY
-	e.examDate; -- 按不同的考试日期分组
+  e.examDate; -- 按不同的考试日期分组
 ```
 
 查询结果：
@@ -263,13 +263,13 @@ SQL 如下：
 
 ```sql
 SELECT
-	ed.hero
+  ed.hero
 FROM
-	demo.exams AS e
+  demo.exams AS e
 JOIN
-	demo.exam_details AS ed ON (e.examId = ed.examId)
+  demo.exam_details AS ed ON (e.examId = ed.examId)
 GROUP BY
-	ed.hero
+  ed.hero
 HAVING count(*) = 3; -- 筛选使用了 3 次英雄，也就是按英雄分组后，组内有 3 条记录
 ```
 
@@ -294,11 +294,11 @@ hero |
 
 ```sql
 SELECT
-	e.*, ed.*
+  e.*, ed.*
 FROM
-	demo.exams AS e
+  demo.exams AS e
 JOIN
-	demo.exam_details AS ed ON (e.examId = ed.examId);
+  demo.exam_details AS ed ON (e.examId = ed.examId);
 ```
 
 得到连接后的所有记录 12 条（6 场考试 x 每场考试 2 个科目 = 12 条）：
@@ -380,15 +380,15 @@ examId | examName | studentId | goal | examDate | id | hero | subject | killCoun
 
 ```sql
 SELECT
-	ed.hero
+  ed.hero
 FROM
-	demo.exams AS e
+  demo.exams AS e
 JOIN
-	demo.exam_details AS ed ON (e.examId = ed.examId)
+  demo.exam_details AS ed ON (e.examId = ed.examId)
 WHERE
-	e.examDate IN ('2021-10-22', '2021-10-28') -- 限定在 10 月 22 号和 28 号这两次考试中
+  e.examDate IN ('2021-10-22', '2021-10-28') -- 限定在 10 月 22 号和 28 号这两次考试中
 GROUP BY
-	ed.hero
+  ed.hero
 HAVING count(*) = 3; -- 筛选使用了 3 次英雄，也就是按英雄分组后，组内有 3 条记录
 ```
 
@@ -431,16 +431,16 @@ MySQL 中有 5 种较为常用的聚合函数：
 
 ```sql
 SELECT
-	LEFT(e.examDate, 10), -- 取考试间字符串的左边 10 个字符，得到年月日
-	SUM(ed.killCount)
+  LEFT(e.examDate, 10), -- 取考试间字符串的左边 10 个字符，得到年月日
+  SUM(ed.killCount)
 FROM
-	demo.exams AS e
+  demo.exams AS e
 JOIN
-	demo.exam_details AS ed ON (e.examId = ed.examId)
+  demo.exam_details AS ed ON (e.examId = ed.examId)
 GROUP BY
-	e.examDate
+  e.examDate
 ORDER BY
-	SUM(ed.killCount) DESC;
+  SUM(ed.killCount) DESC;
 ```
 
 查询结果：
