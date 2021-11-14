@@ -24,3 +24,5 @@ const arr = getRandomArr();
 console.log('插入排序前：', arr);
 insertionSort(arr);
 console.log('插入排序后：', arr);
+
+module.exports = insertionSort;
