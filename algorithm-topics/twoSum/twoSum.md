@@ -42,3 +42,35 @@
 你可以想出一个时间复杂度小于 ![O(n^{2})](http://latex.codecogs.com/png.image?\dpi{110}%20O(n^{2})) 的算法吗？
 
 > 题目来源：力扣（LeetCode）
+
+## （二）青铜级解法 - 双层遍历
+
+核心思路：双层遍历，用数组的每一项，和它之后的所有项一一求和，过程中记录索引，求和等于 `target` 时，`return` 索引数组。
+
+上菜（代码）：
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number[]}
+ */
+const twoSum = (nums, target) => {
+  for (let i = 0; i < nums.length; i++) {
+    const num1 = nums[i]; // 外层循环要比较的值
+
+    for (let j = i + 1; j < nums.length; j++) {
+      const num2 = nums[j]; // 内层循环要比较的值
+
+      if (num1 + num2 === target) {
+        return [i, j]
+      }
+    }
+  }
+  return [];
+};
+```
+
+你也可以在[这里]()找到代码。
+
+这种解法的时间复杂度是 ![O(n^{2})](http://latex.codecogs.com/png.image?\dpi{110}%20O(n^{2}))
