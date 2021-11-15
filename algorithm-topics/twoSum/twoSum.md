@@ -1,6 +1,8 @@
 # 散列表巧解“两数之和”问题
 
 > 发布于 2021.11.15，最后更新于 2021.11.15。
+>
+> 封面图来自 Pexels 上的 Bert 拍摄的图片
 
 ## （一）题目描述
 
@@ -157,6 +159,8 @@ const twoSum = (nums, target) => {
   throw new Error('没有匹配出现');
 };
 ```
+
+你也可以在[这里](https://github.com/roc-an/blog/blob/main/algorithm-topics/twoSum/code/twoSum-level2.js)找到完整代码。
 
 我们分析下使用散列表求解两数之和的时间、空间复杂度：
 
