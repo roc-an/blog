@@ -71,6 +71,6 @@ const twoSum = (nums, target) => {
 };
 ```
 
-你也可以在[这里]()找到代码。
+你也可以在[这里](https://github.com/roc-an/blog/blob/main/algorithm-topics/twoSum/code/twoSum-level1.js)找到代码。
 
 这种解法的时间复杂度是 ![O(n^{2})](http://latex.codecogs.com/png.image?\dpi{110}%20O(n^{2}))
