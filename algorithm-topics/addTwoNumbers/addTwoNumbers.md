@@ -64,3 +64,16 @@
 
 * 链表数据在内存中是**随机存储**的，链表的每一个节点分布在内存的不同位置，依靠 `next` 指针关联起来。这样可以灵活有效地利用零散的碎片空间；
 * 数组数据在内存中是顺序存储（占用连续、完整的存储空间）的。
+
+### 单向链表的 JavaScript 实现
+
+上菜，一个最简单的单向链表节点构造函数：
+
+```js
+function ListNode(val, next) {
+  this.val = val === undefined ? 0 : val;
+  this.next = next === undefined ? null : next;
+}
+```
+
+其中，`this.val` 是节点携带的数据，而 `this.next` 就是指向下个节点的指针。
