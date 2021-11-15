@@ -1,4 +1,6 @@
-# 两数之和
+# 散列表巧解“两数之和”问题
+
+> 发布于 2021.11.15，最后更新于 2021.11.15。
 
 ## （一）题目描述
 
@@ -130,5 +132,45 @@ ES6 新增了 [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Re
 
 ## （六）JavaScript 实现散列表解两数之和
 
+上菜：
 
+```js
+const twoSum = (nums, target) => {
+  // 创建散列表实例，数组的首项一定不在散列表中，所以直接添加就好
+  const map = new Map([
+    [nums[0], 0]
+  ]);
 
+  // 从数组第 2 项开始遍历
+  for(let i = 1; i < nums.length; i++) {
+    const expectedNum = target - nums[i]; // 期望找到的另一个数 = target - 当前数
+    const searchedNumIndex = map.get(expectedNum); // 向 map 中查找数字索引
+
+    if (searchedNumIndex === undefined) {
+      // 如果没找到，那就向散列表添加信息
+      map.set(nums[i], i);
+    } else {
+      // 如果找到，那就返回索引数组
+      return [searchedNumIndex, i];
+    }
+  }
+  throw new Error('没有匹配出现');
+};
+```
+
+我们分析下使用散列表求解两数之和的时间、空间复杂度：
+
+* 时间复杂度：O(n)，`n` 是数组长度，我们仅进行了 1 次数组遍历，且存、取散列表的时间复杂度是 O(1)；
+* 空间复杂度：O(n)，最坏的情况是遍历到数组最后才找到值，所以散列表最多要存 `n - 1` 个键值对；
+
+## （七）小结
+
+我们介绍了两种求解两数之和的方案，暴力解法的时间复杂度是 ![O(n^{2})](http://latex.codecogs.com/png.image?\dpi{110}%20O(n^{2}))，而使用散列表的时间复杂度只有 O(n)。
+
+相比于多花点便宜的存储空间，时间肯定更宝贵。所以这种策略的核心是用空间换时间。
+
+散列表可以方便地进行键值对映射，存取它的时间复杂度是 O(1)。
+
+我还用 JS 代码完成了这两种方案，过程中使用了 ES6 Map，这也是 Map 的一个典型使用场景。
+
+最后，感谢阅读，欢迎 Star 和订阅，每次发布新的文章我都会 release，这样好文章一旦发布你就能够收到通知。我的文章更新频率是每周至少 1 篇，上头时可能会 2~3 篇，欢迎大家与我交流！
