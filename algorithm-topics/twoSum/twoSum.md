@@ -45,32 +45,48 @@
 
 ## （二）青铜级解法 - 双层遍历
 
-核心思路：双层遍历，用数组的每一项，和它之后的所有项一一求和，过程中记录索引，求和等于 `target` 时，`return` 索引数组。
+这是暴力解法。
+
+核心思路：双层遍历，用数组的每一项，和它之后的所有项一一求和，过程中记录索引，求和等于 `target` 时，`return` 索引数组。也就是说，通过双层遍历枚举了所有可能的情况。
 
 上菜（代码）：
 
 ```js
-/**
- * @param {number[]} nums
- * @param {number} target
- * @return {number[]}
- */
 const twoSum = (nums, target) => {
-  for (let i = 0; i < nums.length; i++) {
-    const num1 = nums[i]; // 外层循环要比较的值
+  const len = nums.length;
 
-    for (let j = i + 1; j < nums.length; j++) {
-      const num2 = nums[j]; // 内层循环要比较的值
-
-      if (num1 + num2 === target) {
+  for (let i = 0; i < len - 1; i++) {
+    for (let j = i + 1; j < len; j++) {
+      if (nums[i] + nums[j] === target) {
         return [i, j]
       }
     }
   }
-  return [];
+  throw new Error('没有匹配出现');
 };
 ```
 
 你也可以在[这里](https://github.com/roc-an/blog/blob/main/algorithm-topics/twoSum/code/twoSum-level1.js)找到代码。
 
-这种解法的时间复杂度是 ![O(n^{2})](http://latex.codecogs.com/png.image?\dpi{110}%20O(n^{2}))
+复杂度分析：
+
+* 时间复杂度：![O(n^{2})](http://latex.codecogs.com/png.image?\dpi{110}%20O(n^{2}))，`n` 是数组长度；
+* 空间复杂度：O(1)，只用到常数个临时变量（`len`、`i`、`j`）；
+
+## （三）钻石级解法 - 使用散列表空间换时间
+
+青铜级解法的时间复杂度是 ![O(n^{2})](http://latex.codecogs.com/png.image?\dpi{110}%20O(n^{2}))，空间复杂度是 O(1)。对于这种情况，通常的算法优化方向是：**空间换时间**。
+
+两数之和为 `target`，这其实限定了数组中满足条件的这两个数的关系。如果数组中一个数 A，如果想找到满足条件的另一个数，那另一个数一定是 `target - A`。
+
+因此，可以使用 `查找表法`，核心思路：
+
+* 遍历数组时，记录信息，从而省去一层循环，这是空间换时间；
+* 需要记录数字值，及其索引。可以通过查找表来实现；
+
+查找表通常有两种实现：
+
+* 散列表；
+* 平衡二叉搜索树；
+
+由于不需要维护查找表中元素的顺序，所以用**散列表**就可以了。

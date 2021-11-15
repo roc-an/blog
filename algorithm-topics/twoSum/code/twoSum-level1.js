@@ -8,18 +8,16 @@ const arr = [0, -28, 13, 22, 2, -6];
 const target = 7;
 
 const twoSum = (nums, target) => {
-  for (let i = 0; i < nums.length; i++) {
-    const num1 = nums[i]; // 外层循环要比较的值
+  const len = nums.length;
 
-    for (let j = i + 1; j < nums.length; j++) {
-      const num2 = nums[j]; // 内层循环要比较的值
-
-      if (num1 + num2 === target) {
+  for (let i = 0; i < len - 1; i++) {
+    for (let j = i + 1; j < len; j++) {
+      if (nums[i] + nums[j] === target) {
         return [i, j]
       }
     }
   }
-  return [];
+  throw new Error('没有匹配出现');
 };
 
 const indexArr = twoSum(arr, target);
