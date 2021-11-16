@@ -1,6 +1,8 @@
 # 无重复字符的最长子串
 
 > 发布于 2021.11.16，最后更新于 2021.11.16。
+>
+> 虽然我的算法实现使用了 JS，但思想都是相通的，与语言无关。
 
 ## （一）题目描述
 
@@ -61,7 +63,7 @@
 const isHasRepeatingStr = (str) => {
   const strLen = str.length;
 
-  if (strLen < 1) { return false; } // 空字符直接 return false
+  if (strLen < 2) { return false; } // 空字符或单字符直接 return false
 
   // 初始化散列表，存入字符串首字符和其索引
   const map = new Map([
@@ -103,3 +105,36 @@ const str3 = 'abca'; // 期望 true
 * 如果完全遍历后，依然没有重复值，那就最终 `return false`；
 
 另外我在代码中使用了 `Map`，这是 ES6 新增的集合引用类型，可以用它来表示散列表。如果不熟悉的话，可以看看我的另一篇文章：[《“可圈可点”的 Map 与 Set》](https://github.com/roc-an/blog/issues/10)。
+
+### 暴力求解
+
+上菜：
+
+```js
+const lengthOfLongestSubstring = (s) => {
+  const sLen = s.length;
+  if (sLen === 1) { return 1; } // 如果只有 1 个字符，直接 return 1
+
+  let longestLen = 0; // 最长子串长度
+
+  for (let i = 0; i < sLen; i++) {
+    for (let j = i + 1; j < sLen + 1; j++) {
+      // 在 s 中按索引截取子串
+      const subStr = s.slice(i, j);
+      const subStrLen = subStr.length;
+
+      // 如果子串无重复字符，那么判断并更新最长子串长度
+      if (!isHasRepeatingStr(subStr) && subStrLen > longestLen) {
+        longestLen = subStrLen;
+      }
+    }
+  }
+  return longestLen;
+};
+```
+
+其中调用了我们之前实现的 `isHasRepeatingStr()` 函数来检测子串是否有重复字符。
+
+在 LeetCode 上跑暴力求解的算法，在执行最后一个超长字符串时超出时间限制了（我用秒表计时了 15s）...
+
+### 暴力求解算法的时间、空间复杂度分析
