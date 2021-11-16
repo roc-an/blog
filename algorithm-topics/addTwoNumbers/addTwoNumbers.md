@@ -177,3 +177,13 @@ l2Node2.next = new ListNode(4);
 // 期望的新列表：7 -> 0 -> 8
 console.log('得到的新链表头节点：', addTwoNumbers(l1HeadNode, l2HeadNode));
 ```
+
+其中：
+
+* 递归调用了 `setNextNode()` 函数来计算两数相加的和，并创建新节点，搞定 `next` 指向；
+* 计算当前新节点 `val` 时，用了 `Math.floor(sum/10)`，向下取整；
+* 计算进位时，用了 `sum%10`，取余。
+
+另外我编写了测试用例，并且代码也通过了 LeetCode 上 1568 个测试用例：
+
+完整代码也可以在[这里](https://github.com/roc-an/blog/blob/main/algorithm-topics/addTwoNumbers/code/addTwoNumbers.js)找到。
