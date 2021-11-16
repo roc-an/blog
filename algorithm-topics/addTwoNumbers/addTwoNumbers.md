@@ -187,3 +187,12 @@ console.log('得到的新链表头节点：', addTwoNumbers(l1HeadNode, l2HeadNo
 另外我编写了测试用例，并且代码也通过了 LeetCode 上 1568 个测试用例：
 
 完整代码也可以在[这里](https://github.com/roc-an/blog/blob/main/algorithm-topics/addTwoNumbers/code/addTwoNumbers.js)找到。
+
+## （五）时间、空间复杂度分析
+
+记 `m`、`n` 分别为输入链表 `l1`、`l2` 的长度。那么该算法的时间、空间复杂度如下：
+
+* 时间复杂度：O(max(m, n))：因为 `l1`、`l2` 不等长，所以算法最多执行 `max(m, n)` 次，每次进行计算、创建新节点、处理 `next` 指向这些操作都是 O(1) 的；
+* 空间复杂度：O(max(m, n))：即 `l1`、`l2` 和新链表的存储长度，该算法没有借助其他数据结构，所以不需要额外的存储空间。另外，新链表的最大长度是 `max(m , n) + 1`，因为要考虑遍历结束还存在进位的情况。
+
+总之，该算法的时间、空间复杂度都是线性的。
