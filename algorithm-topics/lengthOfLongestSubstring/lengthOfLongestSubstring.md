@@ -43,3 +43,63 @@
 * 0 <= s.length <= 5 * ![10^{4}](http://latex.codecogs.com/png.image?\dpi{110}%2010^{4})；
 * `s` 由英文字母、数字、符号和空格组成。
 
+## （二）青铜级解法 - 枚举所有子串
+
+这是一种暴力解法，核心思路：
+
+* 通过双层循环，遍历 `s`，得到所有子串的情况。第一层循环从 `s` 的开始位置向后遍历，第二层从外层索引的下一个字符开始遍历，直到 `s` 结尾。当然双层循环的方式可以有很多，但总之是用了双层循环才能枚举穷尽所有子串情况；
+* 在遍历过程中，不断判断子串是否有重复字符，用变量记录无重复字符的最长子串长度，并不断更新它。
+
+### JS 实现通过散列表判断字符串中是否有重复字符
+
+上面思路中，“判断子串是否有重复字符”，这本身需要一个小算法。可以通过散列表来解决。
+
+上菜（代码）：
+
+```js
+// 判断传入字符中是否有重复的字符
+const isHasRepeatingStr = (str) => {
+  const strLen = str.length;
+
+  if (strLen < 1) { return false; } // 空字符直接 return false
+
+  // 初始化散列表，存入字符串首字符和其索引
+  const map = new Map([
+    [str[0], 0]
+  ]);
+
+  // 从第二个字符开始遍历
+  for (let i = 1; i < str.length; i++) {
+    // 当前遍历的字符
+    const currentStr = str[i];
+    // 尝试从散列表中取当前遍历的字符
+    const searchedStr = map.get(currentStr);
+
+    // 如果取到，说明有重复字符
+    if (searchedStr !== undefined) { return true; }
+
+    // 如果没取到，就添加进散列表
+    map.set(currentStr, i);
+  }
+  return false;
+}
+
+// 测试用例 - 判断传入字符中是否有重复的字符
+const str1 = 'abc'; // 期望 false
+const str2 = ''; // 期望 false
+const str3 = 'abca'; // 期望 true
+
+[str1, str2, str3].forEach((str) => {
+  console.log(isHasRepeatingStr(str)); // 依次输出 false, false. true
+});
+```
+
+**散列表**，也就是哈希表，里面存储着键值对（键-值映射）。
+
+核心思路是：遍历传入字符串的每个字符，尝试从散列表中取当前遍历字符：
+
+* 如果能取到值，说明有重复字符，结束遍历，`return true`；
+* 如果取不到值，说明还未重复，那就向散列表添加值；
+* 如果完全遍历后，依然没有重复值，那就最终 `return false`；
+
+另外我在代码中使用了 `Map`，这是 ES6 新增的集合引用类型，可以用它来表示散列表。如果不熟悉的话，可以看看我的另一篇文章：[《“可圈可点”的 Map 与 Set》](https://github.com/roc-an/blog/issues/10)。
