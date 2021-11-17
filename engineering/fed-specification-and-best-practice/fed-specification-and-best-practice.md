@@ -457,3 +457,167 @@ class Queue {
   return total + n;
 }, 0);
 ```
+
+## （六）Vue 技术栈
+
+### 组件命名
+
+#### 组件名为多个单词
+
+**组件名应该始终是多个单词的，根组件 `App` 以及 `<transition>`、`<component>` 之类的 Vue 内置组件除外**。
+
+这样做可以避免跟现有的以及未来的 HTML 元素[相冲突](https://html.spec.whatwg.org/multipage/custom-elements.html#valid-custom-element-name)，因为所有的 HTML 元素名称都是单个单词的。
+
+```js
+// bad
+Vue.component('todo', {
+  // ...
+})
+
+export default { name: 'Todo' }
+
+// good
+Vue.component('todo-item', {
+  // ...
+})
+
+export default { name: 'TodoItem' }
+```
+
+#### 单文件组件的大小写
+
+**[单文件组件](https://cn.vuejs.org/v2/guide/single-file-components.html)的文件名应该要么始终是单词大写开头 (PascalCase)，要么始终是横线连接 (kebab-case)。**
+
+单词大写开头对于代码编辑器的自动补全最为友好，因为这使得我们在 JS(X) 和模板中引用组件的方式尽可能的一致。然而，混用文件命名方式有的时候会导致大小写不敏感的文件系统的问题，这也是横线连接命名同样完全可取的原因。
+
+```
+// bad
+components/
+|- mycomponent.vue
+
+components/
+|- myComponent.vue
+
+// good
+components/
+|- MyComponent.vue
+
+components/
+|- my-component.vue
+```
+
+#### 紧密耦合的组件名
+
+**和父组件紧密耦合的子组件应该以父组件名作为前缀命名。**
+
+如果一个组件只在某个父组件的场景下有意义，这层关系应该体现在其名字上。因为编辑器通常会按字母顺序组织文件，所以这样做可以把相关联的文件排在一起。
+
+```js
+// bad
+components/
+|- TodoList.vue
+|- TodoItem.vue
+|- TodoButton.vue
+
+components/
+|- SearchSidebar.vue
+|- NavigationForSearchSidebar.vue
+
+// good
+components/
+|- TodoList.vue
+|- TodoListItem.vue
+|- TodoListItemButton.vue
+
+components/
+|- SearchSidebar.vue
+|- SearchSidebarNavigation.vue
+```
+
+### Prop 定义
+
+**Prop 定义应该尽量详细。**
+
+在你提交的代码中，`prop` 的定义应该尽量详细，至少需要指定其类型。
+
+细致的[prop 定义](https://cn.vuejs.org/v2/guide/components-props.html#Prop-验证)有两个好处：
+
+* 它们写明了组件的 API，所以很容易看懂组件的用法；
+* 在开发环境下，如果向一个组件提供格式不正确的 `prop`，Vue 将会警告，以帮助捕获潜在的错误来源。
+
+```js
+// bad
+// 这样做只有开发 Demo 时可以接受
+props: ['status']
+
+// good
+props: {
+  status: String
+}
+
+// 更好的做法！
+props: {
+  status: {
+    type: String,
+    required: true,
+    validator: function(value) {
+      return [
+        'syncing',
+        'synced',
+        'version-conflict',
+        'error'
+      ].indexOf(value) !== -1
+    }
+  }
+}
+```
+
+### 为 `v-for` 设置键值
+
+请在组件上总是用 `key` 配合 `v-for`，以便维护内部组件及其子树的状态。
+
+```html
+// bad
+<ul>
+  <li v-for="todo in todos">{{ todo.text }}</li>
+</ul>
+
+// good
+<ul>
+  <li v-for="todo in todos" :key="todo.id">{{ todo.text }}</li>
+</ul>
+```
+
+不要直接使用节点索引作为 `key`，这会导致新旧节点序列的 Diff 算法部分优化失效。
+
+### 模板中简单的表达式
+
+**组件模板应该只包含简单的表达式，复杂的表达式则应该重构为计算属性或方法。**
+
+复杂表达式会让你的模板变得不那么声明式。我们应该尽量描述应该出现的**是什么**，而非**如何**计算那个值。而且计算属性和方法使得代码可以重用。
+
+```html
+<!-- bad -->
+{{
+  fullName.split(' ').map(function (word) {
+    return word[0].toUpperCase() + word.slice(1)
+  }).join(' ')
+}}
+```
+
+```html
+<!-- good -->
+<!-- 在模板中 -->
+{{ normalizedFullName }}
+```
+
+```js
+// 复杂表达式已经移入一个计算属性
+computed: {
+  normalizedFullName: function () {
+    return this.fullName.split(' ').map(function (word) {
+      return word[0].toUpperCase() + word.slice(1)
+    }).join(' ')
+  }
+}
+```
