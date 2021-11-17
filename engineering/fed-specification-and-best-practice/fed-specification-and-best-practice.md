@@ -400,3 +400,60 @@ this._firstName = 'Panda';
 // good
 this.firstName = 'Panda';
 ```
+
+#### 函数命名
+
+函数命名大多使用动词开头，例：
+
+* 事件处理函数，可以用 `handle` 开头：`handleSubmitForm`、`handleFieldChange`、`handleOptionChange`；
+* 获得整合处理的数据，可以用 `get` 开头，修改数据，可以用 `set` 开头：`getTeacherData`、`setTeacherData`；
+
+变量和函数的命名尽量有区分度、语义化，可以适当使用单词简写。
+
+### 类和构造函数
+
+* 优先使用类而不是构造函数，因为类的语法更加简洁，避免直接操作原型
+
+```js
+// bad
+function Queue(contents = []) {
+  this.queue = [...contents];
+}
+Queue.prototype.pop = function () {
+  const value = this.queue[0];
+  this.queue.splice(0, 1);
+  return value;
+};
+
+// good
+class Queue {
+  constructor(contents = []) {
+    this.queue = [...contents];
+  }
+  pop() {
+    const value = this.queue[0];
+    this.queue.splice(0, 1);
+    return value;
+  }
+}
+```
+
+另外，对于 `class` 要根据实际场景，区分以下 3 种属性/方法：
+
+* 实例属性、实例方法：由 `new` 构造函数得到的实例的属性和方法；
+* 静态属性、静态方法：直接挂载构造函数上的属性和方法，比如 `Array.isArray`；
+* 原型属性、原型方法：本质上是挂在 `构造函数.prototype` 上的属性和方法，它们被各个实例所共享。
+
+### 箭头函数
+
+- 如果一个函数适合用一行写出并且只有一个参数，那就把花括号、圆括号和 `return` 都省略掉。如果不是，那就不要省略。（为什么？语法糖。在链式调用中可读性很高。）
+
+```js
+// good
+[1, 2, 3].map(x => x * x);
+
+// good
+[1, 2, 3].reduce((total, n) => {
+  return total + n;
+}, 0);
+```
