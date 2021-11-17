@@ -1,5 +1,5 @@
 /**
- * @description 求无重复字符的最长子串
+ * @description 求无重复字符的最长子串 - 单次遍历配合散列表（钻石级）
  * @param {string} s
  * @return {number}
  */
