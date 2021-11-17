@@ -1,6 +1,6 @@
 # 无重复字符的最长子串
 
-> 发布于 2021.11.16，最后更新于 2021.11.16。
+> 发布于 2021.11.17，最后更新于 2021.11.17。
 >
 > 虽然我的算法实现使用了 JS，但思想都是相通的，与语言无关。
 
@@ -160,11 +160,6 @@ const lengthOfLongestSubstring = (s) => {
 代码如下：
 
 ```js
-/**
- * @description 求无重复字符的最长子串
- * @param {string} s
- * @return {number}
- */
 const lengthOfLongestSubstring = (s) => {
   const sLen = s.length; // 传入字符的长度
   let longestLen = 0; // 遍历过程中，最长子串的长度
@@ -236,7 +231,80 @@ const s5 = ' '; // 期望得到 1
 * 若遇到重复字符，就不断地右移左侧索引，从散列表删字符，直到删除了散列表中的原有重复字符为止（滑动窗口收缩）；
 * 若遇到重复字符，如果此时散列表长度 + `s` 未遍历的字符数 `<=` 已记录的最长子串长度，那就没必要再遍历下去了，这是一个提前终止遍历的小优化点。
 
-利用「滑动窗口」策略，该算法的时间、空间复杂度：
+上菜：
+
+```js
+const lengthOfLongestSubstring = (s) => {
+  const sLen = s.length;
+  // 遍历过程中的散列表，存着：“字符 -> 该字符在 s 中索引”的映射
+  const map = new Map();
+  // 遍历过程中，不断更新的最长子串的长度
+  let longestLen = 0;
+  // 初始化滑动窗口的左、右侧索引
+  let lIndex = 0;
+  let rIndex = 0;
+
+  // 右侧索引不断右移去遍历字符
+  while (rIndex < sLen) {
+    const currentStr = s[rIndex]; // 当前遍历字符
+    const searchedIndex = map.get(currentStr); // 尝试在散列表取重复字符索引
+
+    if (searchedIndex === undefined) {
+      // 若未取到，说明未重复
+      map.set(currentStr, rIndex); // 添加到散列表
+      const mapSize = map.size;
+      longestLen = mapSize > longestLen ? mapSize : longestLen; // 更新最长子串长度
+    } else {
+      // 若取到，说明遇到重复字符了
+      while (lIndex <= searchedIndex) {
+        // 不断右移左侧索引，删除散列表重复字符及其之前的字符
+        map.delete(s[lIndex]);
+        lIndex++;
+      }
+      map.set(currentStr, rIndex); // 删除操作后，添加到散列表
+
+      // 如果此时散列表长度 + s 未遍历的字符数 <= 已记录的最长子串长度，那就没必要再遍历下去了
+      if (map.size + (sLen - rIndex - 1) <= longestLen) {
+        break;
+      }
+    }
+    rIndex += 1; // 滑动窗口右侧右移 1 位
+  }
+  return longestLen;
+};
+
+// 测试用例
+const s1 = 'abcabcbb'; // 期望得到 3
+const s2 = 'bbbbb'; // 期望得到 1
+const s3 = 'pwwkew'; // 期望得到 3
+const s4 = ''; // 期望得到 0
+const s5 = ' '; // 期望得到 1
+
+[s1, s2, s3, s4, s5].forEach((s) => {
+  console.log(lengthOfLongestSubstring(s)); // 依次输出 3, 1, 3, 0, 1
+});
+```
+
+注释多其实代码本身并不多。除了自己写的测试用例外，代码也通过了 LeetCode 上 987 个测试用例：
+
+相比于前面的钻石级解法，你会发现，算法里也是既有遍历又有散列表呀。不同的是，在钻石级解法中，对于每次遍历，都会创建一个新的散列表，来取到遍历字符在可能的最长子串中的索引（这导致遍历了一次可能的最长子串）。而王者级解法从头到尾就维护着 1 个散列表，通过左、右侧索引的不断右移来增、删散列表中的数据。
+
+利用「滑动窗口」策略，该算法的**时间、空间复杂度**：
 
 * 时间复杂度：`O(n)`。虽然代码用了双重 `while` 循环，但并不是对于每次右侧索引右移，都要进行左侧索引遍历。实际上是，随着右侧索引右移遍历字符，左侧索引按条件跟着右移。对于左、右索引，都不存在要重复遍历 `s` 的过程；
 * 空间复杂度：`O(n)`。主要使用了散列表来记录可能的最长子串的字符。
+
+## （五）小结
+
+我们前后用了 “青铜级 -> 钻石级 -> 王者级” 3 种方案对 “无重复字符的最长子串” 进行了解题。
+
+可以在[这里]()找到 3 种方案的完整代码。
+
+核心的**解题意识**可以概括为两点：
+
+* 通过**散列表**这种数据结构，实现“**查找、判重**”；
+* 通过**滑动窗口**右移左、右侧索引来实现“**取子串**”。
+
+另外我们在代码实现中，还使用了 JS ES6 `Map`，这是 `Map` 的一个典型使用场景。
+
+最后，感谢阅读，欢迎 Star 和订阅，每次发布新的文章我都会 release，这样好文章一旦发布你就能够收到通知。我的文章更新频率是每周至少 1 篇，上头时可能会 2~3 篇，欢迎大家与我交流！
