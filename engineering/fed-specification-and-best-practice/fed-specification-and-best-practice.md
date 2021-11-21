@@ -621,3 +621,103 @@ computed: {
   }
 }
 ```
+
+## （七）React 技术栈（含 JSX）
+
+### 命名
+
+* 扩展名: React 组件使用 `.jsx` 扩展名；
+* 文件名: 组件文件名使用帕斯卡（大驼峰）命名. 如：`ReservationCard.jsx`；
+* 引用命名: React 组件名使用帕斯卡命名，实例使用骆驼式命名：
+
+```js
+// bad
+import reservationCard from './ReservationCard';
+
+// good
+import ReservationCard from './ReservationCard';
+
+// bad
+const ReservationItem = <ReservationCard />;
+
+// good
+const reservationItem = <ReservationCard />;
+```
+
+### JSX 缩进对齐
+
+```jsx
+// bad
+<Foo superLongParam="bar"
+     anotherSuperLongParam="baz" />
+
+// good, 有多行属性的话, 新建一行关闭标签
+<Foo
+  superLongParam="bar"
+  anotherSuperLongParam="baz"
+/>
+
+// 若能在一行中显示, 直接写成一行
+<Foo bar="bar" />
+
+// 子元素按照常规方式缩进
+<Foo
+  superLongParam="bar"
+  anotherSuperLongParam="baz"
+>
+  <Quux />
+</Foo>
+```
+
+### 正确设置 `key`
+
+避免使用数组的索引 `index` 来作为属性 `key` 的值，推荐使用唯一 ID：
+
+```js
+// bad
+{todos.map((todo, index) => <Todo {...todo} key={index} />)}
+
+// good
+{todos.map(todo => (<Todo {...todo} key={todo.id} />))}
+```
+
+### Refs
+
+总是在 Refs 里使用回调函数，字符串形式已弃用：
+
+```jsx
+// bad
+<Foo ref="myRef" />
+
+// good
+<Foo ref={(ref) => { this.myRef = ref; }} />
+```
+
+### 为事件处理函数绑定 `this`
+
+```js
+// bad
+class extends React.Component {
+  onClickDiv() {
+    // do stuff
+  }
+
+  // 在每次 render 过程中， 再调用 bind 都会新建一个新的函数，浪费资源
+  render() {
+    return <div onClick={this.onClickDiv.bind(this)} />;
+  }
+}
+
+// good
+class extends React.Component {
+  // 通过 class 的实例方法绑定 this
+  onClickDiv = () => {
+    // do stuff
+  }
+
+  render() {
+    return <div onClick={this.onClickDiv} />;
+  }
+}
+
+```
