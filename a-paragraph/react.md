@@ -37,3 +37,26 @@
 ## 可中断渲染的原理是什么？
 
 在“时间切片”的基础上，每构造完成 Fiber 树的一个单元，就会超时检测。**如果超时，就会退出 Fiber 树构造循环，并返回一个新回调**，等待下一次执行回调继续构造 Fiber 树
+
+## 谈谈 Fiber 树构造
+
+Fiber 树构造发生在 `Scheduler` 调度的任务的回调中（`task.callback`），是通过「Fiber 树构造循环」完成的。
+
+当需要进行新的更新渲染时，新旧 Fiber 树会进行 Diff 比较，进行部分或全部更新。
+
+### ReactElement、Fiber 和 DOM 三者关系
+
+* `ReactElement`：JSX 会编译为 `React.createElement()`，创建出 `ReactElement` 树
+* `Fiber`：由 `ReactElement` 创建，对应着 `Fiber` 树。`Fiber` 树是构造 DOM 树的数据模型，它的任何改动最后都将体现到 DOM 上
+* `DOM`：就是文档对象模型，DOM 对象的集合就是 DOM 树，JS 可以操作 DOM 从而渲染界面
+
+所以**从编码到渲染页面的转换流程**是：`JSX` -> `ReactElement` 树 -> `Fiber` 树 -> DOM 树。它们是前者驱动后者的关系
+
+### 双缓冲技术（Double Buffering）
+
+在根据 `ReactElement` 构建 Fiber 树的过程中，内存中同时存在两棵 Fiber 树：
+
+1. Current Fiber 树：当前界面已渲染出来的 Fiber 树，挂在 `fiberRoot.current` 上。如果是首次构造 Fiber 树，即初始化渲染，那么 `fiberRoot.current` 为 `null`
+2. Work In Progress Fiber 树：正在构建的 Fiber 树，挂在 `HostRootFiber.alternate` 上。构造完成后，重新渲染页面，并与 Current Fiber 树切换。
+
+这么做的原因是，构造 Fiber 树过程的很多 Fiber 对象属性是可复用的，避免了每次更新渲染时重新创建对象的开销。
