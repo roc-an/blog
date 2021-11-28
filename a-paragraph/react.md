@@ -40,7 +40,12 @@
 
 ## 谈谈 Fiber 树构造
 
-Fiber 树构造发生在 `Scheduler` 调度的任务的回调中（`task.callback`），是通过「Fiber 树构造循环」完成的。
+Fiber 树的构造处在一个「Fiber 树构造工作循环」中，在 Concurrent 模式下，每次构造完 1 个 Fiber 节点，都会通过 `shouldYield()` 判断是否需要让出控制权给主线程，这一机制实现了“时间切片”和“可中断渲染”
+
+Fiber 树的构造过程是一个“深度优先遍历”，每个 Fiber 节点经历两个阶段：
+
+* 探寻阶段：`beginWork`
+* 回溯阶段：`completeWork`
 
 当需要进行新的更新渲染时，新旧 Fiber 树会进行 Diff 比较，进行部分或全部更新。
 
