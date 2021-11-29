@@ -65,3 +65,33 @@ Fiber 树的构造过程是一个“深度优先遍历”，每个 Fiber 节点�
 2. Work In Progress Fiber 树：正在构建的 Fiber 树，挂在 `HostRootFiber.alternate` 上。构造完成后，重新渲染页面，并与 Current Fiber 树切换。
 
 这么做的原因是，构造 Fiber 树过程的很多 Fiber 对象属性是可复用的，避免了每次更新渲染时重新创建对象的开销。
+
+## Diff 算法原理
+
+Diff 算法也叫调和算法，发生在构建 Fiber 树的工作循环中。当确定更新后，新的 ReactElement 树和旧 Fiber 树进行比较，尽可能地复用旧 Fiber，最终生成一棵新的 Fiber 树
+
+注意，Diff 比较的对象是：
+
+* 旧 Fiber 树
+* 新 ReactElement 树
+
+时间复杂度是 O(n)，过程中使用了哈希表 Map 来优化查询
+
+Diff 流程：
+
+1. 区分新 ReactElement 的类型：单节点、数组或是可迭代对象
+2. 对于数组或可迭代对象，旧 Fiber 序列和新 ReactElement 序列在比对时会经历 2 个循环：
+  a) 第一个循环：遍历最长公共序列
+  b) 第二个循环：遍历剩余非公共序列
+
+在经过第一个循环遍历最长公共序列后，剩余的旧 Fiber 都会存入 Map 中，便于后续快速查询
+
+判断能否复用节点的条件是 `key` 和 `type` 都一致，如果一致，那么旧 Fiber 的组件实例或是 DOM 结构将被复用。
+
+在 Diff 过程中不会进行实际的 DOM 渲染，而是为 Fiber 节点打上标记：
+
+* 新增
+* 删除
+* 移动位置
+
+之后新的 Fiber 树会在 Commit 阶段进行实际的 DOM 处理。
