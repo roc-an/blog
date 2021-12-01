@@ -1,5 +1,45 @@
 # 一段话说透一个前端知识点 - React 技术栈
 
+## setState
+
+关于 `setState`：
+
+* 不能直接改变 `state`，应通过 `setState` 设置不可变数据
+* 可能是异步更新
+* 可能会被合并
+* 函数组件没有实例，没有 `state`
+
+## 对于对象、数组等引用类型数据，如何 `setState`？
+
+不能直接改变 `state`，应通过 `setState` 设置不可变数据
+
+对于数组：
+
+```js
+// 设置不可变数据 - 数组
+const { list } = this.state;
+const list5Copy = list.slice(); // Clone list
+list5Copy.push('newItem'); // 对 Clone 的数组做任何其他操作
+this.setState({
+  list1: list.concat('newItem'), // 追加
+  list2: [...list, 'newItem'], // 追加
+  list3: list.slice(0, 2), // 截取
+  list4: list.filter(item => item > 100), // 筛选
+  list5: list5Copy, // 其他操作，先 Clone，再操作 Clone 的数据
+});
+```
+
+对于对象：
+
+```js
+// 设置不可变数据 - 对象
+const { obj } = this.state;
+this.setState({
+  obj1: Object.assign({}, obj, { a: 1 }), // 通过 Object.assign() 合并为一个新对象
+  obj2: { ...obj, a: 1 },
+})
+```
+
 ## React 事件与 DOM 原生事件的区别？
 
 如果在 React 中为元素绑定了事件，如：
