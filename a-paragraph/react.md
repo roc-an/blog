@@ -40,6 +40,38 @@ this.setState({
 })
 ```
 
+## 调用 `setState()` 后，`state` 的更新是同步还是异步的？
+
+* 直接使用 `setState()` 是异步更新 `state` 的，可以通过第二个参数的回调拿到更新后的 `state`；
+* 定时器 `setTimeout`、`setInterval` 中使用 `setState()`，将同步更新 `state`；
+* 自定义 DOM 事件处理函数中使用 `setState()`，将同步更新 `state`；
+
+## `setState` 可能会合并 `state` 更新
+
+对于**异步更新 `state` 的场景**，如果为 `setState()` 传入**对象**，`state` 会被合并：
+
+```js
+// 下方代码重复执行了多次 setState() 来修改 count 属性，最终 count 的值为最后一个 setState() 中设置的值，执行结果是 +2
+this.setState({ count: this.state.count + 1 });
+this.setState({ count: this.state.count + 1 });
+this.setState({ count: this.state.count + 2 });
+```
+
+对于**异步更新 `state` 的场景**，如果为 `setState()` 传入**函数**，`state` 不会被合并：
+
+```js
+// 每个函数都将执行，执行结果是 +4
+this.setState((prevState, props) => {
+  return { count: prevState.count + 1 };
+});
+this.setState((prevState, props) => {
+  return { count: prevState.count + 1 };
+});
+this.setState((prevState, props) => {
+  return { count: prevState.count + 2 };
+});
+```
+
 ## React 事件与 DOM 原生事件的区别？
 
 如果在 React 中为元素绑定了事件，如：
