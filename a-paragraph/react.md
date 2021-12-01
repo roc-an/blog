@@ -1,6 +1,8 @@
 # 一段话说透一个前端知识点 - React 技术栈
 
-## setState
+## 框架应用层面
+
+### setState
 
 关于 `setState`：
 
@@ -9,7 +11,7 @@
 * 可能会被合并
 * 函数组件没有实例，没有 `state`
 
-## 对于对象、数组等引用类型数据，如何 `setState`？
+### 对于对象、数组等引用类型数据，如何 `setState`？
 
 不能直接改变 `state`，应通过 `setState` 设置不可变数据
 
@@ -40,13 +42,13 @@ this.setState({
 })
 ```
 
-## 调用 `setState()` 后，`state` 的更新是同步还是异步的？
+### 调用 `setState()` 后，`state` 的更新是同步还是异步的？
 
 * 直接使用 `setState()` 是异步更新 `state` 的，可以通过第二个参数的回调拿到更新后的 `state`；
 * 定时器 `setTimeout`、`setInterval` 中使用 `setState()`，将同步更新 `state`；
 * 自定义 DOM 事件处理函数中使用 `setState()`，将同步更新 `state`；
 
-## `setState` 可能会合并 `state` 更新
+### `setState` 可能会合并 `state` 更新
 
 对于**异步更新 `state` 的场景**，如果为 `setState()` 传入**对象**，`state` 会被合并：
 
@@ -72,7 +74,7 @@ this.setState((prevState, props) => {
 });
 ```
 
-## React 组件的完整生命周期？
+### React 组件的完整生命周期？
 
 一个贼好用的 [图示 React 组件生命周期](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
 
@@ -84,7 +86,7 @@ this.setState((prevState, props) => {
 
 如果包含了不常用的生命周期，那么完整生命周期流程，如图：
 
-## React 事件与 DOM 原生事件的区别？
+### React 事件与 DOM 原生事件的区别？
 
 如果在 React 中为元素绑定了事件，如：
 
@@ -134,7 +136,9 @@ handleClick = (e) => {
 
 PS：React16 版本中是绑到了 `document` 上，整个网页就 1 个 `document`，这样不利于多个 React 版本共存。
 
-## Scheduler 调度模块的原理是什么？
+## 框架原理层面
+
+### Scheduler 调度模块的原理是什么？
 
 `Scheduler` 将**回调任务分为了两类，「及时回调」和「延时回调」**：
 
@@ -147,7 +151,7 @@ PS：React16 版本中是绑到了 `document` 上，整个网页就 1 个 `docum
 
 `Scheduler` 还实现了「时间切片」，见下一话题
 
-## 什么是“时间切片”？
+### 什么是“时间切片”？
 
 浏览器的 JS 线程和 GUI 线程互斥，在执行 JS 时没有办法进行布局、绘制，如果执行 JS 过久，会阻塞页面每一帧的渲染，导致卡顿
 
@@ -168,11 +172,11 @@ PS：React16 版本中是绑到了 `document` 上，整个网页就 1 个 `docum
 
 `Scheduler` 会通过工作循环（`WorkLoop`）依次取任务队列中最高优先级的任务，任务携带的回调在执行时会进行上面的超时检测，一旦超时就会退出循环并等待下次调用
 
-## 可中断渲染的原理是什么？
+### 可中断渲染的原理是什么？
 
 在“时间切片”的基础上，每构造完成 Fiber 树的一个单元，就会超时检测。**如果超时，就会退出 Fiber 树构造循环，并返回一个新回调**，等待下一次执行回调继续构造 Fiber 树
 
-## 谈谈 Fiber 树构造
+### 谈谈 Fiber 树构造
 
 Fiber 树的构造处在一个「Fiber 树构造工作循环」中，在 Concurrent 模式下，每次构造完 1 个 Fiber 节点，都会通过 `shouldYield()` 判断是否需要让出控制权给主线程，这一机制实现了“时间切片”和“可中断渲染”
 
@@ -183,7 +187,7 @@ Fiber 树的构造过程是一个“深度优先遍历”，每个 Fiber 节点�
 
 当需要进行新的更新渲染时，新旧 Fiber 树会进行 Diff 比较，进行部分或全部更新。
 
-### ReactElement、Fiber 和 DOM 三者关系
+#### ReactElement、Fiber 和 DOM 三者关系
 
 * `ReactElement`：JSX 会编译为 `React.createElement()`，创建出 `ReactElement` 树
 * `Fiber`：由 `ReactElement` 创建，对应着 `Fiber` 树。`Fiber` 树是构造 DOM 树的数据模型，它的任何改动最后都将体现到 DOM 上
@@ -191,7 +195,7 @@ Fiber 树的构造过程是一个“深度优先遍历”，每个 Fiber 节点�
 
 所以**从编码到渲染页面的转换流程**是：`JSX` -> `ReactElement` 树 -> `Fiber` 树 -> DOM 树。它们是前者驱动后者的关系
 
-### 双缓冲技术（Double Buffering）
+#### 双缓冲技术（Double Buffering）
 
 在根据 `ReactElement` 构建 Fiber 树的过程中，内存中同时存在两棵 Fiber 树：
 
@@ -200,7 +204,7 @@ Fiber 树的构造过程是一个“深度优先遍历”，每个 Fiber 节点�
 
 这么做的原因是，构造 Fiber 树过程的很多 Fiber 对象属性是可复用的，避免了每次更新渲染时重新创建对象的开销。
 
-## Diff 算法原理
+### Diff 算法原理
 
 Diff 算法也叫调和算法，发生在构建 Fiber 树的工作循环中。当确定更新后，新的 ReactElement 树和旧 Fiber 树进行比较，尽可能地复用旧 Fiber，最终生成一棵新的 Fiber 树
 
