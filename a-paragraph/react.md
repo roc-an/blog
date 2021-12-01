@@ -72,6 +72,18 @@ this.setState((prevState, props) => {
 });
 ```
 
+## React 组件的完整生命周期？
+
+一个贼好用的 [图示 React 组件生命周期](https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/)
+
+几条常见链路：
+
+* 挂载时：`class constructor` -> `render()` -> React 更新 DOM 和 `refs` -> `componentDidMount()`
+* 更新时：新的 `props` / `setState()` / `forceUpdate()` -> `render()` -> React 更新 DOM 和 `refs` -> `componentDidUpdate()`
+* 卸载时：`componentWillUnmount()`
+
+如果包含了不常用的生命周期，那么完整生命周期流程，如图：
+
 ## React 事件与 DOM 原生事件的区别？
 
 如果在 React 中为元素绑定了事件，如：
