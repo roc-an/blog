@@ -144,6 +144,26 @@ PS：React16 版本中是绑到了 `document` 上，整个网页就 1 个 `docum
 
 偏展示的组件，不需要内部维护状态，通常应使用函数组件
 
+### `Portals` 的使用场景
+
+`Portals` 是“传送门”的意思，组件默认会按其嵌套层级来渲染，但如果想让一个组件渲染到其父组件之外，就要用 `Portals` 了
+
+```js
+render() {
+  // 使用 Portals 渲染到 body 上
+  return ReactDOM.createPortal(
+    <div className="modal">{this.props.children}</div>,
+    document.body
+  );
+}
+```
+
+`Portals` 的使用场景：
+
+* 父组件 `overflow: hidden`，子组件想逃离父组件
+* 父组件 `z-index` 值过小，子组件想逃离父组件
+* `position: fixed` 布局，需要放在 `body` 的直接子元素
+
 ## 框架原理层面
 
 ### Scheduler 调度模块的原理是什么？
