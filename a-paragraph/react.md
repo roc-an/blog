@@ -1,5 +1,55 @@
 # 一段话说透一个前端知识点 - React 技术栈
 
+## React 事件与 DOM 原生事件的区别？
+
+如果在 React 中为元素绑定了事件，如：
+
+```jsx
+<a href="https://github.com/roc-an" onClick={this.handleClick}>我是超链接</a>
+```
+
+**事件处理函数获取到的事件对象，是「合成事件对象」，而不是原生事件对象**：
+
+```js
+handleClick = (e) => {
+  // 获取合成事件对象
+  // 打印的事件对象并不是原生事件对象，而是一个 React 合成事件对象
+  // e.__proto__.constructor 是 SyntheticBaseEvent 函数，它是 React 中合成事件的构造函数
+  console.log('合成事件对象 e：', e);
+}
+```
+
+合成事件对象对应的构造函数是 `SyntheticBaseEvent`
+
+**React 合成事件模拟了原生 DOM 事件的所有能力，比如阻止默认行为、阻止冒泡等**：
+
+```js
+handleClick = (e) => {
+  // 合成事件模拟了原生事件的所有能力
+  e.preventDefault(); // 通过合成事件对象阻止默认行为
+  e.stopPropagation(); // 通过合成事件对象阻止事件冒泡
+  console.log('合成事件对象的 target：', e.target); // <a href="https://github.com/roc-an">我是超链接</a>
+  console.log('合成事件对象的 currentTarget：', e.currentTarget); // <a href="https://github.com/roc-an">我是超链接</a>
+}
+```
+
+**通过合成事件对象的 `nativeEvent` 属性可以获取原生事件对象**：
+
+```js
+handleClick = (e) => {
+  // 通过合成事件对象，拿到原生事件对象
+  // 鼠标点击的原生事件对象的构造函数是 PointerEvent
+  console.log('原生事件对象 nativeEvent：', e.nativeEvent);
+  console.log('原生事件对象的 target：', e.nativeEvent.target); // <a href="https://github.com/roc-an">我是超链接</a>
+  // 所有原生事件都被绑到了根 DOM 节点 <div id="root"></div> 上
+  console.log('原生事件对象的 currentTarget：', e.nativeEvent.currentTarget);
+}
+```
+
+**所有原生事件都被绑到了根 DOM 节点（Root Element） `<div id="root"></div>` 上，这样做的好处是有利于多个 React 版本并存，比如微前端**
+
+PS：React16 版本中是绑到了 `document` 上，整个网页就 1 个 `document`，这样不利于多个 React 版本共存。
+
 ## Scheduler 调度模块的原理是什么？
 
 `Scheduler` 将**回调任务分为了两类，「及时回调」和「延时回调」**：
