@@ -164,15 +164,15 @@ render() {
 * 父组件 `z-index` 值过小，子组件想逃离父组件
 * `position: fixed` 布局，需要放在 `body` 的直接子元素
 
-## `context` 的使用
+### `context` 的使用
 
-### `context` 使用场景
+#### `context` 使用场景
 
 * 将公共信息（语言、主题）传递给每个组件
 * 用 `props` 传递的层级过多
 * 用 `redux` 又显得小题大做、过度设计的场景
 
-### `context` API
+#### `context` API
 
 通过 `React.createContext()` 来创建 `context` 并设置初始值：
 
@@ -219,6 +219,29 @@ function ThemedChild2(props) {
   </ThemeContext.Consumer>;
 }
 ```
+
+### React 异步组件
+
+通过 `React.Suspense` 和 `React.lazy` 的配合完成异步组件加载：
+
+```js
+import React, { Component } from 'react';
+
+const Other = React.lazy(() => import('./Other'));
+
+// NetWork 改为 Slow 3G，并且能看到多下载了一个 js 包
+class Lazy extends Component {
+  render() {
+    return <div>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <Other/>
+      </React.Suspense>
+    </div>;
+  }
+}
+```
+
+使用异步组件是 React 应用性能优化的一个小点，原理是 Webpack 对于要异步加载的组件文件进行了单独打包，异步组件常配合路由懒加载使用
 
 ## 框架原理层面
 
