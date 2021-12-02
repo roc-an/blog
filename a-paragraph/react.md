@@ -164,6 +164,62 @@ render() {
 * 父组件 `z-index` 值过小，子组件想逃离父组件
 * `position: fixed` 布局，需要放在 `body` 的直接子元素
 
+## `context` 的使用
+
+### `context` 使用场景
+
+* 将公共信息（语言、主题）传递给每个组件
+* 用 `props` 传递的层级过多
+* 用 `redux` 又显得小题大做、过度设计的场景
+
+### `context` API
+
+通过 `React.createContext()` 来创建 `context` 并设置初始值：
+
+```js
+const ThemeContext = createContext('light');
+```
+
+在上层组件中，生产 `Context` 并绑定值，使用了 `Provider`：
+
+```js
+render() {
+  const { theme } = this.state;
+  return <ThemeContext.Provider value={theme}>
+    ...
+  </ThemeContext.Provider>;
+}
+```
+
+在下层组件中，消费 `Context`，对于 `class` 组件，要设置静态属性 `contextType`：
+
+```js
+// 下层 class 组件 - 消费 Context
+class ThemedChild1 extends Component {
+  static contextType = ThemeContext; // 指定 contextType 是哪个 Context
+  render() {
+    // React 会根据设置的 contextType 往上层找最近的 Context Provider
+    const theme = this.context;
+    return <div>
+      <p>子组件主题是 {theme}</p>
+    </div>;
+  }
+}
+```
+
+对于函数组件，要使用 `Consumer`：
+
+```js
+// 底层函数组件 - 消费 Context
+function ThemedChild2(props) {
+  // const theme = this.context; // 报错，函数组件没有 this
+  // 函数组件应使用 Consumer
+  return <ThemeContext.Consumer>
+    { theme => <p>子组件主题是 {theme}</p> }
+  </ThemeContext.Consumer>;
+}
+```
+
 ## 框架原理层面
 
 ### Scheduler 调度模块的原理是什么？
