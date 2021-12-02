@@ -325,6 +325,31 @@ import { connect } from 'redux';
 export default connect(mapStateToProps, mapDispatchToProps)(AnyComponent);
 ```
 
+#### Render Props
+
+**Render Props 方式的核心思想是：通过函数将 `class` 组件的 `state` 作为 `props` 传递给纯函数组件**
+
+示例：
+
+```js
+class Factory extends React.Component {
+  state = {} // 可以存放被多个组件所共用的 state
+  render() {
+    return <div>{this.props.render(this.state)}</div>;
+  }
+}
+
+const App = () => (
+  <Factory render={
+    // render 是一个函数组件
+    (props) => <p>{props.a} {props.b} ...</p>
+  } />
+)
+```
+
+* 在 HOC 模式中，拥有复用逻辑的组件包裹其他组件
+* 在 Render Props 模式中，其他组件包裹拥有复用逻辑的组件
+
 ## 框架原理层面
 
 ### Scheduler 调度模块的原理是什么？
