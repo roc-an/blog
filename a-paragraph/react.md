@@ -294,6 +294,37 @@ const map2 = map1.set('b', 50);
 map1.get('b') + ' VS. ' + map2.get('b); // "2 VS. 50"
 ```
 
+### 如何进行组件间逻辑复用？
+
+* `mixin`：已弃用，数据来源不清晰，且 `mixin` 文件和组件容易形成多对多关系，很不利于维护
+* 高阶组件 High Order Components（HOC）：类似工厂的一种编码模式
+* Render Props
+
+#### 高阶组件 HOC 示例
+
+```js
+// 传入一个组件，得到一个新组件
+const HOCFactory = (Component) => {
+  class HOC extends React.Component {
+    // 这里定义多个组件的公共逻辑
+    render() {
+      return <Component {...this.props} />
+    }
+  }
+  return HOC;
+}
+const EnhancedComponent1 = HOCFactory(WrappedComponent1);
+const EnhancedComponent2 = HOCFactory(WrappedComponent2);
+```
+
+类似地，Redux 中的 `connect()` 也是高阶组件的模式：
+
+```js
+import { connect } from 'redux';
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnyComponent);
+```
+
 ## 框架原理层面
 
 ### Scheduler 调度模块的原理是什么？
