@@ -271,7 +271,7 @@ React 中当父组件更新时，默认所有子组件也会更新，不管传�
 * 使用异步组件，`React.Suspense` 配合 `React.lazy()`
 * 使用 `shouldComponentUpdate` 生命周期
 * 使用 `PureComponent` 和 `React.memo`
-* 使用不可变数据 `immutable.js`
+* 使用不可变数据 `immutable.js`：基于共享数据（不是深拷贝），但有一定的学习、迁移成本，按需使用
 
 其他小点：
 
@@ -279,9 +279,20 @@ React 中当父组件更新时，默认所有子组件也会更新，不管传�
 
 ### `PureComponent` 与 `memo`
 
-`PureComponent` 纯组件中，实现了 SCU 对新旧 `props` 和 `state` 的浅比较。
+`PureComponent` 纯组件中，实现了 SCU 对新旧 `props` 和 `state` 的浅比较
 
-如果是函数组件，那就用 `memo`，效果是一样的。
+如果是函数组件，那就用 `memo`，效果是一样的
+
+### `immutable.js`
+
+使用 `immutable.js` 可以彻底实现不可变数据，它是基于数据共享实现的，而不是深拷贝：
+
+```js
+const { Map } = require('immutable');
+const map1 = Map({ a: 1, b: 2, c: 3 });
+const map2 = map1.set('b', 50);
+map1.get('b') + ' VS. ' + map2.get('b); // "2 VS. 50"
+```
 
 ## 框架原理层面
 
