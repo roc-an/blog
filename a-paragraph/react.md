@@ -243,6 +243,38 @@ class Lazy extends Component {
 
 使用异步组件是 React 应用性能优化的一个小点，原理是 Webpack 对于要异步加载的组件文件进行了单独打包，异步组件常配合路由懒加载使用
 
+### `shouldComponentUpdate` 的使用
+
+合理使用 `shouldComponentUpdate`（简称 SCU）是 React 常见性能优化方案。
+
+SCU 的基本语法：
+
+```js
+shouldComponentUpdate(nextProps, nextState) {
+  if (nextState.count !== this.state.count) {
+    return true; // 可以渲染
+  }
+  return false; // 不重复渲染
+}
+```
+
+SCU 默认 `return true`
+
+为什么 React 提供了 SCU 生命周期？
+
+### React 性能优化手段有哪些？
+
+方案级别：
+
+* 使用异步组件，`React.Suspense` 配合 `React.lazy()`
+* 使用 `shouldComponentUpdate` 生命周期
+* 使用 `PureComponent` 和 `React.memo`
+* 使用不可变数据 `immutable.js`
+
+其他小点：
+
+* 事件处理函数提前去 `bind`，或者使用 `class` 的实例方法，避免每次触发事件都传递了一个新函数（不要传递匿名箭头函数）；
+
 ## 框架原理层面
 
 ### Scheduler 调度模块的原理是什么？
