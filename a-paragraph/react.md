@@ -1,6 +1,6 @@
 # 一段话说透一个前端知识点 - React 技术栈
 
-## 框架应用层面
+## 框架应用
 
 ### setState
 
@@ -350,7 +350,47 @@ const App = () => (
 * 在 HOC 模式中，拥有复用逻辑的组件包裹其他组件
 * 在 Render Props 模式中，其他组件包裹拥有复用逻辑的组件
 
-## 框架原理层面
+## 社区
+
+### Redux
+
+Redux 作为数据状态管理工具，结合了不可变数据、纯函数的思想。
+
+#### 单向数据流
+
+1. 组件 `dispatch(action)`
+2. `reducer return` 新的 `state`：`reducer` 是一个纯函数，接收 Action 返回新的 State，中间不应该掺杂任何副作用
+3. Store 中 state 改变，`connect` 了对应数据的组件 `props` 更新
+
+#### 异步 Action
+
+* `redux-thunk` 中间件
+* `redux-promise` 中间件
+* `redux-saga` 中间件
+
+#### Redux 中间件原理
+
+进行 `dispatch(action)` 时，对 `dispatch` 进行改造，中间加入自定义的中间件，Action 在这些中间件中传递，最终传递给 `reducer`
+
+为什么是改造 `dispatch` 而不是 Action 或者 `reducer` 呢？
+
+因为 Action 只是个数据结构，表示本次更新 State 的信息，而 `reducer` 是纯函数。
+
+Redux 使用多个中间件的示例：
+
+```js
+import { applyMiddleware, createStore } from 'redux'
+import createLogger from 'redux-logger'
+import thunk from 'redux-thunk'
+
+const logger = createLogger()
+const store = createStore(
+  reducer,
+  applyMiddleware(thunk, logger) // 按顺序执行
+)
+```
+
+## 原理
 
 ### Scheduler 调度模块的原理是什么？
 
