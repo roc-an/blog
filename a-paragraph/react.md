@@ -390,6 +390,83 @@ const store = createStore(
 )
 ```
 
+### React Router
+
+两种路由模式：
+
+* Hash 模式（默认），如：`http://abc.com/#/user/10`
+* H5 History 模式，如果：`http://abc.com/user/10`，需要服务端支持
+
+#### 动态路由
+
+可给路由设置参数，跳转至的页面获取参数值做相应处理
+
+比如，在配置路由的组件中：
+
+```jsx
+<Router>
+  <Switch>
+    <Route path="/project/:id" />
+      <Project />
+    </Route>
+  </Switch>
+</Router>
+```
+
+在跳转至的组件中获取参数：
+
+```js
+
+import { Link, useParams } from 'react-router-dom'
+
+function Project() {
+  // 获取 URL 参数
+  const { id } = useParams()
+  return <div>
+    <Link to="/">首页</Link>
+  </div>;
+}
+```
+
+使用 JS API 进行路由跳转：
+
+```js
+import { useHistory } from 'react-router-dom'
+
+function Trash() {
+  const history = useHistory()
+  function handleClick() {
+    history.push('/')
+  }
+  return <div>
+    <button onClick={handleClick}>回到首页</button>
+  </div>;
+}
+```
+
+#### 路由懒加载
+
+需要配合 `React.Suspense` 和 `React.lazy` 使用：
+
+```js
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import React, { Suspense, lazy } from 'react'
+
+const Home = lazy(() => import('./routes/Home'))
+const About = lazy(() => import('./routes/About'))
+
+const App = () => (
+  <Router>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/about" component={About} />
+      </Switch>
+    </Suspense>
+  </Router>
+)
+```
+
 ## 原理
 
 ### Scheduler 调度模块的原理是什么？
