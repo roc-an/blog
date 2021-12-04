@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>margin 为负值</title>
+  <style>
+    body {
+      margin: 20px
+    }
+    .float-left {
+      float: left;
+    }
+    .clearfix:after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+    .container {
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+    .container-item {
+      width: 100px;
+      height: 100px;
+    }
+    .container-border-blue {
+      border: 1px solid blue;
+    }
+    .container-border-red {
+      border: 1px solid red;
+    }
+  </style>
+</head>
+<body>
+  <p>测试 margin-top、margin-bottom 为负数的情况</p>
+  <div class="container">
+    <div
+      style="margin-top: -20px; margin-bottom: -20px"
+      class="container-item container-border-blue"
+    >Item 1</div>
+    <div class="container-item container-border-red">Item 2</div>
+  </div>
+
+  <p>测试 margin-left、margin-right 为负数的情况</p>
+  <div class="container clearfix">
+    <div
+      style="margin-left: -20px; margin-right: -20px"
+      class="container-item container-border-blue float-left"
+    >Item 3</div>
+    <div class="container-item container-border-red float-left">Item 4</div>
+  </div>
+</body>
+</html>

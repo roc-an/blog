@@ -35,6 +35,10 @@ HTML：
 
 对 `margin` 的 `top`、`right`、`bottom`、`left` 设置负值，有何效果？
 
+* `margin-top` 和 `margin-left` 设为负值，元素会分别向上、向左移动
+* `margin-right` 设为负值，右侧元素左移，自身不受影响
+* `margin-bottom` 设为负值，下方元素上移，自身不受影响
+
 ## 谈谈对于 BFC 的理解？
 
 ## 如何实现圣杯布局和双飞翼布局？
