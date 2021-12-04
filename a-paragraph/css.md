@@ -41,6 +41,17 @@ HTML：
 
 ## 谈谈对于 BFC 的理解？
 
+BFC，Block Format Context，块级格式化上下文，它是一块**独立的渲染区域，内部元素的渲染不会影响边界以外元素**。
+
+形成 BFC 的常见条件：
+
+* `float` 不是 `none`
+* `position` 是 `absolute` 或 `fixed`
+* `overflow` 不是 `visible`
+* `display` 是 `flex`、`inline-block` 等
+
+BFC 的常见应用：清除浮动
+
 ## 如何实现圣杯布局和双飞翼布局？
 
 ## 手写 clearfix
