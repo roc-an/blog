@@ -38,7 +38,6 @@
       background-color: red;
     }
     #footer {
-      clear: both;
       text-align: center;
       background-color: #f1f1f1;
     }
@@ -46,11 +45,21 @@
     .column {
       float: left;
     }
+
+    /* 手写 clearfix */
+    .clearfix:after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+    .clearfix {
+      *zoom: 1; /* 兼容 ID 低版本 */
+    }
   </style>
 </head>
 <body>
   <header id="header">头部</header>
-  <div id="container">
+  <div id="container" class="clearfix">
     <div id="center" class="column">中间区域</div>
     <div id="left" class="column">左侧区域</div>
     <div id="right" class="column">右侧区域</div>

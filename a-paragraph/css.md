@@ -64,9 +64,22 @@ BFC 的常见应用：清除浮动
 
 * 使用 `float` 布局
 * 两侧使用 `margin` 负值，以便和中间内容横向重叠
-* 防止中间内容被两侧覆盖，一个用 `padding`，一个用 `margin`
+* 防止中间内容被两侧覆盖，一个用 `padding`，一个用 `margin`：
+  * 圣杯布局用 `padding` 为两侧留白
+  * 双飞翼布局用（较简单） `margin` 为两侧留白
 
-## 手写 clearfix
+## 手写 `.clearfix`
+
+```css
+.clearfix:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.clearfix {
+  *zoom: 1; /* 兼容 ID 低版本 */
+}
+```
 
 ## flex 实现一个三点的骰子
 
