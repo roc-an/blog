@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圣杯布局</title>
+  <style>
+    body {
+      min-width: 550px;
+    }
+    #container {
+      /* 根据左侧和右侧的固定宽度，设置 padding */
+      padding-left: 200px;
+      padding-right: 150px;
+    }
+    #header {
+      text-align: center;
+      background-color: #f1f1f1;
+    }
+    #center {
+      width: 100%;
+      background-color: #ccc;
+    }
+    #left {
+      position: relative;
+      right: 200px;
+      /* 通过给 margin-left 一个负值，让其与 #center 横向重叠 */
+      /* -100% 中的 100% 指的是 #left 父元素的宽度的 100% */
+      margin-left: -100%;
+      width: 200px;
+      background-color: yellow;
+    }
+    #right {
+      /* #right 相对于它的外界元素而言，宽度已经是 0 了，这样就不占浮动的位置了，从而和 #center 重叠在了 1 行 */
+      margin-right: -150px;
+      width: 150px;
+      background-color: red;
+    }
+    #footer {
+      clear: both;
+      text-align: center;
+      background-color: #f1f1f1;
+    }
+
+    .column {
+      float: left;
+    }
+  </style>
+</head>
+<body>
+  <header id="header">头部</header>
+  <div id="container">
+    <div id="center" class="column">中间区域</div>
+    <div id="left" class="column">左侧区域</div>
+    <div id="right" class="column">右侧区域</div>
+  </div>
+  <footer id="footer">尾部</footer>
+</body>
+</html>
