@@ -35,7 +35,7 @@
 
 ## 什么是 Restful API？
 
-Restful API 是一种 API **设计方法**。**Restful API 把每个 URL 当做一个唯一的资源**。
+Restful API 是一种 API **设计方法**。**Restful API 把每个 URL 当做一个唯一的资源标识**。
 
 * 用 HTTP 请求方法表示操作类型：
   * POST 请求 `/api/blog`，新建博客
@@ -44,6 +44,35 @@ Restful API 是一种 API **设计方法**。**Restful API 把每个 URL 当做�
 * 尽量不用 URL 参数：
   * 传统 API 设计：`/api/list?pageIndex=2`，更像是功能，请求页数为 2 `list` 数据
   * Restful API 设计：`/api/list/2`，把 `list` 当作资源
+
+## HTTP 有哪些常见的 Header？
+
+常见的请求头 Request Header：
+
+* `Accept`： 浏览器可接收的数据格式
+* `Accept-Encoding`：浏览器可接收的压缩算法，比如 gzip。服务器按此格式进行数据压缩，浏览器收到数据后解压缩
+* `Accept-Language`：浏览器可接收的语言，比如 zh-CN
+* `Connection: keep-alive`：一次 TCP 连接可重复使用
+  * HTTP 是单次无状态连接，每次请求都连接一次是比较消耗资源的，HTTP2 支持 Keep Alive，客户端与服务器建立连接后可以重复使用该连接
+* `Cookie`：每次同域请求资源都会带上
+* `Host`：请求的服务器域名
+* `User-Agent`：简称 UA，浏览器信息
+* `Content-Type`：发送数据的格式，如 `application/json`，一般用于 POST 请求
+
+常见的响应头 Response Header：
+
+* `Content-Type`：返回数据的格式，如 `application/json`
+* `Content-Length`：返回数据的大小，多少字节
+* `Content-Encoding`：返回数据的压缩算法，如 gzip。告诉浏览器数据使用什么算法压缩的
+* `Set-Cookie`：服务端通过该字段设置或更改 Cookie
+
+客户端、服务器也可以自定义 Header。比如使用 axios 自定义 header 的配置项：
+
+```js
+headers: { 'X-Requested-With': 'XMLHttpRequest' }
+```
+
+Header 的 `key` 和 `value` 都是可以自定义的。比如有些接口需要在 Header 中加一些秘钥或是特定的值来证明身份
 
 ## 什么是 Restful API？
 
