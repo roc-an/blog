@@ -26,7 +26,24 @@
 * 500：服务器错误
 * 504：网关超时：能访问通服务器，多台服务器跳转处理时可能超时了
 
-## HTTP 常见 Header 有哪些？
+## HTTP 方法有哪些？
+
+* GET：获取服务器数据
+* POST：向服务器新建数据
+* PATCH/PUT：更新数据
+* DELETE：删除数据
+
+## 什么是 Restful API？
+
+Restful API 是一种 API **设计方法**。**Restful API 把每个 URL 当做一个唯一的资源**。
+
+* 用 HTTP 请求方法表示操作类型：
+  * POST 请求 `/api/blog`，新建博客
+  * GET 请求 `/api/blog/100`，获取 ID 为 `100` 的博客
+  * PATCH 请求 `api/blog/100`，更新 ID 为 `100` 的博客
+* 尽量不用 URL 参数：
+  * 传统 API 设计：`/api/list?pageIndex=2`，更像是功能，请求页数为 2 `list` 数据
+  * Restful API 设计：`/api/list/2`，把 `list` 当作资源
 
 ## 什么是 Restful API？
 
