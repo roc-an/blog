@@ -61,6 +61,33 @@ Event Loop 过程小结：
 * Event Loop 轮询查找 Callback Queue 回调队列，如果有回调，则取出并推入 Call Stack 调用栈去执行
 * 然后继续查找（就像永动机一样）
 
+### DOM 事件和 Event Loop 的关系
+
+如下代码：
+
+```html
+<button id="btn">提交</button>
+
+<script>
+console.log('Hi')
+
+// 代码执行至此，将 click 的回调存储在 Web APIs 模块中
+// 当用户点击后，回调从 Web APIs 模块推入 Callback Queue 回调队列中
+// 然后基于 Event Loop 的机制从 Callback Queue 回调队列中轮询到回调，并推入 Call Stack 调用栈去执行
+document.querySelector('#btn').addEventListener('click', function(e) {
+  console.log('Button clicked')
+})
+
+console.log('Bye')
+</script>
+```
+
+由此可见：
+
+* 因为 JS 是单线程的
+* 所以，异步（`setTimeout`、AJAX 等）使用回调，基于 Event Loop
+* 并且，DOM 事件也使用回调，基于 Event Loop（但不能说 DOM 事件是异步的，只能说 DOM 事件和异步回调都是基于 Event Loop）
+
 ## 什么是宏任务、微任务，两者有什么区别？
 
 ## Promise 有哪三种状态，如何变化？
