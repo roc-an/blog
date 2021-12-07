@@ -52,6 +52,40 @@ function deepClone(data, wm = new WeakMap()) {
 }
 ```
 
+## Promise 有哪三种状态，如何变化？
+
+三种状态：
+
+* Pending
+* Fulfilled
+* Rejected
+
+状态变化只能是：
+
+* Pending -> Fulfilled
+* Pending -> Rejected
+
+并且状态变化「不可逆」
+
+状态的表现：
+
+* Pending 状态，不会触发 `.then()` 和 `.catch()`
+* 若变为 Fulfilled 状态，会触发 `.then()` 回调的执行
+* 若变为 Rejected 状态，会触发 `.catch()` 回调的执行
+
+### `.then()` 和 `.catch()` 对于状态的改变
+
+* `.then()` 中：
+  * 正常执行会返回 Fulfilled 状态的 Promise 实例
+  * 如果里面有报错，会返回 Rejected 状态的 Promise 实例
+* `.catch()` 中：
+  * 正常执行会返回 Fulfilled 状态的 Promise 实例
+  * 如果里面有报错，会返回 Rejected 状态的 Promise 实例
+
+或者可以这么说：
+
+**不管是 `.then()` 或是 `.catch()`，只要里面正常执行，`return` 的就是 Fulfilled 状态的 Promise 实例，只要里面有报错，`return` 的就是 Rejected 状态的 Promise 实例**
+
 ## 如何用 Promise 封装一个原生 AJAX 请求？
 
 一个简单的用 `Promise` 配合 `XMLHttpRequest` 封装 AJAX 请求的例子：
@@ -99,3 +133,24 @@ function fetchRequest({
   });
 }
 ```
+
+## async/await
+
+* 背景：回调地狱 Callback Hell
+* 虽然 `Promise` 的 `.then()`、`.catch()` 支持链式调用，但也是基于回调函数
+* `async/await` 是同步语法，彻底消灭回调函数。用同步的语法来编写异步逻辑
+
+### async/await 与 Promise 有什么关系
+
+* `async/await` 是消灭异步回调的终结武器
+* 但和 `Promise` 并不互斥
+* 反而，两者是相辅相成的
+
+`async/await` 与 `Promise` 的结合使用：
+
+* 执行 `async` 函数，`return` 的是 `Promise` 实例
+* `await` 相当于 `Promise` 的 `.then()`
+  * 情况 1：`await` 后跟一个 `Promise` 实例
+  * 情况 2：`await` 后跟一个值，就相当于 `await Promise.resolve(值)`
+  * 情况 3：`await` 后跟一个 `async` 函数的执行，相当于情况 1
+* `try...catch` 可捕获异常，代替了 `Promise` 的 `.catch()`

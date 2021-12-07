@@ -89,37 +89,3 @@ console.log('Bye')
 * 并且，DOM 事件也使用回调，基于 Event Loop（但不能说 DOM 事件是异步的，只能说 DOM 事件和异步回调都是基于 Event Loop）
 
 ## 什么是宏任务、微任务，两者有什么区别？
-
-## Promise 有哪三种状态，如何变化？
-
-三种状态：
-
-* Pending
-* Fulfilled
-* Rejected
-
-状态变化只能是：
-
-* Pending -> Fulfilled
-* Pending -> Rejected
-
-并且状态变化「不可逆」
-
-状态的表现：
-
-* Pending 状态，不会触发 `.then()` 和 `.catch()`
-* 若变为 Fulfilled 状态，会触发 `.then()` 回调的执行
-* 若变为 Rejected 状态，会触发 `.catch()` 回调的执行
-
-### `.then()` 和 `.catch()` 对于状态的改变
-
-* `.then()` 中：
-  * 正常执行会返回 Fulfilled 状态的 Promise 实例
-  * 如果里面有报错，会返回 Rejected 状态的 Promise 实例
-* `.catch()` 中：
-  * 正常执行会返回 Fulfilled 状态的 Promise 实例
-  * 如果里面有报错，会返回 Rejected 状态的 Promise 实例
-
-或者可以这么说：
-
-**不管是 `.then()` 或是 `.catch()`，只要里面正常执行，`return` 的就是 Fulfilled 状态的 Promise 实例，只要里面有报错，`return` 的就是 Rejected 状态的 Promise 实例**
