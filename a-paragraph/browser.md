@@ -89,3 +89,12 @@ console.log('Bye')
 * 并且，DOM 事件也使用回调，基于 Event Loop（但不能说 DOM 事件是异步的，只能说 DOM 事件和异步回调都是基于 Event Loop）
 
 ## 什么是宏任务、微任务，两者有什么区别？
+
+* 宏任务 Macro Task
+  * `setTimeout`、`setInterval`
+  * Ajax
+  * DOM 事件
+* 微任务 Micro Task
+  * `Promise`
+  * `async/await`
+* 微任务的执行时机早于宏任务
