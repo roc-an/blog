@@ -88,6 +88,17 @@ console.log('Bye')
 * 所以，异步（`setTimeout`、AJAX 等）使用回调，基于 Event Loop
 * 并且，DOM 事件也使用回调，基于 Event Loop（但不能说 DOM 事件是异步的，只能说 DOM 事件和异步回调都是基于 Event Loop）
 
+### DOM 渲染和 Event Loop 的关系
+
+* JS 是单线程的，而且和 DOM 渲染公用一个线程
+* JS 执行的时候，得留一些时机供 DOM 渲染
+
+1. 每当 Call Stack 调用栈空闲时（同步代码都执行完）
+2. 尝试进行 DOM 渲染（如果需要操作 DOM 的话）
+3. 开始 Event Loop 机制
+
+每次 Event Loop 轮询到的回调入 Call Stack 执行后，都会尝试 DOM 渲染，然后再继续 Event Loop 轮询
+
 ## 什么是宏任务、微任务，两者有什么区别？
 
 * 宏任务 Macro Task
