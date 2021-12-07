@@ -91,3 +91,22 @@ console.log('Bye')
 ## 什么是宏任务、微任务，两者有什么区别？
 
 ## Promise 有哪三种状态，如何变化？
+
+三种状态：
+
+* Pending
+* Fulfilled
+* Rejected
+
+状态变化只能是：
+
+* Pending -> Fulfilled
+* Pending -> Rejected
+
+并且状态变化「不可逆」
+
+状态的表现：
+
+* Pending 状态，不会触发 `.then()` 和 `.catch()`
+* 若变为 Fulfilled 状态，会触发 `.then()` 回调的执行
+* 若变为 Rejected 状态，会触发 `.catch()` 回调的执行
