@@ -110,3 +110,16 @@ console.log('Bye')
 * Pending 状态，不会触发 `.then()` 和 `.catch()`
 * 若变为 Fulfilled 状态，会触发 `.then()` 回调的执行
 * 若变为 Rejected 状态，会触发 `.catch()` 回调的执行
+
+### `.then()` 和 `.catch()` 对于状态的改变
+
+* `.then()` 中：
+  * 正常执行会返回 Fulfilled 状态的 Promise 实例
+  * 如果里面有报错，会返回 Rejected 状态的 Promise 实例
+* `.catch()` 中：
+  * 正常执行会返回 Fulfilled 状态的 Promise 实例
+  * 如果里面有报错，会返回 Rejected 状态的 Promise 实例
+
+或者可以这么说：
+
+**不管是 `.then()` 或是 `.catch()`，只要里面正常执行，`return` 的就是 Fulfilled 状态的 Promise 实例，只要里面有报错，`return` 的就是 Rejected 状态的 Promise 实例**
