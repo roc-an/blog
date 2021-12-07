@@ -154,3 +154,8 @@ function fetchRequest({
   * 情况 2：`await` 后跟一个值，就相当于 `await Promise.resolve(值)`
   * 情况 3：`await` 后跟一个 `async` 函数的执行，相当于情况 1
 * `try...catch` 可捕获异常，代替了 `Promise` 的 `.catch()`
+
+## `for...of` 遍历
+
+* `for...in`、`forEach`、`for` 循环是常规的同步遍历
+* `for...of` 常用于异步遍历
