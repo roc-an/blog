@@ -93,9 +93,9 @@ console.log('Bye')
 * JS 是单线程的，而且和 DOM 渲染公用一个线程
 * JS 执行的时候，得留一些时机供 DOM 渲染
 
-1. 每当 Call Stack 调用栈空闲时（同步代码都执行完）
-2. 尝试进行 DOM 渲染（如果需要操作 DOM 的话）
-3. 开始 Event Loop 机制
+1. 每当 Call Stack 调用栈空闲时（同步代码都执行完，也是每次轮询结束）
+2. 尝试进行 DOM 渲染（如果 DOM 结构有改变）
+3. 去触发下一次的 Event Loop
 
 每次 Event Loop 轮询到的回调入 Call Stack 执行后，都会尝试 DOM 渲染，然后再继续 Event Loop 轮询
 
@@ -105,7 +105,13 @@ console.log('Bye')
   * `setTimeout`、`setInterval`
   * Ajax
   * DOM 事件
+  * MessageChanel
 * 微任务 Micro Task
   * `Promise`
   * `async/await`
 * 微任务的执行时机早于宏任务
+
+### 为什么微任务比宏任务执行更早？
+
+* 宏任务在 DOM 渲染后触发
+* 微任务在 DOM 渲染前触发
