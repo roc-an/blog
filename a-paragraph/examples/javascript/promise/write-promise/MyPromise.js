@@ -96,4 +96,54 @@ class MyPromise {
   catch(rejectedCb) {
     return this.then(null, rejectedCb)
   }
+
+  static resolve = (value) => {
+    return new MyPromise((resolve) => resolve(value));
+  }
+
+  static reject = (reason) => {
+    return new MyPromise((resolve, reject) => reject(reason));
+  }
+
+  static all = (promiseList = []) => {
+    return new MyPromise((resolve, reject) => {
+      const result = []; // 存储 promiseList 的所有结果
+      const len = promiseList.length;
+      let fulfilledCount = 0;
+
+      promiseList.forEach(p => {
+        p.then((data) => {
+          result.push(data);
+          fulfilledCount++;
+
+          // 如果所有 p 都已经 fulfilled
+          if (fulfilledCount === len) {
+            resolve(result);
+          }
+        }).catch((err) => {
+          // 如果有 1 个失败，那么整个新 Promise 实例失败
+          reject(err);
+        })
+      })
+    })
+  }
+
+  static race = (promiseList = []) => {
+    let resolved = false; // 标记，是否有已经改变状态的 p
+    return new MyPromise((resolve, reject) => {
+      promiseList.forEach(p => {
+        p.then(data => {
+          if (!resolved) {
+            resolve(data)
+            resolved = true;
+          }
+        }).catch(err => {
+          if (!resolved) {
+            reject(err);
+            resolved = true;
+          }
+        })
+      })
+    })
+  }
 }

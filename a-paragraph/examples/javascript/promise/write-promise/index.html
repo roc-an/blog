@@ -16,6 +16,11 @@
 
   <script src="./MyPromise.js"></script>
   <script>
+    // 可选：使用原生 Promise 测试行为一致
+    // const p1 = new Promise((resolve, reject) => {
+    //   reject('错误信息')
+    // })
+
     const p1 = new MyPromise((resolve, reject) => {
       // resolve(100)
       // reject('错误信息...')
@@ -38,10 +43,14 @@
       console.log('接收到抛错', err)
     })
 
-    // const p2 = MyPromise.resolve(200)
-    // const p3 = MyPromise.reject('错误信息')
+    const p2 = MyPromise.resolve(200)
+    const p3 = MyPromise.reject('错误信息')
 
-    // const p4 = MyPromise.all([p1, p2])
+    const p4 = MyPromise.all([p1, p2]);
+    p4.then((res) => {
+      console.log('All Result: ', res);
+    })
+
     // const p5 = MyPromise.race([p1, p2])
   </script>
 </body>
