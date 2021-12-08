@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>手写 Promise</title>
+</head>
+<body>
+  <h1>手写 Promise 要点</h1>
+  <ul>
+    <li>1. 初始化 & 异步调用</li>
+    <li>2. 支持 .then()、.catch() 链式调用，即 .then() 和 .catch() 都 return 一个新的 Promise 实例</li>
+    <li>3. 实现基本的 Promise API，如 .resolve()、.reject()、.all()、.race()</li>
+  </ul>
+
+  <script src="./MyPromise.js"></script>
+  <script>
+    const p1 = new MyPromise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(100)
+      }, 500)
+    })
+
+    const p11 =  p1.then((data) => {
+      return data + 1
+    })
+    
+    const p12 = p11.then((data) => {
+      return data + 2
+    })
+    
+    const p13 = p12.catch((err) => {
+      console.log(err)
+    })
+
+    const p2 = MyPromise.resolve(200)
+    const p3 = MyPromise.reject('错误信息')
+
+    const p4 = MyPromise.all([p1, p2])
+    const p5 = MyPromise.race([p1, p2])
+  </script>
+</body>
+</html>
