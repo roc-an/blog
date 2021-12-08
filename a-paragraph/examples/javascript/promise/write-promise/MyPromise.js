@@ -38,6 +38,62 @@ class MyPromise {
   // 原型方法
   // 执行 .then() 时，Promise 实例的状态可能是 pending、fulfilled 或 rejected
   then(fulfilledCb, rejectedCb) {
-    // 当 pending 状态下，fulfilledCb 和 rejectedCb 会存储到对应的 callbacks 队列中
+    // 判断传参是否是函数
+    fulfilledCb = typeof fulfilledCb === 'function' ? fulfilledCb : (v) => v;
+    rejectedCb = typeof rejectedCb === 'function' ? rejectedCb : (err) => err;
+
+    // 如果在执行 .then() 时状态已经是 fulfilled 了，那么立即执行 fulfilledCb
+    if (this.state === 'fulfilled') {
+      return new MyPromise((resolve, reject) => {
+        try {
+          const res = fulfilledCb(this.value);
+          resolve(res);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    // 如果在执行 .then() 时状态已经是 rejected 了，那么立即执行 rejectedCb
+    if (this.state === 'rejected') {
+      return new MyPromise((resolve, reject) => {
+        try {
+          const res = rejectedCb(this.reason);
+          reject(res);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    // 如果在执行 .then() 时状态是 pending，fulfilledCb 和 rejectedCb 会存储到对应的 callbacks 队列中
+    if (this.state === 'pending') {
+      return new MyPromise((resolve, reject) => {
+        // 推入成功回调队列，当前 Promise 实例状态变为 fulfilled 时触发执行，执行后改变 return 的新 Promise 实例状态
+        this.fulfilledCallbacks.push(() => {
+          try {
+            const res = fulfilledCb(this.value);
+            resolve(res);
+          } catch (err) {
+            reject(err);
+          }
+        })
+
+        // 推入失败回调队列
+        this.rejectedCallbacks.push(() => {
+          try {
+            const res = rejectedCb(this.reason);
+            reject(res);
+          } catch (err) {
+            reject(err);
+          }
+        })
+      });
+    }
+  }
+
+  // .catch() 本质上就是 .then() 的语法糖
+  catch(rejectedCb) {
+    return this.then(null, rejectedCb)
   }
 }
