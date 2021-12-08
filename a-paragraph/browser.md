@@ -115,3 +115,17 @@ console.log('Bye')
 
 * 宏任务在 DOM 渲染后触发
 * 微任务在 DOM 渲染前触发
+
+在 Call Stack 调用栈中执行代码遇到微任务时，会将回调推入「Micro Task Queue」微任务队列中，等待执行
+
+因为像 `Promise`、`async/await` 等微任务属于 ES 规范而不是 W3C 规范，所以不会经过 WebAPIs 模块，即：
+
+* 微任务都是 ES6 语法规定的，属于 ES
+* 宏任务都是由浏览器规定的，属于 Web APIs
+
+所以完整流程是：
+
+1. 每当 Call Stack 调用栈清空，也就是同步代码执行完
+2. 先从 Micro Task Queue 微任务队列中取微任务执行
+3. 如果 DOM 结构发生变更，尝试进行 DOM 渲染
+4. 开始 Event Loop 循环，从 Callback Queue 回调队列中取宏任务执行
