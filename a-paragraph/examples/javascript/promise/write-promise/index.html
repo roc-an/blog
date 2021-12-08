@@ -17,28 +17,31 @@
   <script src="./MyPromise.js"></script>
   <script>
     const p1 = new MyPromise((resolve, reject) => {
+      // resolve(100)
+      // reject('错误信息...')
       setTimeout(() => {
         resolve(100)
       }, 500)
     })
+    console.log(p1)
 
-    const p11 =  p1.then((data) => {
-      return data + 1
-    })
+    // const p11 =  p1.then((data) => {
+    //   return data + 1
+    // })
     
-    const p12 = p11.then((data) => {
-      return data + 2
-    })
+    // const p12 = p11.then((data) => {
+    //   return data + 2
+    // })
     
-    const p13 = p12.catch((err) => {
-      console.log(err)
-    })
+    // const p13 = p12.catch((err) => {
+    //   console.log(err)
+    // })
 
-    const p2 = MyPromise.resolve(200)
-    const p3 = MyPromise.reject('错误信息')
+    // const p2 = MyPromise.resolve(200)
+    // const p3 = MyPromise.reject('错误信息')
 
-    const p4 = MyPromise.all([p1, p2])
-    const p5 = MyPromise.race([p1, p2])
+    // const p4 = MyPromise.all([p1, p2])
+    // const p5 = MyPromise.race([p1, p2])
   </script>
 </body>
 </html>
