@@ -13,7 +13,7 @@ const input1 = document.querySelector('#input1')
 //   timer = setTimeout(() => {
 //     console.log(input1.value);
 
-//     clearTimeout(timer);
+//     timer = null
 //   }, 500)
 // })
 
@@ -26,7 +26,7 @@ function debounce(fn, delay = 500) {
     }
     timer = setTimeout(() => {
       fn.apply(this, arguments) // 重要，透传参数
-      clearTimeout(timer);
+      timer = null
     }, delay)
   }
 }
