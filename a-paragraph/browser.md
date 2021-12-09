@@ -28,11 +28,19 @@
 4. 浏览器根据 Render Tree 渲染页面
 5. 如果渲染页面过程中，遇到 `<script>`，会暂停渲染，优先加载并执行 JS 代码，完成后再继续渲染
   * JS 执行和页面渲染是共用同一个线程的，因为 JS 的执行可能会改变 Render Tree 的结构
+  * 遇到 `<img src="xxx" />` 这种资源加载并不会阻塞，资源加载后，图片再显示出来
 6. 直至将 Render Tree 渲染完成
 
-### 从输入 URL 到渲染出页面的整个过程？
-
 ### `window.onload` 和 `DOMContentLoaded` 区别？
+
+```js
+window.addEventListener('load', function() {
+  // 页面的全部资源加载完成后才会执行，包括图片、视频、<iframe /> 等
+});
+document.addEventListener('DOMContentLoaded', function() {
+  // DOM 渲染完就执行，此时图片、视频可能没有加载完
+})
+```
 
 ## 请描述 Event Loop（事件循环/事件轮询）的机制，可画图
 
