@@ -316,6 +316,47 @@ state Hook 让函数组件使用 `state` 和 `setState` 的功能
 * 函数组件是一个纯函数，执行完即销毁，无法存储 `state`
 * 需要 state Hook，把 state 功能“钩”到纯函数中
 
+`useState` 使用总结：
+
+* `useState(0)` 传入初始值（数组、对象等引用类型均可），返回数组 `[state, setState]`
+* 通过 `state` 获取值
+* 通过 `setState(1)` 更新修改值
+
+PS：Hooks 命名规范：
+
+* 规定所有的 Hooks 都以 `use` 开头，如 `useXXX`
+* 自定义 Hook 也要以 `use` 开头
+* 非 Hooks 的地方，尽量不要用 `useXXX` 的命名方式
+
+#### Effect Hook
+
+Effect Hook 让函数组件可以模拟生命周期。
+
+* 默认函数组件没有生命周期
+* 函数组件是一个纯函数，执行完即销毁，自己无法实现生命周期
+* 使用 Effect Hook 将生命周期“钩”到纯函数中
+
+`useEffect` 的使用总结：
+
+* 默认情况下，相当于模拟了 class 组件的 `componentDidMount` + `componentDidUpdate`，传入的函数在这两个生命周期中都会执行；
+* 要模拟 `componentDidMount`，那么 `useEffect(() => {}, [])`
+* 要模拟 `componentDidUpdate`，那么 `useEffect(() => {}, [state, ...])`，但注意此时首次渲染也会触发执行，（无依赖也会触发）
+* 要模拟 `componentWillUnmount`，那么 `return` 一个组件卸载时触发执行的函数：
+
+```js
+useEffect(() => {
+  return () => {
+    // 卸载时执行
+    timerId && clearInterval(timerId)
+  }
+})
+```
+
+`useEffect` 让纯函数有了副作用：
+
+* 默认情况下，执行纯函数，输入参数，返回结果，无副作用
+* 所谓副作用，就是对函数之外造成影响，如设置全局定时任务
+* 而组件需要副作用，所以需要 `useEffect` 钩到纯函数中
 #### 几道关于 React Hooks 的面试题
 
 为什么会有 Hooks，它解决了什么问题？
