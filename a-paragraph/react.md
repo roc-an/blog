@@ -86,6 +86,16 @@ this.setState((prevState, props) => {
 
 如果包含了不常用的生命周期，那么完整生命周期流程，如图：
 
+#### `static getDerivedStateFromProps()`
+
+中译为：根据 `props` 获取派生的 `state`
+
+在组件**初始挂载**和**后续更新**时都会触发调用，调用时机是 `shouldComponentUpdate()` 之前，它 `return` 一个对象来更新 `state`。
+
+此方法无权访问组件实例。
+
+此方法适用于罕见的用例，即 `state` 的值取决于 `props`
+
 ### React 事件与 DOM 原生事件的区别？
 
 如果在 React 中为元素绑定了事件，如：
