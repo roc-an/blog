@@ -282,6 +282,26 @@ SCU 默认 `return true`
 
 React 中当父组件更新时，默认所有子组件也会更新，不管传递的 `props` 是否改变。这时就需要 SCU 的能力了，如果对应的数据没变，那没必要重新更新子组件。
 
+### React Hooks
+
+* React Hooks 是完全可选的功能
+* 100% 向后兼容，没有破坏性改动
+* 不会取代 class 组件，尚无计划要移除 class 组件
+
+#### 几道关于 React Hooks 的面试题
+
+为什么会有 Hooks，它解决了什么问题？
+
+React Hooks 如何模拟组件生命周期？
+
+如何自定义 Hook？
+
+React Hooks 性能优化？
+
+使用 React Hooks 遇到哪些坑？
+
+Hooks 相比 HOC 和 Render Props 有哪些优点？
+
 ### React 性能优化手段有哪些？
 
 方案级别：
