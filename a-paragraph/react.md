@@ -302,6 +302,20 @@ class 组件的问题：
 * 相同业务逻辑，分散到各个方法中，逻辑混乱，逻辑关注点被分离
 * 多组件复用逻辑变得复杂，如 Mixins、HOC、Render Prop
 
+React 组件更易用函数表达：
+
+* React 提倡函数式编程，view = fn(props)
+* 函数更灵活，更易拆分，更易测试（特别是纯函数，纯函数在单元测试用非常便捷）
+* 但函数组件太简单，需要增强能力 - Hooks
+
+#### state Hook
+
+state Hook 让函数组件使用 `state` 和 `setState` 的功能
+
+* 默认函数组件没有 `state`
+* 函数组件是一个纯函数，执行完即销毁，无法存储 `state`
+* 需要 state Hook，把 state 功能“钩”到纯函数中
+
 #### 几道关于 React Hooks 的面试题
 
 为什么会有 Hooks，它解决了什么问题？
