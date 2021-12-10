@@ -86,7 +86,7 @@ this.setState((prevState, props) => {
 
 如果包含了不常用的生命周期，那么完整生命周期流程，如图：
 
-#### `static getDerivedStateFromProps()`
+#### `static getDerivedStateFromProps(props, state)`
 
 中译为：根据 `props` 获取派生的 `state`
 
@@ -95,6 +95,14 @@ this.setState((prevState, props) => {
 此方法无权访问组件实例。
 
 此方法适用于罕见的用例，即 `state` 的值取决于 `props`
+
+#### `getSnapshotBeforeUpdate(prevProps, prevState)`
+
+中译为：在更新前获取快照
+
+* 调用时机：在渲染输出（提交到 DOM 节点）之前调用
+* 作用：在组件发生更改之前从 DOM 中捕获一些信息（例如，滚动位置）
+* 返回值：此生命周期方法的任何返回值都将作为参数传递给 `componentDidUpdate()`
 
 ### React 事件与 DOM 原生事件的区别？
 
