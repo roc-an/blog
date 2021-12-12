@@ -352,6 +352,14 @@ useEffect(() => {
 })
 ```
 
+不过，准确地说，该函数会在下一次 Effect 执行之前被执行。所该函数不能理解成完全等同于 `componentWillUnmount` 生命周期。
+
+关于 `useEffect` 中的返回函数 `fn`，小结：
+
+* 如果 `useEffect` 依赖 `[]`，那么组件销毁时执行 `fn`，这种情况等同于 `componentWillUnmount`
+* 如果 `useEffect` 无依赖或依赖某些状态 `[a, b]`，那么组件更新时执行 `fn`
+* 即，下一次执行 `useEffect` 之前，就会执行 `fn`，无论更新或卸载
+
 `useEffect` 让纯函数有了副作用：
 
 * 默认情况下，执行纯函数，输入参数，返回结果，无副作用
@@ -732,4 +740,4 @@ export type HookType =
 
 **在函数组件的函数调用过程中，如果使用了 Hook，那么就会创建与之对应的 Hook 对象。这些对象会根据 Hook 调用顺序而依次创建，以单链表的形式挂载在 `Fiber` 的 `memoizedState` 属性上**
 
-在每次更新时，基于双缓冲技术，current 节点的 Hook 链表都会克隆到 workInProgress 节点上，并且它们的 Hook 对象的内部状态会被完全复用
+在每次 Fiber 树更新时，基于双缓冲技术，current 节点的 Hook 链表都会克隆到 workInProgress 节点上，并且它们的 Hook 对象的内部状态会被完全复用
