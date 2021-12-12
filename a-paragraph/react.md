@@ -357,6 +357,7 @@ useEffect(() => {
 * 默认情况下，执行纯函数，输入参数，返回结果，无副作用
 * 所谓副作用，就是对函数之外造成影响，如设置全局定时任务
 * 而组件需要副作用，所以需要 `useEffect` 钩到纯函数中
+
 #### 几道关于 React Hooks 的面试题
 
 为什么会有 Hooks，它解决了什么问题？
@@ -671,3 +672,64 @@ Diff 流程：
 * 移动位置
 
 之后新的 Fiber 树会在 Commit 阶段进行实际的 DOM 处理。
+
+### React Hooks 原理
+
+引入 Hooks 的几个核心优势：
+
+* 减少初学者对 ES6 Class 的认知难度
+* 使得组件间逻辑复用变得简单
+* 避免了 class 以及 class 中实例方法作为事件处理函数的开销
+* 避免了很深的组件嵌套层级
+
+Hook 的类型定义：
+
+```js
+// Hook 对象，多个 Hook 间形成了单向链表
+// FunctionalComponent Fiber 的 memoizedState 会指向 Hook，所以 Hook 不能脱离 Fiber 独立存在
+export type Hook = {|
+  memoizedState: any, // 缓存的 state，用于输出最终的 Fiber 树
+  baseState: any, // baseQueue 中所有 update 对象合并之后的状态
+  baseQueue: Update<any, any> | null, // Update 的环形链表
+  queue: any, // Update 队列
+  next: Hook | null, // 指向该 FunctionalComponent 的下一个 Hook 对象，所以多个 Hook 间也形成了单向链表
+|};
+```
+
+每个 Hook 对象有 3 个属性非常重要：
+
+* `memoizedState`：保存的状态
+* `queue`：更新队列
+* `next`：指向单链表的下一个 Hook 对象
+
+多个 Hook 在内存中的数据结构，是一个单向链表。
+
+目前一共有 17 种 Hook：
+
+```js
+// 17 种 Hook 类型
+export type HookType =
+  | 'useState'
+  | 'useReducer'
+  | 'useContext'
+  | 'useRef'
+  | 'useEffect'
+  | 'useInsertionEffect'
+  | 'useLayoutEffect'
+  | 'useCallback'
+  | 'useMemo'
+  | 'useImperativeHandle'
+  | 'useDebugValue'
+  | 'useDeferredValue'
+  | 'useTransition'
+  | 'useMutableSource'
+  | 'useSyncExternalStore'
+  | 'useId'
+  | 'useCacheRefresh';
+```
+
+#### Hook 对象以单链表形式挂载在 Fiber 节点上
+
+**在函数组件的函数调用过程中，如果使用了 Hook，那么就会创建与之对应的 Hook 对象。这些对象会根据 Hook 调用顺序而依次创建，以单链表的形式挂载在 `Fiber` 的 `memoizedState` 属性上**
+
+在每次更新时，基于双缓冲技术，current 节点的 Hook 链表都会克隆到 workInProgress 节点上，并且它们的 Hook 对象的内部状态会被完全复用
