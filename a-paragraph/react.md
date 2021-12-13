@@ -386,6 +386,21 @@ function UseRefDemo() {
 
 用于在函数组件中接收 context 值
 
+#### useReducer
+
+`const [state, dispatch] = useReducer(reducer, initialArg, init);`
+
+`useState` 的替代方案。它接收一个形如 `(state, action) => newState` 的 reducer，并返回当前的 `state` 以及与其配套的 `dispatch` 方法
+
+可以理解为，`useReducer` 是一个更加复杂化的 `useState`，可以自定义 `reducer` 逻辑，它整体上借鉴了 Redux 的设计方式
+
+`useReducer` 和 Redux 的区别：
+
+* `useReducer` 是 `useState` 的代替方案，用于 `state` 的复杂变化场景
+* `useReducer` 属于单组件内的状态管理，组件间通讯还是需要 `props`
+* Redux 是全局状态的管理，多组件间共享数据
+* `useReducer` 只是借鉴了 Redux 的设计方式而已，不能说有了 `useReducer` 就不再需要 Redux 了，两者的主要职责和解决的问题都不相同
+
 #### 几道关于 React Hooks 的面试题
 
 为什么会有 Hooks，它解决了什么问题？
