@@ -366,6 +366,26 @@ useEffect(() => {
 * 所谓副作用，就是对函数之外造成影响，如设置全局定时任务
 * 而组件需要副作用，所以需要 `useEffect` 钩到纯函数中
 
+#### useRef
+
+常用于访问 DOM 节点：
+
+```js
+function UseRefDemo() {
+  const btnRef = useRef(null); // 初始值
+
+  useEffect(() => {
+    console.log(btnRef.current); // 获取 DOM 节点
+  }, []);
+
+  return <div><button ref={btnRef}>点击</button></div>;
+}
+```
+
+#### useContext
+
+用于在函数组件中接收 context 值
+
 #### 几道关于 React Hooks 的面试题
 
 为什么会有 Hooks，它解决了什么问题？
