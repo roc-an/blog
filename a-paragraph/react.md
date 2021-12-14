@@ -404,6 +404,9 @@ function UseRefDemo() {
 #### useMemo 与 useCallback
 
 * `useMemo`：用于缓存计算得到的数据。如果依赖项不变，就不会重新计算。有助于避免每次渲染中都进行高开销的重复计算
+* `useCallback`：用于缓存函数
+
+两者是 React Hooks 的常见优化策略
 
 #### 几道关于 React Hooks 的面试题
 
