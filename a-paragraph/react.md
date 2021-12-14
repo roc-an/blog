@@ -418,8 +418,14 @@ function UseRefDemo() {
 
 * 命名以 `use` 开头，比如 `useXxx`
 * Hooks 只能用于函数组件和自定义 Hook 中，其他地方不可以
-* 只能用于顶层代码，不能在循环、判断中使用 Hooks
+* 只能用于顶层代码，不能在循环、判断中使用 Hooks，也不能提前 `return`（因为 Hook 的取值顺序与调用顺序是一致的）
 * 可以配置 `eslint-plugin-react-hooks`
+
+其中，第 3 点尤为重要，Hooks 的调用顺序必须确保一致性：
+
+* 无论是 render 还是 re-render，Hooks 调用顺序必须一致
+* 如果 Hooks 出现在循环、判断里，或者提前 `return`，则无法保证顺序一致
+* Hooks 严重依赖于调用顺序，十分重要！
 
 #### 几道关于 React Hooks 的面试题
 
