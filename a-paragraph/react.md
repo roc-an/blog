@@ -401,6 +401,10 @@ function UseRefDemo() {
 * Redux 是全局状态的管理，多组件间共享数据
 * `useReducer` 只是借鉴了 Redux 的设计方式而已，不能说有了 `useReducer` 就不再需要 Redux 了，两者的主要职责和解决的问题都不相同
 
+#### useMemo 与 useCallback
+
+* `useMemo`：用于缓存计算得到的数据。如果依赖项不变，就不会重新计算。有助于避免每次渲染中都进行高开销的重复计算
+
 #### 几道关于 React Hooks 的面试题
 
 为什么会有 Hooks，它解决了什么问题？
