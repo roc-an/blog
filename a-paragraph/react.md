@@ -414,6 +414,13 @@ function UseRefDemo() {
 * 内部正常使用 `useState`、`useEffect` 或者其他 Hooks
 * 可以自定义返回结果，格式不限
 
+#### Hooks 使用规范
+
+* 命名以 `use` 开头，比如 `useXxx`
+* Hooks 只能用于函数组件和自定义 Hook 中，其他地方不可以
+* 只能用于顶层代码，不能在循环、判断中使用 Hooks
+* 可以配置 `eslint-plugin-react-hooks`
+
 #### 几道关于 React Hooks 的面试题
 
 为什么会有 Hooks，它解决了什么问题？
