@@ -408,6 +408,12 @@ function UseRefDemo() {
 
 两者是 React Hooks 的常见优化策略
 
+#### 自定义 Hook
+
+* 本质上是一个函数，命名以 `use` 开头
+* 内部正常使用 `useState`、`useEffect` 或者其他 Hooks
+* 可以自定义返回结果，格式不限
+
 #### 几道关于 React Hooks 的面试题
 
 为什么会有 Hooks，它解决了什么问题？
