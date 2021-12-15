@@ -433,20 +433,6 @@ function UseRefDemo() {
 * 如果 `useEffect` 的依赖项是 `[]`，那么内部获取的 `state` 值不会变，因为 Effect 函数不会重新执行，没法拿到最新的 `state` 值
 * 如果 `useEffect` 的依赖项是引用数据类型，会出现死循环。因为内部是通过 `Object.is()` 进行依赖是否一致的比较的
 
-#### 几道关于 React Hooks 的面试题
-
-为什么会有 Hooks，它解决了什么问题？
-
-React Hooks 如何模拟组件生命周期？
-
-如何自定义 Hook？
-
-React Hooks 性能优化？
-
-使用 React Hooks 遇到哪些坑？
-
-Hooks 相比 HOC 和 Render Props 有哪些优点？
-
 ### React 性能优化手段有哪些？
 
 方案级别：
@@ -455,6 +441,11 @@ Hooks 相比 HOC 和 Render Props 有哪些优点？
 * 使用 `shouldComponentUpdate` 生命周期
 * 使用 `PureComponent` 和 `React.memo`
 * 使用不可变数据 `immutable.js`：基于共享数据（不是深拷贝），但有一定的学习、迁移成本，按需使用
+
+Hooks 优化：
+
+* `useMemo`：缓存计算得到的数据。如果依赖项不变，就不会重新计算。有助于避免每次渲染中都进行高开销的重复计算
+* `useCallback`：缓存函数
 
 其他小点：
 
@@ -824,3 +815,17 @@ export type HookType =
 **在函数组件的函数调用过程中，如果使用了 Hook，那么就会创建与之对应的 Hook 对象。这些对象会根据 Hook 调用顺序而依次创建，以单链表的形式挂载在 `Fiber` 的 `memoizedState` 属性上**
 
 在每次 Fiber 树更新时，基于双缓冲技术，current 节点的 Hook 链表都会克隆到 workInProgress 节点上，并且它们的 Hook 对象的内部状态会被完全复用
+
+#### 数据结构关系
+
+* 每调用一个 Hook，就会创建一个 Hook 对象
+* 多个 Hook 对象以单链表形式存储在 `fiber.memoizedState` 上
+* Hook 对象维护着 2 个关键属性：
+  * `memoizedState`：当前状态的值，比如 `useState()` 的 `state` 值
+  * `queue`：环形链表，每当 `dispatch` 一个 `Action`，就会创建一个 `update` 对象添加到该队列中。之所以用环形链表，是因为入队和取队首元素都是 O(1)
+
+正是由于使用了链表形式存储 Hook 及其 `dispatch` 的更新，所以 React 中调用 Hook 的顺序必须确保一致，不能使用判断语句或者提前 `return`
+
+#### 其他
+
+* `useState` 就是对 `useReducer` 的封装，内置了一个特殊的 `reducer`，调用 `setXXX` 函数时会调用这个 `reducer`
