@@ -2,6 +2,24 @@
 
 ## `Array.prototype.reduce`
 
+`reduce()` 方法对数组中的每个元素执行 `reducer` 函数，并将结果汇总为单个返回值
+
+语法：
+
+`arr.reduce(callback(accumulator, currentValue[, index[, array]])[, initialValue])`
+
+`reducer` 函数的 4 个参数：
+
+1. Accumulator（acc）：累计器
+2. Current Value（cur）：当前值
+3. Current Index（idx）：当前索引
+4. Source Array（src）：源数组
+
+`reducer` 首次执行时：
+
+* 如果提供了 `initialValue`，那么累计器 acc 取值为 `initialValue`
+* 如果没提供 `initialValue`，累计器 acc 取数组中第一个值，当前值 cur 取数组中第二个值
+
 ## 实现深拷贝函数
 
 ```js

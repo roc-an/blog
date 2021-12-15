@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>使用 reduce 将多维数组转为一维</title>
+</head>
+<body>
+<script>
+  function flat(arr) {
+    if (!Array.isArray(arr)) {
+      throw new Error('flat 参数非数组')
+    }
+
+    return arr.reduce((distArr, cur) => {
+      if (Array.isArray(cur)) {
+        // cur 当前值是数组
+        return distArr.concat(flat(cur)); // 递归调用 flat 函数
+      } else if (typeof cur === 'number') {
+        // cur 当前值是数字
+        return distArr.concat(cur);
+      } else {
+        throw new Error('传入了非法值')
+      }
+    }, []);
+  }
+
+  const arr = [[0, 1], [2, 3], [4, 5, [6, 7, 8]], 9];
+  console.log(flat(arr));
+</script>
+</body>
+</html>
