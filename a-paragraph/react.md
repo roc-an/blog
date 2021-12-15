@@ -427,6 +427,12 @@ function UseRefDemo() {
 * 如果 Hooks 出现在循环、判断里，或者提前 `return`，则无法保证顺序一致
 * Hooks 严重依赖于调用顺序，十分重要！
 
+#### Hooks 的坑
+
+* `useState` 初始化值，只有第一次有效
+* 如果 `useEffect` 的依赖项是 `[]`，那么内部获取的 `state` 值不会变，因为 Effect 函数不会重新执行，没法拿到最新的 `state` 值
+* 如果 `useEffect` 的依赖项是引用数据类型，会出现死循环。因为内部是通过 `Object.is()` 进行依赖是否一致的比较的
+
 #### 几道关于 React Hooks 的面试题
 
 为什么会有 Hooks，它解决了什么问题？
