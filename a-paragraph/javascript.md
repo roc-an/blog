@@ -1,5 +1,7 @@
 # 一段话说透一个前端知识点 - JavaScript
 
+## `Array.prototype.reduce`
+
 ## 实现深拷贝函数
 
 ```js
