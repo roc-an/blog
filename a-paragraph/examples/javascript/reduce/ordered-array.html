@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>使用 reduce 进行数组去重</title>
+</head>
+<body>
+<script>
+  const arr = ['a', 'b', 'a', 'b', 'c', 'e', 'e', 'c', 'd', 'd', 'd', 'd'];
+
+  // 方式一：Array.from() 结合 Set
+  const orderedArr1 = Array.from(new Set(arr))
+
+  // 方式二：使用 reduce() 进行数组去重
+  const orderedArr2 = arr.reduce((distArr, item) => {
+    // 如果 distArr 中没有该元素，那么 push 进去。即仅 push 不重复的元素
+    if (distArr.indexOf(item) === -1) {
+      distArr.push(item);
+    }
+    return distArr;
+  }, [])
+
+  console.log('去重后数组', orderedArr2)
+</script>
+</body>
+</html>

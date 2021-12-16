@@ -20,6 +20,11 @@
 * 如果提供了 `initialValue`，那么累计器 acc 取值为 `initialValue`
 * 如果没提供 `initialValue`，累计器 acc 取数组中第一个值，当前值 cur 取数组中第二个值
 
+几个关于使用 `reduce` 的典型场景：
+
+* 多维数组转一维
+* 数组去重
+
 ## 实现深拷贝函数
 
 ```js
