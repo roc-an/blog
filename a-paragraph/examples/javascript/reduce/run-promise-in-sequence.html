@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>按顺序运行 Promise</title>
+</head>
+<body>
+<script>
+/**
+ * Runs promises from array of functions that can return promises
+ * in chained manner
+ *
+ * @param {array} arr - promise arr
+ * @return {Object} promise object
+ */
+function runPromiseInSequence(arr, input) {
+  return arr.reduce((promiseChain, curFn) => {
+    // then 方法返回的是一个新的 Promise 实例
+    // 因此可以采用链式写法，即 then 方法后面再调用另一个 then 方法
+    return promiseChain.then(curFn);
+  }, Promise.resolve(input));
+}
+
+// promise fn1
+function fn1(a) {
+  return new Promise((resolve, reject) => {
+    resolve(a * 5);
+  });
+}
+
+// promise fn2
+function fn2(a) {
+  return new Promise((resolve, reject) => {
+    resolve(a * 2)
+  })
+}
+
+// fn3 将通过 .then() 包裹进一个 resolved 的 Promise 实例
+function fn3(a) {
+  return a * 3;
+}
+
+// promise fn4
+function fn4(a) {
+  return new Promise((resolve, reject) => {
+    resolve(a * 4)
+  })
+}
+
+runPromiseInSequence([fn1, fn2, fn3, fn4], 10)
+  .then(console.log); // 1200
+</script>
+</body>
+</html>
