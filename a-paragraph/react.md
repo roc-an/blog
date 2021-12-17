@@ -546,6 +546,31 @@ const App = () => (
 
 Redux 作为数据状态管理工具，结合了不可变数据、纯函数的思想。
 
+#### `connect()` 的意义
+
+语法：
+
+```js
+function connect(mapStateToProps?, mapDispatchToProps?, mergeProps?, options?)
+```
+
+调用形式是：`connect(若干参数)(组件)`
+
+通过 `mapStateToProps` 和 `mapDispatchToProps` 这两个参数，`react-redux` 提供给了 React 组件去读/写 Store 数据的接口，有了它们，就不用在 React 组件中写冗余的读/写逻辑了
+
+`connect` 函数调用一次得到新函数，再调用新函数得到包裹后组件，这么设计是为了**复用 Connect 逻辑**。比如：
+
+```js
+const connectToExam = connect(mapExamStateToProps, mapExamDispatchToProps);
+
+const Teacher = connectToExam(Teacher组件)
+const Student = connectToExam(Student组件)
+```
+
+上例中，`Teacher`、`Student` 两个组件复用了连接 Store 中考试数据的连接
+
+小结一下，`connect` 的首次执行，相当于得到了一个半成品，它提供了读写相关 Store 数据的接口，之后就可以再次调用，传入任何的使用该接口的组件，这就是 `connect` 的意义
+
 #### 单向数据流
 
 1. 组件 `dispatch(action)`
