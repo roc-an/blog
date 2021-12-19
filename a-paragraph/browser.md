@@ -42,6 +42,18 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 ```
 
+## 渲染流程详解
+
+整个渲染机制比较复杂，浏览器的「渲染模块」在执行时划分了很多子阶段，整个的处理过程可称为「渲染流水线」
+
+### Step 1 - 构建 DOM 树
+
+* 职责：将 HTML 转为浏览器能够理解的 DOM 树结构
+* 输入：HTML 文件
+* 输出：树结构 DOM
+
+在控制台打印 `document` 可以看到完整 DOM 树结构，**DOM 是保存在内存中的树结构，可以通过 JS 来查询和修改**
+
 ## 请描述 Event Loop（事件循环/事件轮询）的机制，可画图
 
 * JS 是单线程运行的
