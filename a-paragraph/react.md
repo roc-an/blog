@@ -542,6 +542,25 @@ const App = () => (
 
 ## 社区
 
+### React 18 前瞻
+
+* React 18 正式引入了对并发模式/特性的「渐进升级」策略：并发特性的引入是完全可选的，如果不引入就不会有 breaking changes
+  * 从此再无 CM（Concurrent Mode），有的只是 Concurrent Features 并发特性
+  * 对于直接想让应用的某一部分“躺平”的情况可以用 Legacy Root。React 18 引入了新的 Root API - `ReactDOM.createRoot` 来与旧的 `ReactDOM.render` 作区分，从而可以将整个 React 树分形为不同的 roots
+* 更加激进的「自动 Batching」：React 17 仅会在事件回调中 Batch，而 18 会对任何来源的 `setState` 做尽可能多的 Batching
+* `startTransition` 和 `useDeferredValue` API：允许将 UI 的一部分标记为“较低的更新优先级”
+* Suspense SSR
+  * 传统 SSR 的一个问题是，全量渲染的延迟太高了
+  * CM + Suspense 可以做到用 Suspense Boundary 将应用分片，然后以分片为单位做流式 SSR
+* Strict Mode 在既 double-render 之后加入了 double-effect
+* 新的交互式官方文档：[beta.reactjs.org](https://beta.reactjs.org/)
+  * 旧网站在一些连锁话题下需要自行跳转（比如性能优化一章介绍的还是老的 SCU 方案，如果想看 Hooks 相关的就要自己跳转）。这无形间提高了学习 React 的门槛
+  * 新网站把 Hooks 作为首推方式来给大家介绍 React
+  * 新网站增加了很多关于思想的引导内容，比如可中断渲染、并发、调度等等，并补充了较多的插画来辅助理解
+  * 新网站章节均是可交互的，提供了 SandBox，可以边学边做，甚至还提供了编码挑战
+  * 新网站提供了 Dark Mode 夜间模式
+* 成立了 React 18 工作组（React 18 Working Group），向社区公开 React 18 的讨论和进度
+
 ### Redux
 
 Redux 作为数据状态管理工具，结合了不可变数据、纯函数的思想。
@@ -578,6 +597,8 @@ const Student = connectToExam(Student组件)
 3. Store 中 state 改变，`connect` 了对应数据的组件 `props` 更新
 
 #### 异步 Action
+
+Redux 本身是不支持异步 Action 的，即默认情况下，Redux 的 Action 都是同步更新的
 
 * `redux-thunk` 中间件
 * `redux-promise` 中间件
