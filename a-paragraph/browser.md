@@ -54,6 +54,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
 在控制台打印 `document` 可以看到完整 DOM 树结构，**DOM 是保存在内存中的树结构，可以通过 JS 来查询和修改**
 
+### Step 2 - 样式计算（Recalculate Style）
+
+* 职责：计算出每个 DOM 节点的具体样式
+* 输入：各来源的 CSS 文本
+* 输出：每个 DOM 节点的计算后样式，保存在 `ComputedStyle` 结构内（可在控制台 `Elements` -> `Computed` 中查看）
+
+通过 3 步来完成样式计算：
+
+1. 把 CSS 转为浏览器能理解的结构，即 `styleSheets`
+2. 转换样式表 `styleSheets` 中的属性值，使其标准化
+3. 计算出 DOM 树中每个节点的具体样式
+
+#### 1.把 CSS 转为浏览器能理解的结构
+
+当渲染引擎接收到 CSS 文本时，会执行一个转换操作，**将 CSS 文本转换为浏览器可理解的结构 - 样式表 styleSheets**
+
+控制台打印 `document.styleSheets`，该结构也支持查询、修改
+
+#### 2.转换样式表 `styleSheets` 中的属性值，使其标准化
+
+属性值标准化：将所有 CSS 值转换为渲染引擎容易理解的、标准化的计算值
+
+如，标准化前：
+
+```css
+body { font-size: 2em; }
+p { color: blue; }
+span { display: none; }
+div { font-weight: bold; }
+div p { color: green; }
+div { color: red; }
+```
+
+其中 `2em`、`blue`、`bold` 等属性值是不便于浏览器理解的，于是进行标准化转换：
+
+```css
+body { font-size: 32px; }
+p { color: rgb(0, 0, 255); }
+span { display: none; }
+div { font-weight: 700; }
+div p { color: rgb(0, 128, 0); }
+div { color: rgb(255, 0, 0); }
+```
+
+#### 3.计算出 DOM 树中每个节点的具体样式
+
+* 处理样式继承：根据 DOM 节点的继承关系来合理计算节点样式
+* 处理样式层叠：层叠是 CSS 的一个基本特征，定义了如何合并来自多个源的属性值的算法
+
 ## 请描述 Event Loop（事件循环/事件轮询）的机制，可画图
 
 * JS 是单线程运行的
