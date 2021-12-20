@@ -171,3 +171,24 @@ NodeJS 架构图中，`LibUV` 是 NodeJS 实现异步非阻塞 I/O 的核心模�
 我们的**应用代码、V8、Node Bindings（OS 层）以及 LibUV 中的 Event Queue、Event Loop 都是处于 NodeJS 线程中的**
 
 **NodeJS 线程中，I/O 操作都是非阻塞的，它会把大量的计算能力分发到 LibUV 的其他 C++ 线程中去计算，等到其他 C++ 线程计算完毕，再把结果回调到 NodeJS 线程，进而最终结果返回到应用层去**
+
+## NodeJS 异步编程
+
+### callback
+
+NodeJS 回调函数格式规范：第一个参数是 `error`，后面的参数才是结果
+
+### 事件循环
+
+事件循环是让 NodeJS 实现非阻塞 I/O 的一个关键机制
+
+非阻塞 I/O 和 Event Loop 都属于 LibUV 这个 C++ 模块所提供的能力
+
+NodeJS 环境中维护着一些队列：
+
+* 定时器队列
+* 文件操作队列
+
+事件循环 EventLoop 会不停地向队列中查找执行回调
+
+每一个事件环都是一个全新的调用栈
