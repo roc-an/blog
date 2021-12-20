@@ -105,3 +105,34 @@ Electron 在 NodeJS 基础上，封装了一层浏览器内核，通过 NodeJS �
 
 * 在已有网站的情况下开发新客户端应用
 * 用 NodeJS 客户端技术（Electron）实现，可以最大限度复用现有工程
+
+## NodeJS 内置模块
+
+NodeJS 架构图中：
+
+* APPLICATION：开发者写的 NodeJS 应用
+* V8(JS Engine)：Application 的 ES 代码通过 V8 引擎来运行，并转发给 OS 层，即操作系统
+* NodeJS Bindings，即 OS 层：操作系统层，涉及操作系统的操作，会由 V8 引擎转发到 OS 层，在处理并得到结果后，再由 OS 层将结果返回给 V8，再返回给 Application 的 ES 代码
+
+**Application + V8 + OS 层三者的配合，就诠释了“NodeJS 是基于 Chrome V8 引擎的 JS 运行环境”这句话**
+
+这三者的配合是由很多 NodeJS 内置模块实现的，一些典型的内置模块：
+
+* `fs`：文件系统。通过该模块 API 可以操作 OS 上的文件
+* `net`：网络。可以使用 OS 的网络能力
+* `process`：进程。记载 NodeJS 进程信息
+* `os`：操作系统
+   * `os.arch()`：得到 OS 的 CPU 架构
+   * `os.cpus()`：可以查看计算机有多少个 CPU、是几核的，以及核的参数
+   * `os.freemem()`：查看还有多少剩余内存
+* `events`：事件触发器
+  * `EventEmitter` 类：用观察者模式实现了事件的收发
+    * `emitter.addListener(eventName, listener)`：类似前端的 `addEventListener`
+
+PS: 所有的内置模块都在源码的 `/lib` 目录下
+
+内置模块的调用通路：
+
+应用代码 -> NodeJS 内置模块 -> 调用 C++ 模块得到结果 -> 通过 V8 API 将结果返回到 NodeJS 内置模块 -> 应用代码
+
+NodeJS 内置模块的职责是：负责应用层面到操作系统层面的通信
