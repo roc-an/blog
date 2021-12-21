@@ -1,0 +1,18 @@
+{
+  "name": "awesome",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack-dev-server --config build-base-conf/webpack.dev.js",
+    "devBuild": "webpack-dev-server --config build-base-conf/webpack.dev.js",
+    "build": "webpack-dev-server --config build-base-conf/webpack.prod.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-webpack-plugin": "^4.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "webpack-merge": "^5.8.0"
+  }
+}

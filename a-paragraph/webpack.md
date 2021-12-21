@@ -12,3 +12,5 @@
 * `clean-webpack-plugin`：升级新版本 `const { CleanWebpackPlugin } = require('clean-webpack-plugin')`
 * `module.rules` 中 `loader: ['xxx-loader']` 换成：`use: ['xxx-loader']`
 * `filename: 'bundle.[contenthash:8].js'` 其中 `h` 小写，不能大写
+
+## 基本配置
