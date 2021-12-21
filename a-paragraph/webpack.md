@@ -38,8 +38,19 @@
     * Webpack 已内置 `DllPlugin` 支持
     * 先通过 `DllPlugin` 将库打包成 dll 文件，后续编译再通过 `DllReferencePlugin` 使用 dll 文件，避免重复打包
 * 优化产出代码 - 产品性能
+  * 小图片 Base64 编码
+  * Bundle 文件名加 Hash，以便命中浏览器缓存
+  * 懒加载
   * 公共代码抽离
-  * 文件名加 Hash，以便命中浏览器缓存
+  * IgnorePlugin
+  * 使用 CDN 加速
+    * 打包时自动在静态资源 URL 前加 CDN 域名前缀
+    * 把静态资源上传到 CDN 服务器以备后续访问
+  * 设置 `production` 模式，诸多好处：
+    * 自动开启代码压缩
+    * Vue、React 等会自动删除调试代码，比如开发环境的 Warning
+    * 启动 Tree Shaking：根据 `import`、`export` 将代码中未使用的导出代码删掉
+  * Scope Hosting
 
 其中，`IgnorePlugin` 插件 VS `noParse` 选项：
 
