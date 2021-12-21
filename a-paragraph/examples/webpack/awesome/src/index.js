@@ -9,7 +9,7 @@ import './style/style2.less'
 import { sum } from './math'
 
 // 引入图片
-import imgFile1 from './img/1.png'
+import imgFile1 from './img/1.jpeg'
 import imgFile2 from './img/2.jpeg'
 
 const sumRes = sum(10, 20)

@@ -4,15 +4,31 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --config build-base-conf/webpack.dev.js",
-    "devBuild": "webpack-dev-server --config build-base-conf/webpack.dev.js",
-    "build": "webpack-dev-server --config build-base-conf/webpack.prod.js"
+    "dev-without-dev-server": "webpack --config build-base-conf/webpack.dev.js",
+    "dev": "webpack serve --config build-base-conf/webpack.dev.js",
+    "build": "webpack --config build-base-conf/webpack.prod.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "autoprefixer": "^10.4.0",
+    "babel-loader": "^8.2.3",
     "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^6.5.1",
+    "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "mini-css-extract-plugin": "^2.4.5",
+    "postcss-loader": "^6.2.1",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.0",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0",
     "webpack-merge": "^5.8.0"
   }
 }

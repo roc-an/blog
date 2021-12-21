@@ -1,23 +1,23 @@
 const path = require('path')
 const webpack = require('webpack')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const { smart } = require('webpack-merge')
+const { merge } = require('webpack-merge')
 const webpackCommonConf = require('./webpack.common')
 const { srcPath, distPath } = require('./paths')
 
-module.exports = smart(webpackCommonConf, {
+module.exports = merge(webpackCommonConf, {
   // 模式
   mode: 'production',
   // 输出
   output: {
-    filename: 'bundle.[contentHash:8].js',
+    filename: 'bundle.[contenthash:8].js',
     path: distPath,
-  }
+  },
   // Loaders
-  modules: {
+  module: {
     rules: [{
       // 图片 - 压缩 base64 编码优化
-      test: /\.[png|jpg|jpeg|gif]$/,
+      test: /\.(png|jpg|jpeg|gif)$/,
       use: {
         loader: 'url-loader',
         options: {

@@ -7,18 +7,18 @@ module.exports = {
   entry: path.join(srcPath, 'index'),
   // Loaders
   module: {
-    rules: [{
+    rules: [{ // ES6+ 转 ES5
       test: /\.js$/,
-      loader: ['babel-loader'],
+      use: ['babel-loader'],
       include: srcPath,
       exclude: /node_modules/
     }, {
       test: /\.css$/,
       // loader 执行顺序是从后往前
-      loader: ['style-loader', 'css-loader', 'postcss-loader']
+      use: ['style-loader', 'css-loader', 'postcss-loader']
     }, {
       test: /\.less$/,
-      loader: ['style-loader', 'css-loader', 'less-loader']
+      use: ['style-loader', 'css-loader', 'less-loader']
     }]
   },
   plugins: [
