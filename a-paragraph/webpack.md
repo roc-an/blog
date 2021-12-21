@@ -51,6 +51,8 @@
     * Vue、React 等会自动删除调试代码，比如开发环境的 Warning
     * 启动 Tree Shaking：根据 `import`、`export` 将代码中未使用的导出代码删掉
   * Scope Hosting
+    * 将多个文件模块函数合并成 1 个，代码体积更小
+    * 创建的函数作用域更少，JS 执行更快
 
 其中，`IgnorePlugin` 插件 VS `noParse` 选项：
 
