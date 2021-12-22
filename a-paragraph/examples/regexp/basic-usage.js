@@ -19,3 +19,13 @@ const res21 = str2.replace(reg21, 'X');
 const res22 = str2.replace(reg22, 'X');
 console.log('>>>>> res21', res21);
 console.log('>>>>> res22', res22);
+
+// 示例 3：将字符中的字母替换为 Q
+// 知识点：范围类的使用
+const str3 = 'a1b2d3x4z9YEAH';
+const reg31 = /[a-z]/g; // 仅匹配小写字母
+const reg32 = /[a-zA-Z]/g; // 匹配大小写字母
+const res31 = str3.replace(reg31, 'Q');
+const res32 = str3.replace(reg32, 'Q')
+console.log('>>>>> res31', res31);
+console.log('>>>>> res32', res32);
