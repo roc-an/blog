@@ -29,3 +29,13 @@ const res31 = str3.replace(reg31, 'Q');
 const res32 = str3.replace(reg32, 'Q')
 console.log('>>>>> res31', res31);
 console.log('>>>>> res32', res32);
+
+// 示例 4：多行匹配开头字符
+const str4 =
+`@123
+@456
+@789`;
+
+const reg4 = /^@\d/gm;
+const res4 = str4.replace(reg4, 'X');
+console.log('>>>>> res4', res4);
