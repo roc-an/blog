@@ -768,6 +768,33 @@ React class 组件中的所有的原型方法、生命周期函数：
 
 `Scheduler` 还实现了「时间切片」，见下一话题
 
+### Transaction 事务机制
+
+当生命周期或者我们定义的事件处理函数执行时：
+
+1. 开始，处于 `batchUpdate`（`isBatchUpdates = true`）
+2. 执行函数体，其他任何操作
+3. 结束，`isBatchUpdates = false`
+
+描述 Transaction 事务机制的伪代码：
+
+```js
+transaction.initialize = function() {
+  console.log('Initialize')
+}
+transaction.close = function() {
+  console.log('Close')
+}
+function method() {
+  console.log('abc')
+}
+transaction.perform(method)
+
+// 输出 'Initialize'
+// 输出 'abc'
+// 输出 'Close'
+```
+
 ### 什么是“时间切片”？
 
 浏览器的 JS 线程和 GUI 线程互斥，在执行 JS 时没有办法进行布局、绘制，如果执行 JS 过久，会阻塞页面每一帧的渲染，导致卡顿
