@@ -705,9 +705,9 @@ const App = () => (
 
 ## 原理
 
-## 合成事件 SyntheticEvent 机制
+### 合成事件 SyntheticEvent 机制
 
-* 所有事件都挂在了根节点 `<div id="root">` 上，事件委派
+* 所有事件都挂在了根节点 `<div id="root">` 上，事件委派，利于多个 React 版本并存，例如方便实现微前端
 * React 事件处理函数中的 `event` 不是原生的，是 `SyntheticEvent` 合成事件对象
 
 在合成事件机制下，事件触发的流程：
@@ -864,6 +864,27 @@ Fiber 树的构造过程是一个“深度优先遍历”，每个 Fiber 节点�
 2. Work In Progress Fiber 树：正在构建的 Fiber 树，挂在 `HostRootFiber.alternate` 上。构造完成后，重新渲染页面，并与 Current Fiber 树切换。
 
 这么做的原因是，构造 Fiber 树过程的很多 Fiber 对象属性是可复用的，避免了每次更新渲染时重新创建对象的开销。
+
+### Fiber 如何优化性能？
+
+PS：是否是最新版，有待考究，老版是这样的
+
+渲染更新被分为 2 个阶段：
+
+1. Reconciliation 阶段，执行 Diff 算法，纯 JS 计算
+2. Commit 阶段，将 Diff 结果渲染到 DOM
+
+如果不区分这两个阶段，可能会带来的问题：
+
+* JS 是单线程的，且和 DOM 渲染共用 1 个线程
+* 当组件足够复杂时，组件更新时计算和渲染压力都大
+* 同时再有 DOM 操作需求（动画、鼠标拖拽等），将卡顿
+
+Fiber 的解决方案：
+
+* 将 Reconciliation 阶段进行任务拆分（Commit 阶段无法拆分），拆分成多个子任务
+* DOM 渲染时暂停，空闲时恢复
+* 通过 `window.requestIdleCallback`：这个函数将在浏览器空闲时期被调用。这使开发者能够在主事件循环上执行后台和低优先级工作，而不会影响延迟关键事件，如动画和输入响应
 
 ### Diff 算法原理
 
