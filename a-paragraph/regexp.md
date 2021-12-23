@@ -177,3 +177,99 @@ JS 通过内置对象 RegExp 支持正则表达式
 ```js
 'User roc is OK'.replace(/(?:User).*(OK)/g, '$1'); // 'OK'
 ```
+
+## 字符串方法中使用正则
+
+### `String.prototype.search(reg)`
+
+* `search()` 方法用于检索字符串中指定的子字符串，或检索与正则表达式匹配的子字符串
+* 返回第一个匹配结果 `index`， 找不到则返回 `-1`
+* `search()` 方法不执行全局匹配，会忽略标志 `g`，并且总是从字符串开始处检索
+
+示例：
+
+```js
+'a1b2c3d4'.search(/c\d/); // 4
+```
+
+### `String.prototype.match(reg)`
+
+* `match()` 方法将检索字符串，找到一个或多个与正则匹配的文本
+* RegExp 是否有 `g` 标志对结果影响很大
+
+`match()` 的非全局调用：
+
+* 如果 RegExp 中没有 `g` 标志，那么只匹配一次
+* 如果没有找到任何匹配结果，返回 `null`
+* 否则将返回数组，存放匹配文本相关信息：
+  * 数组第 1 个元素：匹配文本
+  * 后续元素：与子表达式匹配的文本，也就是匹配到的分组的内容
+  * 数组还有 2 个属性：
+    * `index`：匹配文本的起始字符在原字符串的索引
+    * `input`：对原字符串的引用
+
+`match()` 非全局调用示例：
+
+```js
+const str = '$1a2b3c4d5e';
+const reg = /\d(\w)\d/;
+const res = str.match(reg);
+console.log(res);
+//  ['1a2', 'a', index: 1, input: '$1a2b3c4d5e', groups: undefined]
+```
+
+`match()` 的全局调用：
+
+* 如果 RegExp 中没有 `g` 标志，那么全局检索，找到所有匹配的子字符串
+  * 如果没找到任何匹配的子串，则返回 `null`
+  * 如果找到了 1 个或多个匹配的子串，则返回数组
+* 数组元素是匹配到的所有子串，没有 `index` 和 `input` 属性
+
+`match()` 全局调用示例：
+
+```js
+const str = '$1a2b3c4d5e';
+const reg = /\d(\w)\d/g;
+const res = str.match(reg);
+console.log(res); //  ['1a2', '3c4']
+```
+
+### `String.prototype.split(reg)`
+
+字符串分割为数组：
+
+* 一般用法是传入分割用的字符串：`'a,b,c,d'.split(','); // ['a', 'b', 'c', 'd']`
+* 复杂场景可以传入分割用正则：`'a1b2c3d'.split(/\d/); // ['a', 'b', 'c', 'd']`
+
+
+### `String.prototype.replace()`
+
+三种调用语法：
+
+* `String.prototype.replace(str, replaceStr)`
+* `String.prototype.replace(reg, replaceStr)`
+* `String.prototype.replace(reg, function)`
+
+示例 1：将 `a1b1c1` 中所有的 1 替换为 2：
+
+```js
+'a1b1c1'.replace(/1/g, 2); // 'a2b2c2'
+```
+
+示例 2：将 `'a1b2c3d4'` 替换为 `'a2b3c4d5'`：
+
+```js
+'a1b2c3d4'.replace(/\d/g, (match, index, origin) => {
+  return Number(match) + 1;
+})
+// 'a2b3c4d5'
+```
+
+`function` 的 4 个参数：
+
+1. 匹配到的字符串
+2. 分组内容，如果没分组则没有该参数
+3. 匹配项在原字符的索引
+4. 原字符串
+
+每当匹配到结果时就会调用该函数
