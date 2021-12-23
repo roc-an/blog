@@ -540,6 +540,22 @@ const App = () => (
 * 变量来源明确
 * 不会产生组件嵌套
 
+### React 和 Vue 的区别
+
+相同点：
+
+* 都支持组件化
+* 都是数据驱动视图
+* 都使用 VDOM 处理 DOM
+
+区别：
+
+* React 主推 JSX，拥抱 JS，Vue 主推 Template 模板（虽然也支持 JSX），拥抱 HTML
+* React 函数式编程，Vue 声明式编程
+* React 更多是自力更生，Vue 把想要的都给你（比如一个 `v-for` 去渲染列表，React 则要用 `map` 自己写）
+* React 单向数据流，Vue 双向数据绑定
+* React 18 `startTransition` 可以标记低优先渲染，对于渲染任务的控制粒度更细
+
 ## 社区
 
 ### React 18 前瞻
