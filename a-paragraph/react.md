@@ -705,6 +705,56 @@ const App = () => (
 
 ## 原理
 
+### `setState` 和 `batchUpdate`
+
+关于 `setState` 的同/异步：
+
+* 有时异步（普通使用），有时异步（`setTimeout`、DOM 事件）
+* 有时合并（对象形式，类似 `Object.assign`），有时不合并（函数形式）
+
+核心要点：
+
+* setState 主流程
+* batchUpdate 机制
+* transaction 事务机制
+
+#### `setState` 主流程
+
+1. `this.setState(newState)`
+2. `newState` 存入 `pending` 队列
+3. 判断，是否处于（命中） `batchUpdate`？
+  * 处于 `batchUpdate`，则保存组件于 `dirtyComponents` 中（即异步更新 `state` 流程）
+  * 不处于 `batchUpdate`，则（即同步更新 `state` 流程）：
+    * 遍历所有的 `dirtyComponents`
+    * 调用 `updateComponent`
+    * 更新 pending state or props
+
+`dirtyComponents` 是 `state` 已经更新了的组件
+
+React class 组件中的所有的原型方法、生命周期函数：
+
+* 执行时 React 会设置变量 `isBatchingUpdates = true`，表示“处于 `batchUpdate`”
+* 函数执行完，会设置 `isBatchingUpdates = false`
+* 对于异步函数中的 `setState`，由于执行时，之前的同步函数已经执行完，所以不处于 `batchUpdate`，于是同步更新 `state`
+
+所以，关于 `setState` 的同、异步：
+
+* 本质上是取决于是否命中 `batchUpdate` 机制（判断 `isBatchingUpdates` 变量）
+
+哪些能命中 `batchUpdate` 机制？
+
+* 生命周期（和它调用的函数）
+* 注册的事件（和它调用的函数）
+* 总之都是 React 可以管理的入口
+
+哪些不能命中 `batchUpdate` 机制？
+
+* 直接调用 `setTimeout`、`setInterval`（和它调用的函数）
+* 直接自定义的 DOM 事件（和它调用的函数）
+* 总之都是 React “管不到”的入口
+
+所以能不能命中 `batchUpdate` 主要看入口，入口能命中，那么由入口调用的所有函数都会有 `isBatchingUpdates` 的判断
+
 ### Scheduler 调度模块的原理是什么？
 
 `Scheduler` 将**回调任务分为了两类，「及时回调」和「延时回调」**：
