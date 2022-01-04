@@ -38,7 +38,17 @@ NodeJS：
   - 啃《算法导论》系列：
     - [算法分析、插入排序与归并排序（啃算法导论系列 01）](https://github.com/roc-an/blog/issues/8)
 
-  - 图解算法题（JS 实现）：
-    - [散列表巧解“两数之和”问题](https://github.com/roc-an/blog/issues/13)
-    - [两数相加（链表的应用）](https://github.com/roc-an/blog/issues/14)
-    - [滑动窗口巧解“无重复字符的最长子串”问题](https://github.com/roc-an/blog/issues/15)
+  - JS 解 LeetCode 算法题（思路解析 + 代码）：
+    - 简单难度
+      - 数值计算
+        - [回文数-反转一半数字](https://github.com/roc-an/blog/blob/main/algorithm-topics/isPalindrome/code/isPalindrome-nonstr.js)
+      - 链表
+        - [反转单链表](https://github.com/roc-an/blog/blob/main/algorithm-topics/reverseList/code/reverseList.js)
+      - 散列表
+        - [散列表巧解“两数之和”问题](https://github.com/roc-an/blog/issues/13)
+    - 中等难度
+      - 链表
+        - [两数相加（链表的应用）](https://github.com/roc-an/blog/issues/14)
+      - 综合
+        - [滑动窗口巧解“无重复字符的最长子串”问题](https://github.com/roc-an/blog/issues/15)
+        - [三数之和（排序 + 双指针）](https://github.com/roc-an/blog/blob/main/algorithm-topics/threeSum/code/threeSum.js)
