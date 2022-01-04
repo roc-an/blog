@@ -7,7 +7,6 @@
 // 回文匹配有 2 种情况：
 // 奇数个字符：121
 // 偶数个字符：1221
-// 时间复杂度：O(n)
 function isPalindrome(x) {
   if (typeof x !== 'number') return false;
   const xStr = String(x);
