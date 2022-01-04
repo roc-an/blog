@@ -2,8 +2,6 @@
 
 安鸿鹏的专题博客
 
-## 技术
-
 React：
 
 - [React 18 新特性：startTransition](https://github.com/roc-an/react-wisdom/issues/1)
@@ -44,10 +42,3 @@ NodeJS：
     - [散列表巧解“两数之和”问题](https://github.com/roc-an/blog/issues/13)
     - [两数相加（链表的应用）](https://github.com/roc-an/blog/issues/14)
     - [滑动窗口巧解“无重复字符的最长子串”问题](https://github.com/roc-an/blog/issues/15)
-## 跨界看财经
-
-财经月记：
-
-以程序员的视角，摘录财经消息，分享财经知识。
-
-- [财经月记-2021年7月](https://github.com/roc-an/blog/issues/7)
