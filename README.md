@@ -41,14 +41,15 @@ NodeJS：
   - JS 解 LeetCode 算法题（思路解析 + 代码）：
     - 简单难度
       - 数值计算
-        - [回文数-反转一半数字](https://github.com/roc-an/blog/blob/main/algorithm-topics/isPalindrome/code/isPalindrome-nonstr.js)
+        - [回文数（反转一半数字）](https://github.com/roc-an/blog/blob/main/algorithm-topics/isPalindrome/code/isPalindrome-nonstr.js)
       - 链表
         - [反转单链表](https://github.com/roc-an/blog/blob/main/algorithm-topics/reverseList/code/reverseList.js)
+        - [回文链表（反转链表 + 快慢指针）](https://github.com/roc-an/blog/blob/main/algorithm-topics/isPalindrome-linkedList/code/isPalindrome-linkedList.js)
       - 散列表
         - [散列表巧解“两数之和”问题](https://github.com/roc-an/blog/issues/13)
     - 中等难度
       - 链表
-        - [两数相加（链表的应用）](https://github.com/roc-an/blog/issues/14)
+        - [两数相加](https://github.com/roc-an/blog/issues/14)
       - 综合
         - [滑动窗口巧解“无重复字符的最长子串”问题](https://github.com/roc-an/blog/issues/15)
         - [三数之和（排序 + 双指针）](https://github.com/roc-an/blog/blob/main/algorithm-topics/threeSum/code/threeSum.js)
