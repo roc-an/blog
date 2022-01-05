@@ -34,69 +34,69 @@ function getLinkedList(str) {
   return linkedList;
 }
 
+// 反转链表，得到一个新链表
+function getReversedList(head) {
+  let prev = null; // 缓存上一步遍历的节点
+  let cur = head; // 当前遍历的结点
+
+  while (cur !== null) {
+    const node = new Node(cur.val, prev);
+    prev = node;
+    cur = cur.next;
+  }
+  return prev;
+}
+
 /**
  * @param {ListNode} head
  * @return {boolean}
  */
 // 「快慢指针」核心思路解析：
-// 1. 将链表的前半部分反转，然后和后半部分比较
+// 1. 将链表的后半部分反转，然后和前半部分比较
 // 2. 并发场景下函数运行时需要锁定其他线程或进程对链表的访问，因为在函数执行过程中，链表会被修改
 
 // 「快慢指针」算法步骤：
 // 1. 找到前半部分链表的尾结点
-// 2. 过程中反转前半部分链表
+// 2. 反转后半部分链表，得到反转后的新链表（过程中不影响原链表）
 // 3. 判断是否回文
 
 // 如何找到前半部分的尾结点？
 // 使用快、慢指针在一次遍历中找到。慢指针一次走一步，快指针一次走两步，快、慢指针同时出发
 // 当快指针移动到链表的末尾时，慢指针恰好到链表的中间。通过慢指针将链表分为两部分
 // 若链表有奇数个结点，则中间结点应归为前半部分
-function isPalindrome(head) {
-  // 边界：空结点 return false
-  if (head === null) return false;
 
-  // 边界：单结点 return true
-  if (head.next === null) return true;
+// 时间复杂度 O(n)
+// 空间复杂度 O(n)
+// 对于空间复杂度，在过程中创建了新的后半部分反转链表。如果对于空间要求严苛的场景，可以将后半部分链表反转、回文比较后再复原，这样空间复杂度可降为 O(1)，但多了还原的时间开销
+function isPalindrome(head) {
+  // 边界：空结点、单结点 return true
+  if (head === null || head.next === null) return true;
 
   let slowPoint = head; // 慢指针
   let fastPoint = head; // 快指针
-  let reversedLeftListHead = null; // 新构建的前半部分反转链表的头结点（不影响原始链表）
 
+  // 快、慢指针找到链表中间结点 slowPoint
   // 循环终止条件: 快指针遍历到链表尾结点
   // 遍历后：
   // 12 ---> slowPoint 是 1
   // 12321 ---> slowPoint 是 3
   // 123321 ---> slowPoint 是第一个 3
   while(!(fastPoint.next === null || fastPoint.next.next === null)) {
-    // 由当前遍历结点创建新结点，反转
-    reversedLeftListHead = new Node(slowPoint.val, reversedLeftListHead);
-
     slowPoint = slowPoint.next; // 慢指针走 1 步
     fastPoint = fastPoint.next.next; // 快指针走 2 步
   }
 
-  // 锁定前半部分反转后链表、后半部分链表的头结点
-  let rightListHead = slowPoint.next; // 后半部分链表头结点
-  reversedLeftListHead = new Node(slowPoint.val, reversedLeftListHead); // 中间结点 slowPoint 作为前半部分反转链表的头结点
+  // 得到反转后半部分的新链表头结点
+  let reversedSecondHalfHead = getReversedList(slowPoint.next);
 
   // 回文比较
-  if (reversedLeftListHead.val !== rightListHead.val) {
-    // 可能是奇数情况
-    reversedLeftListHead = reversedLeftListHead.next;
+  // 循环终止条件：反转后的后半部分链表遍历结束
+  while (reversedSecondHalfHead !== null) {
+    if (head.val !== reversedSecondHalfHead.val) return false;
+    // 前半部分、后半部分反转后链表，各进一步
+    head = head.next;
+    reversedSecondHalfHead = reversedSecondHalfHead.next;
   }
-
-  console.log('>>> reversedLeftListHead', reversedLeftListHead)
-  console.log('>>> rightListHead', rightListHead)
-
-  while (reversedLeftListHead !== null || rightListHead !== null) {
-    if (reversedLeftListHead === null || rightListHead === null) return false;
-    if (reversedLeftListHead.val !== rightListHead.val) {
-      return false;
-    }
-    reversedLeftListHead = reversedLeftListHead.next; // 遍历至前半部分反转链表的下个结点
-    rightListHead = rightListHead.next; // 遍历至后半部分链表的下个结点
-  }
-  // 如果完全比较后，每个节点都相同
   return true;
 }
 
