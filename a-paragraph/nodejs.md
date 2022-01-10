@@ -206,3 +206,14 @@ PM2 的几个重要功能：
 * 进程守护，系统崩溃自动重启
 * 启动多进程，充分利用 CPU 和内存
 * 自带日志记录功能
+
+常用命令：
+
+* `pm2 list`: 查看进程列表
+* `pm2 start ...`: 启动服务
+* `pm2 restart <AppName>/<id>`: 重启服务
+* `pm2 stop <AppName>/<id>`: 停止服务
+* `pm2 delete <AppName>/<id>`: 删除服务
+* `pm2 info <AppName>/<id>`: 查看服务基本信息
+* `pm2 log <AppName>/<id>`: 打印服务日志
+* `pm2 monit <AppName>/<id>`: 监控服务的 CPU 和内存等信息
