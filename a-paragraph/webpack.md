@@ -83,3 +83,28 @@ Webpack 内置的 stats 变量可以帮我们分析构建的一些基本信息�
 
 * 对于某些资源为什么这么大，是没法深入分析的
 * 对于哪个 Loader 耗时久，也没法分析
+
+## 速度分析：使用 speed-measure-webpack-plugin
+
+配置示例：
+
+```js
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin');
+
+const smp = new SpeedMeasurePlugin();
+
+// 包裹 Webpack 配置
+const webpackConfig = smp.wrap({
+  plugins: [
+    new MyPlugin(),
+    new MyOtherPlugin()
+  ]
+});
+```
+
+速度分析插件的作用：
+
+* 分析打包总耗时
+* 分析每个 Loader 和插件耗时
+
+耗时高亮显示：耗时过久会标红，正常较慢会标黄，正常标绿
