@@ -135,3 +135,52 @@ module.exports = {
 
 * 依赖的第三方模块大小
 * 业务组件代码大小
+
+## 编写 Loader 和插件
+
+### Loader 的链式调用与执行顺序
+
+**Loader 定义：Loader 只是一个导出为函数的 JS 模块**
+
+一个最简单的 Loader 代码结构：
+
+```js
+module.exports = function(source) {
+  return source;
+}
+```
+
+多 Loader 执行顺序：
+
+* 多个 Loader 串行执行，前一个 Loader 的输出作为后一个 Loader 的输入
+* 执行顺序是从后往前
+
+多 Loader 示例：
+
+```js
+module.exports = {
+  module: {
+    rules: [{
+      test: /\.less$/,
+      user: [
+        'style-loader',
+        'css-loader',
+        'less-loader'
+      ]
+    }]
+  }
+}
+```
+
+### 函数组合的两种情况
+
+要理解 Loader 的执行顺序，前提是理解“函数组合的两种情况”
+
+* 第一种：类似 Unix 中的 pipeline（管道），从左往右
+* 第二种：Compose 函数：`compose = (f, g) => (...args) => f(g(...args))`，从右往左
+
+Webpack 采用的就是 Compose 函数方式
+
+### 编写一个 Loader
+
+使用 `webpack-cli` 执行 `webpack-cli generate-loader` 来初始化一个 Loader 项目
