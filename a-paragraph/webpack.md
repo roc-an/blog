@@ -108,3 +108,30 @@ const webpackConfig = smp.wrap({
 * 分析每个 Loader 和插件耗时
 
 耗时高亮显示：耗时过久会标红，正常较慢会标黄，正常标绿
+
+## 体积分析：使用 webpack-bundle-analyzer
+
+配置示例：
+
+```js
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+module.exports = {
+  plugins: [
+    new BundleAnalyzerPlugin()
+  ]
+}
+```
+
+构建完成后，默认会在 8888 端口展示包体积分析
+
+举几个优化案例：
+
+* 发现 `node_modules` 中 `babel-polyfill` 体积较大，而几乎所有页面都要用，为此可以让它上 CDN 而不进行打包（当然，`babel-polyfill` 还有更好的针对性解决方案）
+* 发现某个第三方库 `nowjs.js` 包体积较大，那可以去看看是否使用了所有函数，可以将其拆分模块，按需引入模块
+* 发现某个业务组件体积过大，可以考虑懒加载
+
+可以分析哪些问题？
+
+* 依赖的第三方模块大小
+* 业务组件代码大小
