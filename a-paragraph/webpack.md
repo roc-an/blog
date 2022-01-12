@@ -181,6 +181,46 @@ module.exports = {
 
 Webpack 采用的就是 Compose 函数方式
 
-### 编写一个 Loader
+### 神器 loader-runner
+
+定义：loader-runner 可以在不安装 Webpack 的情况下运行 loaders
+
+作用：
+
+* 作为 Webpack 的依赖，Webpack 中使用它执行 Loader
+* 进行 Loader 的开发和调试
+
+Loader Runner 为 Loader 的运行提供了一个独立的环境
+
+Loader Runner 的使用：
+
+```js
+import { runLoaders } from "loader-runner";
+
+runLoaders({
+	resource: "/abs/path/to/file.txt?query", // Loader 要解析的静态资源绝对路径
+	loaders: ["/abs/path/to/loader.js?query"], // 可传递多个 Loaders
+	context: { minimize: true }, // 基础 Loader 上下文环境之外的额外上下文
+	processResource: (loaderContext, resourcePath, callback) => { ... },
+	readResource: fs.readFile.bind(fs) // 通过什么样的方式去查询 resource
+}, function(err, result) {
+	// err: Error?
+	// result.result: Buffer | String
+})
+```
+
+### 编写 Loader
 
 使用 `webpack-cli` 执行 `webpack-cli generate-loader` 来初始化一个 Loader 项目
+
+一个简单的 raw-loader，将文件转换为字符串：
+
+```js
+module.exports = function(source) {
+  // 考虑 ES6 模板字符串安全性
+  const json = JSON.stringify(source)
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+  return `export default ${json}`;
+}
+```
