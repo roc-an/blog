@@ -47,6 +47,8 @@ NodeJS：
         - [回文链表（反转链表 + 快慢指针）](https://github.com/roc-an/blog/blob/main/algorithm-topics/isPalindrome-linkedList/code/isPalindrome-linkedList.js)
       - 散列表
         - [散列表巧解“两数之和”问题](https://github.com/roc-an/blog/issues/13)
+      - 综合
+        - [第三大的数](https://github.com/roc-an/blog/blob/main/algorithm-topics/thirdMax/code/thirdMax.js)
     - 中等难度
       - 链表
         - [两数相加](https://github.com/roc-an/blog/issues/14)
