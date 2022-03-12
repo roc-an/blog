@@ -64,7 +64,7 @@
 * 如果项目较大，打包较慢，开启多进程能显著提速
 * 如果项目很小，本身打包速度已经比较快了，开启多进程可能反而会降低速度，因为有进程开销
 
-## 初级分析：使用内置的 stats
+### 初级分析：使用内置的 stats
 
 Webpack 内置的 stats 变量可以帮我们分析构建的一些基本信息：
 
@@ -84,7 +84,7 @@ Webpack 内置的 stats 变量可以帮我们分析构建的一些基本信息�
 * 对于某些资源为什么这么大，是没法深入分析的
 * 对于哪个 Loader 耗时久，也没法分析
 
-## 速度分析：使用 speed-measure-webpack-plugin
+### 速度分析：使用 speed-measure-webpack-plugin
 
 配置示例：
 
@@ -109,7 +109,7 @@ const webpackConfig = smp.wrap({
 
 耗时高亮显示：耗时过久会标红，正常较慢会标黄，正常标绿
 
-## 体积分析：使用 webpack-bundle-analyzer
+### 体积分析：使用 webpack-bundle-analyzer
 
 配置示例：
 
