@@ -1,17 +1,48 @@
 # 一段话说透一个前端知识点 - Webpack
 
-## 关于 Webpack 5
+## Webpack 5 新特性概览
 
-* Webpack 5 主要是内部效率的优化
-* 对比 Webpack 4，没有太多使用上的改动
-
-升级 Webpack 5 及周边插件后，代码需要做出的调整：
-
-* `package.json` 的 dev-server 命令改了：`"dev": "webpack serve --config build/webpack.dev.js"`
-* `webpack-merge`：升级新版本 `const { merge } = require('webpack-merge')`
-* `clean-webpack-plugin`：升级新版本 `const { CleanWebpackPlugin } = require('clean-webpack-plugin')`
-* `module.rules` 中 `loader: ['xxx-loader']` 换成：`use: ['xxx-loader']`
-* `filename: 'bundle.[contenthash:8].js'` 其中 `h` 小写，不能大写
+* 功能清除：
+  * 不再为 Node.js 模块自动引入 polyfills
+  * require.include 语法已经废弃
+  * 移除 v4 版本的废弃能力代码
+* 长期缓存：
+  * 新增长期缓存算法，确定 Chunk、模块 ID 和导出名称
+  * 真正的内容 Hash
+* 开发支持：
+  * 命名代码块 ID
+  * 模块联邦
+* 支持崭新的 Web 平台特性
+  * JSON 模块
+    * 在使用非默认导出时发出警告
+    * 使用默认导出，未使用的属性也会被 `optimization.usedExports` 优化丢弃，属性会被 optimization.mangleExports 优化打乱
+  * 资源模块
+    * 新写法：支持浏览器原生提供的写法：`new URL('./image.png', import.meta.url)`
+    * 老写法：`import url from './image.png'`
+  * 原生 Worker 支持：支持 `new Worker(new URL('./worker.js', import.meta.url))`
+  * URIS
+    * 支持 `data:`
+    * 支持 `file:`
+    * 支持 `http(s):`
+  * 异步模块
+    * 异步的外部资源（`async externals`）
+    * 新规范中的 WebAssembly 模块
+    * 使用顶层 Await 的 ES 模块
+* 支持全新的 Node.js 生态特性解析
+  * 支持 package.json 中的 exports 和 imports 字段
+  * 原生支持 Yarn PnP
+* 构建优化：
+  * 嵌套的 Tree-Shaking
+  * 内部模块 Tree-Shaking
+  * CommanJs Tree-Shaking
+  * 副作用分析
+* 性能优化：
+  * 持久缓存
+  * 编译器闲置和关闭
+  * 文件生成
+* 未来计划
+  * 实验特性
+  * 最小 Node.js 版本
 
 ## Webpack 性能优化
 
