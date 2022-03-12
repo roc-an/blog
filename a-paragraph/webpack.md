@@ -3,9 +3,9 @@
 ## Webpack 5 新特性概览
 
 * 功能清除：
-  * 不再为 Node.js 模块自动引入 polyfills
+  * **不再为 Node.js 模块自动引入 polyfills**
   * require.include 语法已经废弃
-  * 移除 v4 版本的废弃能力代码
+  * **移除 v4 版本的废弃能力代码**：所有在 v4 被废弃的能力都被清除，因此 4 升 5 需要确保 v4 下没有打印 Warning
 * 长期缓存：
   * 新增长期缓存算法，确定 Chunk、模块 ID 和导出名称
   * 真正的内容 Hash
@@ -43,6 +43,18 @@
 * 未来计划
   * 实验特性
   * 最小 Node.js 版本
+
+### Webpack 5 持久化缓存
+
+在 Webpack 4 中：
+
+* 可使用 `cache-loader` 将编译结果写入硬盘缓存
+* 可使用 `babel-loader`，设置 `option.cacheDirectory` 将 babel-loader 编译结果写进磁盘
+
+Webpack 5 缓存策略：
+
+* 默认开启缓存，缓存在内存中，可对 cache 进行设置
+* 缓存淘汰策略：文件缓存存储在 `node_modules/.cache/webpack` 中，最大 500 MB，缓存时长两星期，旧的缓存先淘汰
 
 ## Webpack 性能优化
 
