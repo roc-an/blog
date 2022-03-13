@@ -77,9 +77,26 @@ Webpack 5 缓存策略：
 
 而 Webpack 5 的模块联邦，让模块以及组件的代码共享更方便了。尤其在多个应用之间，不用发 NPM 包是很方便的。
 
-#### 模块联邦 ModuleFederationPlugin 用法介绍
+#### 用法介绍
 
+Webpack 内部通过 ModuleFederationPlugin 插件将多个应用结合起来
 
+插件参数：
+
+* `name`: 必须，唯一 ID，作为输出的模块名，使用时通过 `${name}/${expose}` 的方式调用
+* `library`: 必须，作为 umd 的 name
+* `remotes`: 可选，作为 Host 时，去消费哪些 Remote
+* `shared`: 可选，优先用 Host 的依赖，如果 Host 没有，再用自己的
+* `main.js`: 应用主文件
+* `remoteEntry.js`: 作为 Remote 时被引用的文件
+
+#### 原理
+
+生产者/消费者项目 Webpack 配置完成后，生产者项目 `/dist` 目录打包构建出 `remoteEntry.js`，其中：
+
+* 维护了一个 `moduleMap`，表示要共享给其他项目的模块
+* 还维护了一个 `get` 函数，提供给其他消费者项目
+* 其他消费者调用生产者项目 `remoteEntry.js` 中的 `get` 函数，就能拿到被共享的模块了
 
 ## Webpack 性能优化
 
